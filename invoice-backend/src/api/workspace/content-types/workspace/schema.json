@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "workspaces",
+  "info": {
+    "singularName": "workspace",
+    "pluralName": "workspaces",
+    "displayName": "Workspace",
+    "description": "Multi-tenant workspace for invoice management"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "address": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "taxId": {
+      "type": "string"
+    },
+    "invoicePrefix": {
+      "type": "string",
+      "default": "INV"
+    },
+    "defaultPaymentTerms": {
+      "type": "integer",
+      "default": 15
+    },
+    "defaultNotes": {
+      "type": "text"
+    },
+    "customers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::customer.customer",
+      "mappedBy": "workspace"
+    },
+    "invoices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::invoice.invoice",
+      "mappedBy": "workspace"
+    }
+  }
+}

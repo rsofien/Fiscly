@@ -1,0 +1,61 @@
+
+> invoice-app@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1675ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.5s (488 modules)
+ GET / 307 in 2689ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 2.5s (1023 modules)
+ GET /dashboard 307 in 2548ms
+ ○ Compiling /auth/login ...
+ ✓ Compiled /auth/login in 598ms (1275 modules)
+ GET /auth/login 200 in 733ms
+ ✓ Compiled /api/auth/[...nextauth] in 148ms (781 modules)
+ GET /api/auth/providers 200 in 1201ms
+ GET /api/auth/csrf 200 in 8ms
+ POST /api/auth/callback/credentials 401 in 31ms
+ GET /api/auth/providers 200 in 31ms
+ GET /api/auth/csrf 200 in 9ms
+ POST /api/auth/callback/credentials 401 in 16ms
+ GET /auth/login 200 in 131ms
+ GET /api/auth/providers 200 in 15ms
+ GET /api/auth/csrf 200 in 9ms
+ POST /api/auth/callback/credentials 401 in 17ms
+ GET /api/auth/providers 200 in 49ms
+ GET /api/auth/csrf 200 in 10ms
+ POST /api/auth/callback/credentials 401 in 11ms
+ GET /auth/login 200 in 35ms
+ GET /api/auth/providers 200 in 15ms
+ GET /api/auth/csrf 200 in 9ms
+ POST /api/auth/callback/credentials 401 in 14ms
+ ✓ Compiled /_not-found in 404ms (1140 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 537ms
+ ✓ Compiled in 67ms (639 modules)
+ GET /api/auth/providers 200 in 66ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/credentials 200 in 99ms
+ ✓ Compiled /dashboard in 280ms (778 modules)
+ GET /dashboard?_rsc=syt8b 200 in 49ms
+ GET /dashboard?_rsc=syt8b 200 in 16ms
+ ✓ Compiled /customers in 402ms (1309 modules)
+ GET /customers?_rsc=xb5uw 200 in 14ms
+ ✓ Compiled /invoices in 433ms (1406 modules)
+ GET /invoices?_rsc=7qj29 200 in 20ms
+ GET /invoices/1/preview 404 in 113ms
+ GET /invoices 200 in 102ms
+ ○ Compiling /reports ...
+ ✓ Compiled /reports in 2.3s (2490 modules)
+ GET /dashboard?_rsc=16jui 200 in 31ms
+ GET /dashboard?_rsc=pcfej 200 in 34ms
+ GET /customers?_rsc=xb5uw 200 in 17ms
+ GET /invoices?_rsc=1pk80 200 in 24ms
+ ○ Compiling /settings ...
+ ✓ Compiled /settings in 722ms (1948 modules)
+ GET /settings?_rsc=1n6hx 200 in 49ms

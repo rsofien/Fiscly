@@ -1,0 +1,140 @@
+
+> invoice-backend@0.1.0 develop
+> strapi develop
+
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (7ms)
+- Loading Strapi
+[2026-01-08 19:54:31.601] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+Strapi application started
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (49ms)
+- Creating admin
+✔ Creating admin (509ms)
+✔ Loading Strapi (3645ms)
+- Generating types
+✔ Generating types (145ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (5ms)
+✔ Compiling TS (1681ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Thu Jan 08 2026 19:54:34 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 5481 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 41330                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+One more thing...
+Create your first administrator 💻 by going to the administration panel at:
+
+[90m┌─────────────────────────────┐[39m
+[90m│[39m http://localhost:1337/admin [90m│[39m
+[90m└─────────────────────────────┘[39m
+
+[2026-01-08 19:54:34.154] [32minfo[39m: Strapi started successfully
+[2026-01-08 19:54:34.348] [32mhttp[39m: GET /admin (51 ms) 200
+[2026-01-08 19:54:34.979] [32mhttp[39m: GET /admin/project-type (2 ms) 200
+[2026-01-08 19:54:35.280] [32mhttp[39m: GET /admin/init (6 ms) 200
+[2026-01-08 19:54:35.307] [32mhttp[39m: GET /admin/ai-usage (6 ms) 401
+[2026-01-08 19:54:35.377] [32mhttp[39m: POST /admin/access-token (14 ms) 401
+[2026-01-08 19:54:35.381] [32mhttp[39m: POST /admin/logout (1 ms) 401
+[2026-01-08 19:54:35.392] [32mhttp[39m: GET /admin/auth/login (4 ms) 200
+[2026-01-08 19:54:35.742] [32mhttp[39m: GET /admin/project-type (2 ms) 200
+[2026-01-08 19:54:35.856] [32mhttp[39m: GET /admin/init (4 ms) 200
+[2026-01-08 19:54:57.799] [32mhttp[39m: GET / (5 ms) 302
+[2026-01-08 19:54:57.816] [32mhttp[39m: GET /admin (14 ms) 200
+[2026-01-08 19:54:58.538] [32mhttp[39m: GET /admin/project-type (2 ms) 200
+[2026-01-08 19:54:58.771] [32mhttp[39m: GET /admin/init (18 ms) 200
+[2026-01-08 19:54:58.808] [32mhttp[39m: GET /admin/ai-usage (1 ms) 401
+[2026-01-08 19:54:59.352] [32mhttp[39m: POST /admin/access-token (2 ms) 401
+[2026-01-08 19:54:59.365] [32mhttp[39m: POST /admin/logout (1 ms) 401
+[2026-01-08 19:54:59.386] [32mhttp[39m: GET /admin/auth/login (3 ms) 200
+[2026-01-08 19:54:59.818] [32mhttp[39m: GET /admin/project-type (1 ms) 200
+[2026-01-08 19:55:00.208] [32mhttp[39m: GET /admin/init (3 ms) 200
+[2026-01-08 19:55:42.855] [32mhttp[39m: GET /api/users?filters[email][$eq]=admin@acme.com&populate=workspace (8 ms) 401
+[2026-01-08 19:55:55.911] [32mhttp[39m: POST /admin/register-admin (161 ms) 200
+[2026-01-08 19:55:56.019] [32mhttp[39m: GET /admin/users/me (87 ms) 200
+[2026-01-08 19:55:56.023] [32mhttp[39m: GET /admin/telemetry-properties (83 ms) 200
+[2026-01-08 19:55:56.032] [32mhttp[39m: GET /admin/users/me/permissions (95 ms) 200
+[2026-01-08 19:55:56.106] [32mhttp[39m: GET /http://localhost/favicon.ico (5 ms) 404
+[2026-01-08 19:55:56.630] [32mhttp[39m: GET /admin/ai-usage (657 ms) 200
+[2026-01-08 19:56:36.625] [32mhttp[39m: GET /.well-known/appspecific/com.chrome.devtools.json (14 ms) 404
+[2026-01-08 19:56:47.129] [32mhttp[39m: GET /admin/usecase?hasAdmin=true (11 ms) 200
+[2026-01-08 19:56:47.248] [32mhttp[39m: GET /.well-known/appspecific/com.chrome.devtools.json (6 ms) 404
+[2026-01-08 19:56:47.822] [32mhttp[39m: GET /admin/project-type (1 ms) 200
+[2026-01-08 19:56:47.963] [32mhttp[39m: GET /favicon.ico (3 ms) 200
+[2026-01-08 19:56:48.083] [32mhttp[39m: GET /admin/init (19 ms) 200
+[2026-01-08 19:56:48.118] [32mhttp[39m: GET /admin/users/me (49 ms) 200
+[2026-01-08 19:56:48.129] [32mhttp[39m: GET /admin/users/me/permissions (58 ms) 200
+[2026-01-08 19:56:48.159] [32mhttp[39m: GET /admin/telemetry-properties (36 ms) 200
+[2026-01-08 19:56:48.646] [32mhttp[39m: GET /admin/ai-usage (527 ms) 200
+[2026-01-08 19:56:52.726] [32mhttp[39m: GET /admin/usecase?hasAdmin=true (6 ms) 200
+[2026-01-08 19:56:52.778] [32mhttp[39m: GET /.well-known/appspecific/com.chrome.devtools.json (3 ms) 404
+[2026-01-08 19:56:53.339] [32mhttp[39m: GET /admin/project-type (8 ms) 200
+[2026-01-08 19:56:53.474] [32mhttp[39m: GET /favicon.ico (1 ms) 200
+[2026-01-08 19:56:53.606] [32mhttp[39m: GET /admin/init (5 ms) 200
+[2026-01-08 19:56:53.685] [32mhttp[39m: GET /admin/users/me (83 ms) 200
+[2026-01-08 19:56:53.691] [32mhttp[39m: GET /admin/users/me/permissions (92 ms) 200
+[2026-01-08 19:56:53.715] [32mhttp[39m: GET /admin/telemetry-properties (18 ms) 200
+[2026-01-08 19:56:54.259] [32mhttp[39m: GET /admin/ai-usage (566 ms) 200
+[2026-01-08 19:57:08.563] [32mhttp[39m: GET /admin/usecase?hasAdmin=true (5 ms) 200
+[2026-01-08 19:57:08.623] [32mhttp[39m: GET /.well-known/appspecific/com.chrome.devtools.json (8 ms) 404
+[2026-01-08 19:57:09.081] [32mhttp[39m: GET /admin/project-type (12 ms) 200
+[2026-01-08 19:57:09.086] [32mhttp[39m: GET /favicon.ico (0 ms) 200
+[2026-01-08 19:57:09.158] [32mhttp[39m: GET /admin/init (14 ms) 200
+[2026-01-08 19:57:09.185] [32mhttp[39m: GET /admin/users/me (37 ms) 200
+[2026-01-08 19:57:09.205] [32mhttp[39m: GET /admin/users/me/permissions (55 ms) 200
+[2026-01-08 19:57:09.222] [32mhttp[39m: GET /admin/telemetry-properties (22 ms) 200
+[2026-01-08 19:57:09.782] [32mhttp[39m: GET /admin/ai-usage (583 ms) 200
+[2026-01-08 19:57:12.176] [32mhttp[39m: GET /admin/information (13 ms) 200
+[2026-01-08 19:57:12.243] [32mhttp[39m: GET /admin/guided-tour-meta (35 ms) 200
+[2026-01-08 19:57:12.244] [32mhttp[39m: GET /admin/license-limit-information (33 ms) 200
+[2026-01-08 19:57:12.265] [32mhttp[39m: GET /admin/homepage/layout (15 ms) 200
+[2026-01-08 19:57:12.483] [32mhttp[39m: GET /content-releases/homepage/upcoming-releases (32 ms) 200
+[2026-01-08 19:57:12.492] [32mhttp[39m: GET /content-manager/homepage/recent-documents?action=publish (50 ms) 200
+[2026-01-08 19:57:12.502] [32mhttp[39m: GET /content-manager/homepage/recent-documents?action=update (63 ms) 200
+[2026-01-08 19:57:12.511] [32mhttp[39m: GET /content-manager/homepage/count-documents (67 ms) 200
+[2026-01-08 19:57:12.514] [32mhttp[39m: GET /admin/homepage/key-statistics (68 ms) 200
+[2026-01-08 19:57:12.921] [32mhttp[39m: GET /admin/license-trial-time-left (563 ms) 200
+[2026-01-08 19:57:24.854] [32mhttp[39m: GET /content-manager/init (46 ms) 200
+[2026-01-08 19:57:24.861] [32mhttp[39m: GET /content-manager/content-types-settings (50 ms) 200
+[2026-01-08 19:57:24.941] [32mhttp[39m: GET /content-manager/init (17 ms) 200
+[2026-01-08 19:57:24.975] [32mhttp[39m: GET /content-manager/content-types/api::customer.customer/configuration (21 ms) 200
+[2026-01-08 19:57:24.991] [32mhttp[39m: GET /content-manager/collection-types/api::customer.customer?page=1&pageSize=10&sort=name%3AASC (35 ms) 200
+[2026-01-08 19:57:28.490] [32mhttp[39m: GET /content-manager/content-types/api::invoice.invoice/configuration (29 ms) 200
+[2026-01-08 19:57:28.497] [32mhttp[39m: GET /content-manager/collection-types/api::invoice.invoice?page=1&pageSize=10&sort=invoiceNumber%3AASC (32 ms) 200
+[2026-01-08 19:57:29.304] [32mhttp[39m: GET /content-manager/content-types/api::invoice-item.invoice-item/configuration (28 ms) 200
+[2026-01-08 19:57:29.310] [32mhttp[39m: GET /content-manager/collection-types/api::invoice-item.invoice-item?page=1&pageSize=10&sort=description%3AASC (31 ms) 200
+[2026-01-08 19:57:30.015] [32mhttp[39m: GET /content-manager/content-types/plugin::users-permissions.user/configuration (25 ms) 200
+[2026-01-08 19:57:30.019] [32mhttp[39m: GET /content-manager/collection-types/plugin::users-permissions.user?page=1&pageSize=10&sort=username%3AASC (27 ms) 200
+[2026-01-08 19:57:30.514] [32mhttp[39m: GET /content-manager/content-types/api::workspace.workspace/configuration (26 ms) 200
+[2026-01-08 19:57:30.523] [32mhttp[39m: GET /content-manager/collection-types/api::workspace.workspace?page=1&pageSize=10&sort=name%3AASC (32 ms) 200
+[2026-01-08 19:57:31.820] [32mhttp[39m: GET /content-releases/settings (20 ms) 200
+[2026-01-08 19:57:31.821] [32mhttp[39m: GET /content-releases?page=1&pageSize=16&filters[releasedAt][$notNull]=false (24 ms) 200
+[2026-01-08 19:57:32.771] [32mhttp[39m: GET /content-manager/init (15 ms) 200
+[2026-01-08 19:57:36.212] [32mhttp[39m: GET /api/users?filters[email][$eq]=admin@acme.com&populate=workspace (2 ms) 401
+[2026-01-08 19:57:57.158] [32mhttp[39m: GET /api/users?filters[email][$eq]=admin@acme.com&populate=workspace (4 ms) 401
+[2026-01-08 19:58:22.412] [32mhttp[39m: POST /api/auth/local/register (9 ms) 400
+[2026-01-08 19:58:27.943] [32mhttp[39m: POST /api/auth/local/register (6 ms) 400
+[2026-01-08 19:58:33.790] [32mhttp[39m: POST /api/auth/local/register (95 ms) 200
+[2026-01-08 19:58:38.858] [32mhttp[39m: GET /api/users?filters[email][$eq]=admin@acme.com&populate=workspace (2 ms) 401
+[2026-01-08 19:58:50.701] [32mhttp[39m: GET /api/users?filters[email][$eq]=admin@acme.com&populate=workspace (1 ms) 401
+[2026-01-08 19:59:34.010] [32mhttp[39m: POST /api/auth/local (85 ms) 200
