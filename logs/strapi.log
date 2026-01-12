@@ -1,0 +1,272 @@
+
+> invoice-backend@0.1.0 develop
+> strapi develop
+
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (9ms)
+- Loading Strapi
+[2026-01-12 22:16:31.578] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+🔧 Configuring API permissions...
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (98ms)
+- Creating admin
+✔ Creating admin (438ms)
+✔ Loading Strapi (2369ms)
+- Generating types
+✔ Generating types (208ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (9ms)
+✔ Compiling TS (2128ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Mon Jan 12 2026 22:16:34 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 4729 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 17277                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-12 22:16:34.615] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+[2026-01-12 22:17:00.165] [32mhttp[39m: GET / (15 ms) 302
+[2026-01-12 22:25:11.714] [32mhttp[39m: GET /api/customers (75 ms) 200
+[2026-01-12 22:25:11.931] [32mhttp[39m: POST /api/auth/local (188 ms) 200
+[2026-01-12 22:25:39.295] [32mhttp[39m: POST /api/auth/local (17 ms) 400
+[2026-01-12 22:26:05.233] [32mhttp[39m: POST /api/auth/local (133 ms) 200
+[2026-01-12 22:26:05.787] [32mhttp[39m: GET /api/customers (26 ms) 200
+[2026-01-12 22:26:05.843] [32mhttp[39m: GET /api/invoices?populate=* (43 ms) 200
+[2026-01-12 22:26:05.845] [32mhttp[39m: GET /api/invoices?populate=* (48 ms) 200
+[2026-01-12 22:28:14.771] [32mhttp[39m: GET /api/customers (31 ms) 200
+[2026-01-12 22:28:14.804] [32mhttp[39m: GET /api/customers (14 ms) 200
+[2026-01-12 22:28:22.441] [32mhttp[39m: POST /api/customers (30 ms) 201
+[2026-01-12 22:28:22.471] [32mhttp[39m: GET /api/customers (13 ms) 200
+[2026-01-12 22:28:34.363] [32mhttp[39m: PUT /api/customers/4 (6 ms) 400
+[2026-01-12 22:28:34.996] [32mhttp[39m: PUT /api/customers/4 (7 ms) 400
+[2026-01-12 22:28:37.796] [32mhttp[39m: PUT /api/customers/4 (6 ms) 400
+[2026-01-12 22:28:41.543] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 22:28:41.570] [32mhttp[39m: GET /api/invoices?populate=* (12 ms) 200
+[2026-01-12 22:28:47.761] [32mhttp[39m: DELETE /api/invoices/3 (8 ms) 204
+[2026-01-12 22:28:47.786] [32mhttp[39m: GET /api/invoices?populate=* (14 ms) 200
+[2026-01-12 22:28:51.000] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 22:28:51.441] [32mhttp[39m: GET /api/invoices?populate=* (12 ms) 200
+[2026-01-12 22:29:20.107] [32mhttp[39m: POST /api/invoices (12 ms) 400
+[2026-01-12 22:29:22.817] [32mhttp[39m: POST /api/invoices (11 ms) 400
+[2026-01-12 22:29:36.111] [32mhttp[39m: GET /api/invoices?populate=* (15 ms) 200
+[2026-01-12 22:29:36.471] [32mhttp[39m: GET /api/invoices?populate=* (14 ms) 200
+[2026-01-12 22:29:36.487] [32mhttp[39m: GET /api/customers (10 ms) 200
+[2026-01-12 22:29:42.195] [32mhttp[39m: GET /api/customers (12 ms) 200
+[2026-01-12 22:29:42.216] [32mhttp[39m: GET /api/customers (10 ms) 200
+[2026-01-12 22:29:44.069] [32mhttp[39m: GET /api/invoices?populate=* (20 ms) 200
+[2026-01-12 22:29:44.092] [32mhttp[39m: GET /api/invoices?populate=* (11 ms) 200
+[2026-01-12 22:29:45.030] [32mhttp[39m: GET /api/customers (10 ms) 200
+[2026-01-12 22:29:45.050] [32mhttp[39m: GET /api/customers (7 ms) 200
+[2026-01-12 22:36:52.286] [32mhttp[39m: PUT /api/customers/1 (15 ms) 400
+[2026-01-12 22:37:03.848] [32mhttp[39m: GET /api/invoices?populate=* (19 ms) 200
+[2026-01-12 22:37:03.876] [32mhttp[39m: GET /api/invoices?populate=* (12 ms) 200
+[2026-01-12 22:39:23.479] [32mhttp[39m: GET /api/customers (68 ms) 200
+[2026-01-12 22:39:23.486] [32mhttp[39m: GET /api/invoices?populate=* (22 ms) 200
+[2026-01-12 22:39:23.511] [32mhttp[39m: GET /api/customers (12 ms) 200
+[2026-01-12 22:39:23.515] [32mhttp[39m: GET /api/invoices?populate=* (14 ms) 200
+[2026-01-12 22:42:33.281] [32mhttp[39m: GET /api/customers (21 ms) 200
+[2026-01-12 22:42:41.104] [32mhttp[39m: GET /api/customers (9 ms) 200
+[2026-01-12 22:42:46.697] [32mhttp[39m: GET /api/invoices?populate=* (12 ms) 200
+[2026-01-12 22:43:30.964] [32mhttp[39m: PUT /api/customers/1 (14 ms) 404
+[2026-01-12 22:43:43.464] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-12 22:43:50.976] [32mhttp[39m: PUT /api/customers/1 (9 ms) 404
+[2026-01-12 22:43:56.132] [32mhttp[39m: PUT /api/customers/1 (8 ms) 404
+[2026-01-12 22:44:07.940] [32mhttp[39m: GET /api/customers (21 ms) 200
+[2026-01-12 22:44:13.590] [32mhttp[39m: PUT /api/customers/cfa14klsc75dkmi6z4wa2kdv (19 ms) 200
+[2026-01-12 22:45:25.081] [32mhttp[39m: GET /api/customers?filters[id][$eq]=1 (27 ms) 200
+[2026-01-12 22:45:25.114] [32mhttp[39m: PUT /api/customers/cfa14klsc75dkmi6z4wa2kdv (26 ms) 200
+[2026-01-12 22:45:33.197] [32mhttp[39m: GET /api/customers?filters[id][$eq]=1 (9 ms) 200
+[2026-01-12 22:45:33.214] [32mhttp[39m: PUT /api/customers/cfa14klsc75dkmi6z4wa2kdv (12 ms) 200
+[2026-01-12 22:45:55.588] [32mhttp[39m: GET /api/customers (27 ms) 200
+[2026-01-12 22:45:55.597] [32mhttp[39m: GET /api/invoices?populate=* (30 ms) 200
+[2026-01-12 22:45:55.670] [32mhttp[39m: GET /api/customers (33 ms) 200
+[2026-01-12 22:45:55.675] [32mhttp[39m: GET /api/invoices?populate=* (34 ms) 200
+[2026-01-12 22:45:55.838] [32mhttp[39m: GET /api/customers (41 ms) 200
+[2026-01-12 22:45:55.895] [32mhttp[39m: GET /api/customers (17 ms) 200
+[2026-01-12 22:46:05.708] [32mhttp[39m: GET /api/customers?filters[id][$eq]=1 (15 ms) 200
+[2026-01-12 22:46:05.730] [32mhttp[39m: PUT /api/customers/cfa14klsc75dkmi6z4wa2kdv (15 ms) 200
+[2026-01-12 22:46:05.759] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-12 22:46:09.847] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-12 22:46:09.851] [32mhttp[39m: GET /api/invoices?populate=* (17 ms) 200
+[2026-01-12 22:46:09.876] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-12 22:46:09.880] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 22:46:41.787] [32mhttp[39m: POST /api/invoices (13 ms) 400
+[2026-01-12 22:46:47.342] [32mhttp[39m: POST /api/invoices (12 ms) 400
+[2026-01-12 22:47:01.146] [32mhttp[39m: POST /api/invoices (11 ms) 400
+[2026-01-12 22:47:30.607] [32mhttp[39m: GET /api/invoices/3?populate=* (31 ms) 404
+[2026-01-12 22:47:30.608] [32mhttp[39m: GET /api/invoices/3?populate=* (24 ms) 404
+[2026-01-12 22:47:33.486] [32mhttp[39m: GET /api/invoices?populate=* (15 ms) 200
+[2026-01-12 22:47:33.488] [32mhttp[39m: GET /api/invoices?populate=* (20 ms) 200
+[2026-01-12 22:47:33.512] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 22:47:33.513] [32mhttp[39m: GET /api/customers (14 ms) 200
+[2026-01-12 22:47:35.934] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 22:47:35.935] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 22:47:37.433] [32mhttp[39m: GET /api/invoices?populate=* (23 ms) 200
+[2026-01-12 22:47:37.436] [32mhttp[39m: GET /api/invoices?populate=* (28 ms) 200
+[2026-01-12 22:47:37.442] [32mhttp[39m: GET /api/customers (24 ms) 200
+[2026-01-12 22:47:37.446] [32mhttp[39m: GET /api/customers (24 ms) 200
+[2026-01-12 22:49:49.551] [32mhttp[39m: POST /api/invoices (53 ms) 201
+[2026-01-12 22:50:45.898] [32mhttp[39m: GET /api/customers (31 ms) 200
+[2026-01-12 22:50:53.551] [32mhttp[39m: GET /api/customers (32 ms) 200
+[2026-01-12 22:50:53.554] [32mhttp[39m: GET /api/customers (32 ms) 200
+[2026-01-12 22:50:53.562] [32mhttp[39m: GET /api/invoices?populate=* (34 ms) 200
+[2026-01-12 22:50:53.575] [32mhttp[39m: GET /api/invoices?populate=* (41 ms) 200
+[2026-01-12 22:51:12.641] [32mhttp[39m: GET /api/invoices?populate=* (91 ms) 200
+[2026-01-12 22:51:12.653] [32mhttp[39m: GET /api/customers (30 ms) 200
+[2026-01-12 22:51:12.661] [32mhttp[39m: GET /api/invoices?populate=* (42 ms) 200
+[2026-01-12 22:51:12.669] [32mhttp[39m: GET /api/customers (41 ms) 200
+[2026-01-12 22:51:32.279] [32mhttp[39m: GET /api/invoices/1?populate=* (14 ms) 404
+[2026-01-12 22:51:32.279] [32mhttp[39m: GET /api/invoices/1?populate=* (12 ms) 404
+[2026-01-12 22:51:35.059] [32mhttp[39m: GET /api/customers (14 ms) 200
+[2026-01-12 22:51:35.061] [32mhttp[39m: GET /api/invoices?populate=* (28 ms) 200
+[2026-01-12 22:51:35.064] [32mhttp[39m: GET /api/customers (15 ms) 200
+[2026-01-12 22:51:35.068] [32mhttp[39m: GET /api/invoices?populate=* (32 ms) 200
+[2026-01-12 22:51:37.893] [32mhttp[39m: POST /api/invoices (17 ms) 201
+[2026-01-12 22:52:00.302] [32mhttp[39m: POST /api/invoices (19 ms) 400
+[2026-01-12 22:52:20.585] [32mhttp[39m: GET /api/invoices?populate=* (17 ms) 200
+[2026-01-12 23:00:46.440] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=4 (30 ms) 200
+[2026-01-12 23:00:46.464] [32mhttp[39m: DELETE /api/invoices/jgjaga1m21dh26o2songtow3 (19 ms) 204
+[2026-01-12 23:00:46.510] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=5 (10 ms) 200
+[2026-01-12 23:00:46.524] [32mhttp[39m: DELETE /api/invoices/k3dsj21bcifm5v0nvr69jrv4 (9 ms) 204
+[2026-01-12 23:01:03.226] [32mhttp[39m: GET /api/invoices?populate=* (29 ms) 200
+[2026-01-12 23:01:03.230] [32mhttp[39m: GET /api/invoices?populate=* (36 ms) 200
+[2026-01-12 23:01:03.236] [32mhttp[39m: GET /api/customers (31 ms) 200
+[2026-01-12 23:01:03.238] [32mhttp[39m: GET /api/customers (29 ms) 200
+[2026-01-12 23:01:10.071] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=3 (15 ms) 200
+[2026-01-12 23:01:10.087] [32mhttp[39m: DELETE /api/invoices/b5ckk705gcekk1posamq9267 (12 ms) 204
+[2026-01-12 23:01:10.114] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 23:01:13.060] [32mhttp[39m: GET /api/invoices/2?populate=* (9 ms) 404
+[2026-01-12 23:01:13.067] [32mhttp[39m: GET /api/invoices/2?populate=* (12 ms) 404
+[2026-01-12 23:02:02.107] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=2&populate=* (39 ms) 200
+[2026-01-12 23:03:19.774] [32mhttp[39m: GET /api/invoices?populate=* (32 ms) 200
+[2026-01-12 23:03:19.776] [32mhttp[39m: GET /api/customers (19 ms) 200
+[2026-01-12 23:03:19.777] [32mhttp[39m: GET /api/invoices?populate=* (26 ms) 200
+[2026-01-12 23:03:19.779] [32mhttp[39m: GET /api/customers (15 ms) 200
+[2026-01-12 23:03:24.206] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=2&populate=* (40 ms) 200
+[2026-01-12 23:05:30.050] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=2&populate=* (32 ms) 200
+[2026-01-12 23:05:43.896] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate=* (12 ms) 200
+[2026-01-12 23:07:27.080] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=2&populate=* (26 ms) 200
+[2026-01-12 23:07:40.611] [32mhttp[39m: GET /api/invoices?populate=* (31 ms) 200
+[2026-01-12 23:07:40.616] [32mhttp[39m: GET /api/customers (26 ms) 200
+[2026-01-12 23:07:40.620] [32mhttp[39m: GET /api/customers (24 ms) 200
+[2026-01-12 23:07:40.629] [32mhttp[39m: GET /api/invoices?populate=* (46 ms) 200
+[2026-01-12 23:07:42.659] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate=* (98 ms) 200
+[2026-01-12 23:07:42.663] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate=* (99 ms) 200
+[2026-01-12 23:08:21.749] [32mhttp[39m: GET /api/invoices?populate=* (26 ms) 200
+[2026-01-12 23:08:21.756] [32mhttp[39m: GET /api/invoices?populate=* (29 ms) 200
+[2026-01-12 23:08:21.757] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 23:08:21.763] [32mhttp[39m: GET /api/customers (26 ms) 200
+[2026-01-12 23:08:25.624] [32mhttp[39m: GET /api/invoices?populate=* (19 ms) 200
+[2026-01-12 23:08:25.636] [32mhttp[39m: GET /api/invoices?populate=* (33 ms) 200
+[2026-01-12 23:08:28.022] [32mhttp[39m: GET /api/invoices?populate=* (18 ms) 200
+[2026-01-12 23:08:28.023] [32mhttp[39m: GET /api/customers (12 ms) 200
+[2026-01-12 23:08:28.027] [32mhttp[39m: GET /api/invoices?populate=* (27 ms) 200
+[2026-01-12 23:08:28.031] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 23:08:30.683] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 23:08:30.690] [32mhttp[39m: GET /api/invoices?populate=* (23 ms) 200
+[2026-01-12 23:08:36.444] [32mhttp[39m: GET /api/customers (10 ms) 200
+[2026-01-12 23:08:36.448] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-12 23:08:40.881] [32mhttp[39m: GET /api/customers (12 ms) 200
+[2026-01-12 23:08:40.886] [32mhttp[39m: GET /api/invoices?populate=* (21 ms) 200
+[2026-01-12 23:08:40.888] [32mhttp[39m: GET /api/invoices?populate=* (14 ms) 200
+[2026-01-12 23:08:54.874] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-12 23:08:54.875] [32mhttp[39m: GET /api/customers (15 ms) 200
+[2026-01-12 23:12:10.890] [32mhttp[39m: GET /api/customers (38 ms) 200
+[2026-01-12 23:12:10.896] [32mhttp[39m: GET /api/customers (32 ms) 200
+[2026-01-12 23:12:10.899] [32mhttp[39m: GET /api/invoices?populate=* (29 ms) 200
+[2026-01-12 23:12:10.902] [32mhttp[39m: GET /api/invoices?populate=* (27 ms) 200
+[2026-01-12 23:12:14.801] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 23:12:14.803] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 23:12:14.813] [32mhttp[39m: GET /api/invoices?populate=* (33 ms) 200
+[2026-01-12 23:12:14.814] [32mhttp[39m: GET /api/invoices?populate=* (32 ms) 200
+[2026-01-12 23:15:15.246] [32mhttp[39m: GET /api/invoices?populate=* (59 ms) 200
+[2026-01-12 23:15:15.251] [32mhttp[39m: GET /api/invoices?populate=* (52 ms) 200
+[2026-01-12 23:15:15.254] [32mhttp[39m: GET /api/customers (37 ms) 200
+[2026-01-12 23:15:15.255] [32mhttp[39m: GET /api/customers (24 ms) 200
+[2026-01-12 23:16:21.891] [32mhttp[39m: POST /api/invoice-items (65 ms) 201
+[2026-01-12 23:17:26.482] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate[customer]=*&populate[items]=* (56 ms) 400
+[2026-01-12 23:19:04.928] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate[customer]=*&populate[items]=* (25 ms) 400
+[2026-01-12 23:19:11.060] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate[customer]=*&populate[items]=* (7 ms) 400
+[2026-01-12 23:19:16.054] [32mhttp[39m: GET /api/invoices (11 ms) 200
+[2026-01-12 23:19:34.954] [32mhttp[39m: GET /api/invoices/1?populate=items (12 ms) 404
+[2026-01-12 23:19:52.891] [32mhttp[39m: GET /api/invoices?populate=* (31 ms) 200
+[2026-01-12 23:19:52.893] [32mhttp[39m: GET /api/invoices?populate=* (30 ms) 200
+[2026-01-12 23:19:52.899] [32mhttp[39m: GET /api/customers (31 ms) 200
+[2026-01-12 23:19:52.903] [32mhttp[39m: GET /api/customers (29 ms) 200
+[2026-01-12 23:19:57.211] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate[customer]=*&populate[items]=* (15 ms) 400
+[2026-01-12 23:19:57.212] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1&populate[customer]=*&populate[items]=* (20 ms) 400
+[2026-01-12 23:20:00.116] [32mhttp[39m: GET /api/customers (12 ms) 200
+[2026-01-12 23:20:00.117] [32mhttp[39m: GET /api/customers (10 ms) 200
+[2026-01-12 23:20:00.121] [32mhttp[39m: GET /api/invoices?populate=* (28 ms) 200
+[2026-01-12 23:20:00.123] [32mhttp[39m: GET /api/invoices?populate=* (28 ms) 200
+[2026-01-12 23:20:05.131] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=1 (9 ms) 200
+[2026-01-12 23:20:05.145] [32mhttp[39m: DELETE /api/invoices/bjisq0mc6vnvbnwhtxqlcnr4 (10 ms) 204
+[2026-01-12 23:20:05.202] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 23:20:08.593] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=2 (7 ms) 200
+[2026-01-12 23:20:08.604] [32mhttp[39m: DELETE /api/invoices/od2txf6urxaeyibftznegs4c (7 ms) 204
+[2026-01-12 23:20:08.627] [32mhttp[39m: GET /api/invoices?populate=* (6 ms) 200
+[2026-01-12 23:21:21.396] [32mhttp[39m: POST /api/invoices (20 ms) 201
+[2026-01-12 23:21:22.016] [32mhttp[39m: POST /api/invoice-items (13 ms) 201
+[2026-01-12 23:21:22.032] [32mhttp[39m: POST /api/invoices (9 ms) 400
+[2026-01-12 23:21:22.046] [32mhttp[39m: POST /api/invoice-items (11 ms) 201
+[2026-01-12 23:21:23.823] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-12 23:21:30.973] [32mhttp[39m: GET /api/invoices?populate=* (24 ms) 200
+[2026-01-12 23:21:30.977] [32mhttp[39m: GET /api/invoices?populate=* (25 ms) 200
+[2026-01-12 23:21:30.982] [32mhttp[39m: GET /api/customers (21 ms) 200
+[2026-01-12 23:21:30.988] [32mhttp[39m: GET /api/customers (32 ms) 200
+[2026-01-12 23:21:34.117] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=6&populate[customer]=*&populate[items]=* (40 ms) 400
+[2026-01-12 23:21:34.126] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=6&populate[customer]=*&populate[items]=* (52 ms) 400
+[2026-01-12 23:21:35.790] [32mhttp[39m: GET /api/invoices?populate=* (18 ms) 200
+[2026-01-12 23:21:35.792] [32mhttp[39m: GET /api/customers (13 ms) 200
+[2026-01-12 23:21:35.797] [32mhttp[39m: GET /api/invoices?populate=* (28 ms) 200
+[2026-01-12 23:21:35.799] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 23:21:40.152] [32mhttp[39m: GET /api/invoices?populate=* (15 ms) 200
+[2026-01-12 23:21:40.156] [32mhttp[39m: GET /api/invoices?populate=* (23 ms) 200
+[2026-01-12 23:21:41.840] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-12 23:21:41.840] [32mhttp[39m: GET /api/customers (6 ms) 200
+[2026-01-12 23:21:47.338] [32mhttp[39m: GET /api/customers?filters[id][$eq]=2 (10 ms) 200
+[2026-01-12 23:21:47.355] [32mhttp[39m: DELETE /api/customers/k1cu5akk2yawjusnya3uotmb (12 ms) 204
+[2026-01-12 23:21:47.382] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-12 23:21:50.933] [32mhttp[39m: GET /api/customers?filters[id][$eq]=3 (15 ms) 200
+[2026-01-12 23:21:50.954] [32mhttp[39m: DELETE /api/customers/qt77psg8m6oewpipsbh64bhs (15 ms) 204
+[2026-01-12 23:21:50.999] [32mhttp[39m: GET /api/customers (16 ms) 200
+[2026-01-12 23:21:54.605] [32mhttp[39m: GET /api/customers?filters[id][$eq]=1 (9 ms) 200
+[2026-01-12 23:21:54.616] [32mhttp[39m: DELETE /api/customers/cfa14klsc75dkmi6z4wa2kdv (7 ms) 204
+[2026-01-12 23:21:54.636] [32mhttp[39m: GET /api/customers (6 ms) 200
+[2026-01-12 23:21:56.825] [32mhttp[39m: GET /api/invoices?populate=* (15 ms) 200
+[2026-01-12 23:21:56.826] [32mhttp[39m: GET /api/customers (9 ms) 200
+[2026-01-12 23:21:56.828] [32mhttp[39m: GET /api/invoices?populate=* (14 ms) 200
+[2026-01-12 23:23:32.200] [32mhttp[39m: GET /api/customers (42 ms) 200
+[2026-01-12 23:23:32.202] [32mhttp[39m: GET /api/invoices?populate=* (46 ms) 200
+[2026-01-12 23:23:32.205] [32mhttp[39m: GET /api/invoices?populate=* (43 ms) 200
+[2026-01-12 23:23:34.865] [32mhttp[39m: GET /api/customers (9 ms) 200
+[2026-01-12 23:23:34.866] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-12 23:23:46.399] [32mhttp[39m: GET /api/customers (10 ms) 200
+[2026-01-12 23:23:46.400] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-12 23:23:50.792] [32mhttp[39m: GET /api/invoices?populate=* (16 ms) 200
+[2026-01-12 23:23:50.792] [32mhttp[39m: GET /api/invoices?populate=* (18 ms) 200
+[2026-01-12 23:23:50.798] [32mhttp[39m: GET /api/customers (16 ms) 200

@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FileText, DollarSign, Users, TrendingUp, AlertCircle, CheckCircle2 } from "lucide-react"
+import { FileText, DollarSign, Users, AlertCircle, CheckCircle2 } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -14,26 +14,66 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  // TODO: Fetch real data from Strapi
-  const stats = {
-    totalInvoices: 156,
-    outstandingAmount: 48750.00,
-    paidThisMonth: 125890.00,
-    totalCustomers: 42,
-    dueInvoices: 12,
-    overdueInvoices: 3,
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+
+  const [reportsRes, invoicesRes, customersRes] = await Promise.all([
+    fetch(`${baseUrl}/api/reports`, { cache: "no-store" }),
+    fetch(`${baseUrl}/api/invoices`, { cache: "no-store" }),
+    fetch(`${baseUrl}/api/customers`, { cache: "no-store" }),
+  ])
+
+  const reports = reportsRes.ok ? await reportsRes.json() : null
+  const invoicesData = invoicesRes.ok ? await invoicesRes.json() : []
+  const customersData = customersRes.ok ? await customersRes.json() : []
+  const invoices = Array.isArray(invoicesData) ? invoicesData : []
+  const user = {
+    name: session.user.name,
+    email: session.user.email || "",
+    workspaceName: (session.user as any).workspaceName ?? null,
   }
 
-  const topCustomers = [
-    { id: 1, name: "Acme Corporation", totalSpent: 45600.00, invoiceCount: 24 },
-    { id: 2, name: "TechStart Inc.", totalSpent: 32400.00, invoiceCount: 18 },
-    { id: 3, name: "Global Solutions", totalSpent: 28900.00, invoiceCount: 15 },
-    { id: 4, name: "Digital Ventures", totalSpent: 21300.00, invoiceCount: 12 },
-    { id: 5, name: "Innovation Labs", totalSpent: 18700.00, invoiceCount: 9 },
-  ]
+  const now = new Date()
+  const paidThisMonth = invoices
+    .filter((inv) => {
+      if (inv.status !== "paid" || !inv.issueDate) return false
+      const issued = new Date(inv.issueDate)
+      return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
+    })
+    .reduce((sum, inv) => sum + (Number(inv.amount) || 0), 0)
+
+  const outstandingAmount = reports?.outstanding
+    ?? invoices
+      .filter((inv) => inv.status !== "paid")
+      .reduce((sum, inv) => sum + (Number(inv.amount) || 0), 0)
+
+  const totalInvoices = reports?.invoiceCount ?? invoices.length
+  const totalCustomers = Array.isArray(customersData) ? customersData.length : 0
+  const dueInvoices = reports?.byStatus?.sent ?? 0
+  const overdueInvoices = reports?.byStatus?.overdue ?? 0
+
+  const topCustomers = Object.values(
+    invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
+      (acc, inv) => {
+        const name = inv.customerName || "Unknown"
+        const amount = Number(inv.amount) || 0
+        if (!acc[name]) {
+          acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
+        }
+        acc[name].totalSpent += amount
+        acc[name].invoiceCount += 1
+        return acc
+      },
+      {}
+    )
+  )
+    .sort((a, b) => b.totalSpent - a.totalSpent)
+    .slice(0, 5)
+
+  const formatCurrency = (value: number) =>
+    `$${(Number(value) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
   return (
-    <AppLayout user={session.user}>
+    <AppLayout user={user}>
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
@@ -69,9 +109,9 @@ export default async function DashboardPage() {
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">{stats.totalInvoices}</div>
+              <div className="text-2xl font-semibold">{totalInvoices}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {stats.dueInvoices} due, {stats.overdueInvoices} overdue
+                {dueInvoices} due, {overdueInvoices} overdue
               </p>
             </CardContent>
           </Card>
@@ -84,7 +124,7 @@ export default async function DashboardPage() {
               <DollarSign className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">${stats.outstandingAmount.toLocaleString()}</div>
+              <div className="text-2xl font-semibold">{formatCurrency(outstandingAmount)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Pending payment
               </p>
@@ -99,10 +139,9 @@ export default async function DashboardPage() {
               <CheckCircle2 className="h-4 w-4 text-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">${stats.paidThisMonth.toLocaleString()}</div>
-              <p className="text-xs text-success mt-1 flex items-center">
-                <TrendingUp className="h-3 w-3 mr-1" />
-                +12.5% from last month
+              <div className="text-2xl font-semibold">{formatCurrency(paidThisMonth)}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Paid invoices issued this month
               </p>
             </CardContent>
           </Card>
@@ -115,7 +154,7 @@ export default async function DashboardPage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">{stats.totalCustomers}</div>
+              <div className="text-2xl font-semibold">{totalCustomers}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Active clients
               </p>
@@ -131,26 +170,30 @@ export default async function DashboardPage() {
               <CardDescription>Your highest spending clients this year</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {topCustomers.map((customer, index) => (
-                  <div key={customer.id} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-medium">
-                        {index + 1}
+              {topCustomers.length > 0 ? (
+                <div className="space-y-4">
+                  {topCustomers.map((customer, index) => (
+                    <div key={customer.name} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-medium">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{customer.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {customer.invoiceCount} invoices
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">{customer.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {customer.invoiceCount} invoices
-                        </p>
+                      <div className="text-sm font-semibold">
+                        {formatCurrency(customer.totalSpent)}
                       </div>
                     </div>
-                    <div className="text-sm font-semibold">
-                      ${customer.totalSpent.toLocaleString()}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">Add invoices to see your top customers.</p>
+              )}
             </CardContent>
           </Card>
 

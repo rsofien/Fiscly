@@ -37,6 +37,34 @@ module.exports = {
         },
       });
 
+      // Set up permissions for public role
+      const permissionsToGrant = [
+        'find', 'findOne', 'create', 'update', 'delete'
+      ];
+      
+      for (const action of permissionsToGrant) {
+        await strapi.query('plugin::users-permissions.permission').create({
+          data: {
+            action: `api::customer.customer.${action}`,
+            role: { connect: [{ id: publicRole.id }] },
+          },
+        });
+        
+        await strapi.query('plugin::users-permissions.permission').create({
+          data: {
+            action: `api::invoice.invoice.${action}`,
+            role: { connect: [{ id: publicRole.id }] },
+          },
+        });
+        
+        await strapi.query('plugin::users-permissions.permission').create({
+          data: {
+            action: `api::invoice-item.invoice-item.${action}`,
+            role: { connect: [{ id: publicRole.id }] },
+          },
+        });
+      }
+
       // Create sample workspace
       const workspace = await strapi.query('api::workspace.workspace').create({
         data: {

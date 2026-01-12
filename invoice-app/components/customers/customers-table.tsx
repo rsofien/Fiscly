@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -12,9 +12,10 @@ import {
   ColumnFiltersState,
   useReactTable,
 } from "@tanstack/react-table"
-import { MoreHorizontal, Plus, Search, Download, Pencil, Trash2, Eye } from "lucide-react"
+import { MoreHorizontal, Plus, Search, Download, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Table,
   TableBody,
@@ -32,71 +33,123 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 type Customer = {
   id: string
   name: string
   email: string
-  phone: string
-  company: string
-  totalInvoices: number
-  totalAmount: number
+  phone?: string
+  company?: string
+  address?: string
+  taxId?: string
   status: "active" | "inactive"
-  createdAt: string
+  notes?: string
 }
-
-// Mock data - replace with Strapi API call
-const mockCustomers: Customer[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@acme.com",
-    phone: "+1 234 567 8900",
-    company: "Acme Corporation",
-    totalInvoices: 24,
-    totalAmount: 45600.0,
-    status: "active",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    email: "sarah@techstart.io",
-    phone: "+1 234 567 8901",
-    company: "TechStart Inc.",
-    totalInvoices: 18,
-    totalAmount: 32400.0,
-    status: "active",
-    createdAt: "2024-02-20",
-  },
-  {
-    id: "3",
-    name: "Michael Chen",
-    email: "m.chen@global.com",
-    phone: "+1 234 567 8902",
-    company: "Global Solutions",
-    totalInvoices: 15,
-    totalAmount: 28900.0,
-    status: "active",
-    createdAt: "2024-03-10",
-  },
-  {
-    id: "4",
-    name: "Emily Brown",
-    email: "emily@digital.ventures",
-    phone: "+1 234 567 8903",
-    company: "Digital Ventures",
-    totalInvoices: 12,
-    totalAmount: 21300.0,
-    status: "inactive",
-    createdAt: "2023-11-05",
-  },
-]
 
 export function CustomersTable() {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [data] = useState<Customer[]>(mockCustomers)
+  const [data, setData] = useState<Customer[]>([])
+  const [loading, setLoading] = useState(true)
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
+  const [formData, setFormData] = useState<Partial<Customer>>({
+    status: "active",
+  })
+
+  useEffect(() => {
+    fetchCustomers()
+  }, [])
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await fetch("/api/customers")
+      if (response.ok) {
+        const result = await response.json()
+        setData(Array.isArray(result) ? result : result.data || [])
+      }
+    } catch (error) {
+      console.error("Failed to fetch customers:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleAddCustomer = async () => {
+    try {
+      const response = await fetch("/api/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      if (response.ok) {
+        setFormData({ status: "active" })
+        setIsAddDialogOpen(false)
+        fetchCustomers()
+      }
+    } catch (error) {
+      console.error("Failed to add customer:", error)
+    }
+  }
+
+  const handleEditCustomer = async () => {
+    if (!selectedCustomer) return
+    try {
+      const response = await fetch(`/api/customers/${selectedCustomer.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      if (response.ok) {
+        setFormData({ status: "active" })
+        setIsEditDialogOpen(false)
+        setSelectedCustomer(null)
+        fetchCustomers()
+      }
+    } catch (error) {
+      console.error("Failed to update customer:", error)
+    }
+  }
+
+  const handleDeleteCustomer = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this customer?")) return
+    try {
+      const response = await fetch(`/api/customers/${id}`, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        fetchCustomers()
+      }
+    } catch (error) {
+      console.error("Failed to delete customer:", error)
+    }
+  }
+
+  const exportToCSV = () => {
+    const headers = ["Name", "Email", "Phone", "Company", "Status"]
+    const rows = data.map((c) => [
+      c.name,
+      c.email,
+      c.phone || "",
+      c.company || "",
+      c.status,
+    ])
+
+    const csv = [
+      headers.join(","),
+      ...rows.map((r) => r.map((v) => `"${v}"`).join(",")),
+    ].join("\n")
+
+    const blob = new Blob([csv], { type: "text/csv" })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `customers_${new Date().toISOString().split("T")[0]}.csv`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
 
   const columns: ColumnDef<Customer>[] = [
     {
@@ -118,20 +171,6 @@ export function CustomersTable() {
       header: "Phone",
     },
     {
-      accessorKey: "totalInvoices",
-      header: "Invoices",
-      cell: ({ row: _row }) => (
-        <div className="text-center">{_row.original.totalInvoices}</div>
-      ),
-    },
-    {
-      accessorKey: "totalAmount",
-      header: "Total Amount",
-      cell: ({ row }) => (
-        <div className="font-medium">${row.original.totalAmount.toLocaleString()}</div>
-      ),
-    },
-    {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
@@ -142,7 +181,7 @@ export function CustomersTable() {
     },
     {
       id: "actions",
-      cell: () => (
+      cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
@@ -150,16 +189,30 @@ export function CustomersTable() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <Eye className="mr-2 h-4 w-4" />
-              View Details
-            </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setSelectedCustomer(row.original)
+                setFormData({
+                  name: row.original.name,
+                  email: row.original.email,
+                  phone: row.original.phone,
+                  company: row.original.company,
+                  address: row.original.address,
+                  taxId: row.original.taxId,
+                  status: row.original.status,
+                  notes: row.original.notes,
+                })
+                setIsEditDialogOpen(true)
+              }}
+            >
               <Pencil className="mr-2 h-4 w-4" />
               Edit
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              onClick={() => handleDeleteCustomer(row.original.id)}
+              className="text-red-600"
+            >
               <Trash2 className="mr-2 h-4 w-4" />
               Delete
             </DropdownMenuItem>
@@ -176,18 +229,13 @@ export function CustomersTable() {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     state: {
       sorting,
       columnFilters,
     },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
   })
-
-  const handleExportCSV = () => {
-    // TODO: Implement CSV export
-    console.log("Exporting CSV...")
-  }
 
   return (
     <div className="space-y-4">
@@ -206,11 +254,11 @@ export function CustomersTable() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={handleExportCSV}>
+          <Button variant="outline" onClick={exportToCSV}>
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Button>
+          <Button onClick={() => setIsAddDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Add Customer
           </Button>
@@ -236,7 +284,13 @@ export function CustomersTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
@@ -280,6 +334,140 @@ export function CustomersTable() {
           </Button>
         </div>
       </div>
+
+      {/* Add Customer Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Customer</DialogTitle>
+            <DialogDescription>Create a new customer</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="name">Name *</Label>
+              <Input
+                id="name"
+                value={formData.name || ""}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Customer name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email || ""}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="customer@example.com"
+              />
+            </div>
+            <div>
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                value={formData.phone || ""}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="+1 (555) 000-0000"
+              />
+            </div>
+            <div>
+              <Label htmlFor="company">Company</Label>
+              <Input
+                id="company"
+                value={formData.company || ""}
+                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                placeholder="Company name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="status">Status</Label>
+              <select
+                id="status"
+                value={formData.status || "active"}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value as "active" | "inactive" })}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddCustomer}>Create Customer</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Customer Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Customer</DialogTitle>
+            <DialogDescription>Update customer information</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="edit-name">Name *</Label>
+              <Input
+                id="edit-name"
+                value={formData.name || ""}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Customer name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-email">Email *</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                value={formData.email || ""}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="customer@example.com"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-phone">Phone</Label>
+              <Input
+                id="edit-phone"
+                value={formData.phone || ""}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="+1 (555) 000-0000"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-company">Company</Label>
+              <Input
+                id="edit-company"
+                value={formData.company || ""}
+                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                placeholder="Company name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-status">Status</Label>
+              <select
+                id="edit-status"
+                value={formData.status || "active"}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value as "active" | "inactive" })}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleEditCustomer}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
