@@ -1,53 +1,44 @@
 #!/bin/bash
 
-# Color codes
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# Fiscly - Start both backend and frontend
 
-echo -e "${BLUE}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║     Fiscly Invoice Management - Full Stack Setup       ║${NC}"
-echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
-echo ""
+echo "🚀 Starting Fiscly..."
 
-# Check if ports are available
-check_port() {
-  if lsof -Pi :$1 -sTCP:LISTEN -t >/dev/null 2>&1 ; then
-    return 0
-  else
-    return 1
-  fi
-}
+# Navigate to project root
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$PROJECT_DIR"
 
-# Check dependencies
-echo -e "${YELLOW}Checking dependencies...${NC}"
+# Create logs directory if it doesn't exist
+mkdir -p logs
 
-# Check Node.js
-if ! command -v node &> /dev/null; then
-  echo -e "${RED}✗ Node.js is not installed${NC}"
-  exit 1
-fi
-echo -e "${GREEN}✓ Node.js $(node -v)${NC}"
+echo "📦 Starting backend (Strapi)..."
+cd invoice-backend
+nohup npm run develop > ../logs/strapi.log 2>&1 &
+STRAPI_PID=$!
+echo "✓ Backend started (PID: $STRAPI_PID)"
 
-# Check npm
-if ! command -v npm &> /dev/null; then
-  echo -e "${RED}✗ npm is not installed${NC}"
-  exit 1
-fi
-echo -e "${GREEN}✓ npm $(npm -v)${NC}"
+# Wait a bit for backend to start
+sleep 5
 
-# Check if Docker is available for postgres
-if command -v docker &> /dev/null; then
-  echo -e "${GREEN}✓ Docker is available${NC}"
-  HAS_DOCKER=true
-else
-  echo -e "${YELLOW}⚠ Docker not found - will need PostgreSQL installed locally${NC}"
-  HAS_DOCKER=false
-fi
+echo "🎨 Starting frontend (Next.js)..."
+cd ../invoice-app
+nohup npm run dev > ../logs/nextjs.log 2>&1 &
+NEXTJS_PID=$!
+echo "✓ Frontend started (PID: $NEXTJS_PID)"
 
 echo ""
-echo -e "${YELLOW}Starting services...${NC}"
+echo "✅ Fiscly is running!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🌐 Frontend: http://localhost:3000"
+echo "⚙️  Backend:  http://localhost:1337"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Logs:"
+echo "  Backend:  logs/strapi.log"
+echo "  Frontend: logs/nextjs.log"
+echo ""
+echo "To stop both services, run:"
+echo "  pkill -f 'npm run develop'; pkill -f 'npm run dev'"
 echo ""
 
 # Create logs directory

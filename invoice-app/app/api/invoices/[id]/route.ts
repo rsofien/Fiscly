@@ -16,8 +16,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // First, get the invoice by numeric ID to find its documentId
-    const response = await fetch(`${STRAPI_URL}/api/invoices?filters[id][$eq]=${params.id}&populate[customer]=*&populate[items]=*`, {
+    // Use populate=* which works in Strapi v5
+    const url = `${STRAPI_URL}/api/invoices?filters[id][\$eq]=${params.id}&populate=*`
+
+    const response = await fetch(url, {
       headers: buildHeaders(),
     });
 

@@ -7,402 +7,174 @@
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 4.3s
+ ✓ Ready in 6s
  ○ Compiling / ...
- ✓ Compiled / in 3.5s (488 modules)
- GET / 307 in 3696ms
- ✓ Compiled in 278ms (234 modules)
- ✓ Compiled /api/customers in 280ms (56 modules)
- GET /api/customers 200 in 508ms
- ✓ Compiled / in 152ms (282 modules)
- GET / 307 in 533ms
- GET /?id=5fc7cf79-7a11-4329-a326-2d57836519f3&vscodeBrowserReqId=1768253131300 307 in 62ms
+ ✓ Compiled / in 3.4s (488 modules)
+ GET / 307 in 3825ms
+ ✓ Compiled in 393ms (234 modules)
  ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 2.1s (1047 modules)
-[next-auth][error][JWT_SESSION_ERROR] 
-https://next-auth.js.org/errors#jwt_session_error decryption operation failed {
-  message: 'decryption operation failed',
-  stack: 'JWEDecryptionFailed: decryption operation failed\n' +
-    '    at gcmDecrypt (webpack-internal:///(rsc)/./node_modules/jose/dist/node/cjs/runtime/decrypt.js:67:15)\n' +
-    '    at decrypt (webpack-internal:///(rsc)/./node_modules/jose/dist/node/cjs/runtime/decrypt.js:92:20)\n' +
-    '    at flattenedDecrypt (webpack-internal:///(rsc)/./node_modules/jose/dist/node/cjs/jwe/flattened/decrypt.js:143:52)\n' +
-    '    at async compactDecrypt (webpack-internal:///(rsc)/./node_modules/jose/dist/node/cjs/jwe/compact/decrypt.js:18:23)\n' +
-    '    at async jwtDecrypt (webpack-internal:///(rsc)/./node_modules/jose/dist/node/cjs/jwt/decrypt.js:8:23)\n' +
-    '    at async Object.decode (webpack-internal:///(rsc)/./node_modules/next-auth/jwt/index.js:56:7)\n' +
-    '    at async Object.session (webpack-internal:///(rsc)/./node_modules/next-auth/core/routes/session.js:48:28)\n' +
-    '    at async AuthHandler (webpack-internal:///(rsc)/./node_modules/next-auth/core/index.js:136:27)\n' +
-    '    at async getServerSession (webpack-internal:///(rsc)/./node_modules/next-auth/next/index.js:129:19)\n' +
-    '    at async DashboardPage (webpack-internal:///(rsc)/./app/dashboard/page.tsx:27:21)',
-  name: 'JWEDecryptionFailed'
+ ✓ Compiled /dashboard in 6.4s (1024 modules)
+ ✓ Compiled /api/customers in 297ms (677 modules)
+ ✓ Compiled (681 modules)
+Customer fetch error: TypeError: fetch failed
+    at node:internal/deps/undici/undici:13510:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async GET (webpack-internal:///(rsc)/./app/api/customers/route.ts:19:26)
+    at async /Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: AggregateError [ECONNREFUSED]: 
+      at internalConnectMultiple (node:net:1122:18)
+      at afterConnectMultiple (node:net:1689:7)
+      at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
 }
- GET /dashboard 307 in 2335ms
- GET /dashboard 307 in 2378ms
- ○ Compiling /auth/login ...
- ✓ Compiled /auth/login in 809ms (1299 modules)
- GET /auth/login 200 in 1069ms
- GET /auth/login 200 in 1082ms
- ✓ Compiled /api/auth/[...nextauth] in 117ms (803 modules)
- GET /api/auth/providers 200 in 785ms
- GET /api/auth/csrf 200 in 9ms
- POST /api/auth/callback/credentials 401 in 44ms
- GET /api/auth/providers 200 in 21ms
- GET /api/auth/csrf 200 in 10ms
- POST /api/auth/callback/credentials 200 in 147ms
- ✓ Compiled /api/invoices in 149ms (805 modules)
- ✓ Compiled (807 modules)
- GET /api/customers 200 in 496ms
- GET /api/invoices 200 in 551ms
- GET /api/reports 200 in 555ms
- GET /dashboard?_rsc=syt8b 200 in 623ms
- ✓ Compiled /favicon.ico in 495ms (836 modules)
- GET /favicon.ico 200 in 665ms
+ GET /api/customers 500 in 655ms
+Invoice fetch error: TypeError: fetch failed
+    at node:internal/deps/undici/undici:13510:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async GET (webpack-internal:///(rsc)/./app/api/invoices/route.ts:19:26)
+    at async /Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: AggregateError [ECONNREFUSED]: 
+      at internalConnectMultiple (node:net:1122:18)
+      at afterConnectMultiple (node:net:1689:7)
+      at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+ GET /api/invoices 500 in 658ms
+Reports error: TypeError: fetch failed
+    at node:internal/deps/undici/undici:13510:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async GET (webpack-internal:///(rsc)/./app/api/reports/route.ts:17:26)
+    at async /Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/rhoumasofien/Local Sites/Fiscly/invoice-app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  [cause]: AggregateError [ECONNREFUSED]: 
+      at internalConnectMultiple (node:net:1122:18)
+      at afterConnectMultiple (node:net:1689:7)
+      at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+ GET /api/reports 500 in 665ms
+ GET /dashboard 200 in 7781ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 641ms (680 modules)
+ GET /favicon.ico 200 in 829ms
  ○ Compiling /customers ...
- ✓ Compiled /customers in 1203ms (1313 modules)
- GET /customers?_rsc=xb5uw 200 in 67ms
- ✓ Compiled /api/customers in 103ms (821 modules)
- GET /api/customers 200 in 251ms
- GET /api/customers 200 in 28ms
- POST /api/customers 201 in 55ms
- GET /api/customers 200 in 24ms
- ✓ Compiled /api/customers/[id] in 134ms (823 modules)
- PUT /api/customers/4 400 in 520ms
- PUT /api/customers/4 400 in 25ms
- PUT /api/customers/4 400 in 24ms
- ○ Compiling /invoices ...
- ✓ Compiled /invoices in 583ms (1354 modules)
- GET /invoices?_rsc=7qj29 200 in 49ms
- ✓ Compiled /api/invoices in 119ms (833 modules)
- GET /api/invoices 200 in 186ms
- GET /api/invoices 200 in 26ms
- ✓ Compiled /api/invoices/[id] in 207ms (835 modules)
- DELETE /api/invoices/3 200 in 552ms
- GET /api/invoices 200 in 22ms
- GET /invoices 200 in 153ms
- GET /api/invoices 200 in 35ms
- ✓ Compiled /favicon.ico in 218ms (864 modules)
- GET /favicon.ico 200 in 449ms
- GET /api/invoices 200 in 435ms
- POST /api/invoices 400 in 36ms
- POST /api/invoices 400 in 30ms
- ○ Compiling /reports ...
- ✓ Compiled /reports in 3.2s (2469 modules)
- GET /reports?_rsc=1pa75 200 in 59ms
- ✓ Compiled /api/reports in 193ms (1407 modules)
- GET /api/reports 200 in 279ms
- GET /api/reports 200 in 54ms
- GET /api/reports 200 in 36ms
- ✓ Compiled /api/customers in 155ms (1409 modules)
- GET /api/invoices 200 in 394ms
- GET /api/customers 200 in 409ms
- GET /dashboard?_rsc=16jui 200 in 484ms
- GET /customers?_rsc=xb5uw 200 in 26ms
- GET /api/customers 200 in 32ms
- GET /api/customers 200 in 20ms
- GET /invoices?_rsc=1pk80 200 in 27ms
- GET /api/invoices 200 in 31ms
- GET /api/invoices 200 in 21ms
- GET /api/customers 200 in 25ms
- GET /api/customers 200 in 17ms
- PUT /api/customers/1 400 in 61ms
- GET /api/invoices 200 in 52ms
- GET /api/invoices 200 in 25ms
- ○ Compiling /api/customers ...
- ✓ Compiled /api/customers in 1849ms (2424 modules)
- ✓ Compiled in 1ms (1374 modules)
- GET /invoices?_rsc=1t6lu 200 in 578ms
- GET /api/customers 200 in 1421ms
- GET /api/invoices 200 in 1429ms
- GET /api/customers 200 in 28ms
- GET /api/invoices 200 in 25ms
- ✓ Compiled in 630ms (2452 modules)
- GET /invoices?_rsc=1t6lu 200 in 119ms
- GET /invoices?_rsc=1t6lu 200 in 215ms
- ✓ Compiled in 1114ms (2438 modules)
- GET /invoices?_rsc=1t6lu 200 in 201ms
- ✓ Compiled in 482ms (1078 modules)
- GET /invoices?_rsc=1t6lu 200 in 86ms
- GET /api/customers 200 in 80ms
- GET /api/customers 200 in 21ms
- GET /api/invoices 200 in 34ms
- ✓ Compiled in 572ms (1078 modules)
- GET /invoices?_rsc=1t6lu 200 in 109ms
- ✓ Compiled in 2.5s (2452 modules)
- GET /invoices?_rsc=1t6lu 200 in 207ms
- ✓ Compiled in 781ms (2424 modules)
- GET /invoices?_rsc=1t6lu 200 in 155ms
- ✓ Compiled in 164ms (1078 modules)
- GET /invoices?_rsc=1t6lu 200 in 19ms
- ✓ Compiled in 943ms (1078 modules)
- GET /invoices?_rsc=1t6lu 200 in 59ms
- ✓ Compiled in 166ms (1078 modules)
- GET /invoices?_rsc=1t6lu 200 in 18ms
- ✓ Compiled in 401ms (1078 modules)
- GET /invoices?_rsc=1t6lu 200 in 29ms
- ○ Compiling /api/customers/[id] ...
- ✓ Compiled /api/customers/[id] in 527ms (1372 modules)
- GET /invoices?_rsc=1t6lu 200 in 148ms
- PUT /api/customers/1 200 in 726ms
- PUT /api/customers/1 200 in 39ms
- GET /invoices 200 in 176ms
- ✓ Compiled /api/customers in 369ms (1401 modules)
- ✓ Compiled (1405 modules)
- GET /favicon.ico 200 in 739ms
- GET /api/customers 200 in 762ms
- GET /api/invoices 200 in 780ms
- GET /customers?_rsc=jq4ko 200 in 53ms
- GET /api/customers 200 in 63ms
- GET /api/invoices 200 in 61ms
- GET /api/customers 200 in 84ms
- GET /api/customers 200 in 52ms
- PUT /api/customers/1 200 in 62ms
- GET /api/customers 200 in 27ms
- GET /api/customers 200 in 28ms
- GET /api/invoices 200 in 37ms
- GET /api/customers 200 in 27ms
- GET /api/invoices 200 in 24ms
- POST /api/invoices 400 in 39ms
- POST /api/invoices 400 in 28ms
- GET /invoices 200 in 147ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 1248ms (2472 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1588ms
- POST /api/invoices 400 in 44ms
- ○ Compiling /invoices/[id]/preview ...
- ✓ Compiled /invoices/[id]/preview in 817ms (2455 modules)
- ✓ Compiled /api/invoices/[id] in 196ms (1384 modules)
- GET /api/invoices/3 404 in 312ms
- GET /api/invoices/3 404 in 317ms
- ✓ Compiled /api/customers in 165ms (1386 modules)
- GET /api/invoices 200 in 412ms
- GET /api/invoices 200 in 413ms
- GET /api/customers 200 in 431ms
- GET /api/customers 200 in 433ms
- GET /reports?_rsc=1pa75 200 in 48ms
- ✓ Compiled /api/reports in 159ms (1388 modules)
- GET /api/reports 200 in 238ms
- GET /api/reports 200 in 242ms
- GET /invoices?_rsc=1pk80 200 in 65ms
- GET /api/invoices 200 in 51ms
- GET /api/invoices 200 in 56ms
- GET /api/customers 200 in 58ms
- GET /api/customers 200 in 61ms
- ✓ Compiled in 537ms (2475 modules)
- GET /invoices?_rsc=1t6lu 200 in 73ms
- ✓ Compiled in 3.1s (2431 modules)
- GET /invoices?_rsc=1t6lu 200 in 241ms
- ✓ Compiled /api/customers in 245ms (1372 modules)
- GET /api/customers 200 in 417ms
- GET /invoices 200 in 201ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 607ms (2446 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 777ms
- ✓ Compiled /api/invoices in 459ms (1402 modules)
- ✓ Compiled (1404 modules)
- GET /favicon.ico 200 in 928ms
- GET /api/customers 200 in 920ms
- GET /api/customers 200 in 922ms
- GET /api/invoices 200 in 934ms
- GET /api/invoices 200 in 947ms
- GET /invoices 200 in 195ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 31ms
- GET /favicon.ico 200 in 21ms
- GET /api/invoices 200 in 140ms
- GET /api/customers 200 in 145ms
- GET /api/invoices 200 in 158ms
- GET /api/customers 200 in 161ms
- ✓ Compiled /invoices/[id]/preview in 368ms (1413 modules)
- ✓ Compiled /api/invoices/[id] in 168ms (1415 modules)
- GET /api/invoices/1 404 in 256ms
- GET /api/invoices/1 404 in 264ms
- GET /api/customers 200 in 49ms
- GET /api/invoices 200 in 58ms
- GET /api/customers 200 in 54ms
- GET /api/invoices 200 in 61ms
- POST /api/invoices 201 in 29ms
- POST /api/invoices 400 in 56ms
- GET /api/invoices 200 in 39ms
- DELETE /api/invoices/4 200 in 118ms
- DELETE /api/invoices/5 200 in 41ms
- GET /invoices 200 in 157ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 31ms
- GET /favicon.ico 200 in 27ms
- GET /api/invoices 200 in 56ms
- GET /api/invoices 200 in 62ms
- GET /api/customers 200 in 66ms
- GET /api/customers 200 in 72ms
- DELETE /api/invoices/3 200 in 65ms
- GET /api/invoices 200 in 25ms
- GET /api/invoices/2 404 in 25ms
- GET /api/invoices/2 404 in 31ms
- ✓ Compiled in 1122ms (2380 modules)
- GET /api/invoices/2 200 in 69ms
- GET /api/invoices 200 in 84ms
- GET /api/customers 200 in 84ms
- GET /api/invoices 200 in 92ms
- GET /api/customers 200 in 92ms
- GET /api/invoices/2 200 in 73ms
- GET /api/invoices/2 200 in 71ms
- GET /api/invoices/1 200 in 40ms
- GET /api/invoices/2 200 in 63ms
- GET /invoices 200 in 197ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 35ms
- GET /favicon.ico 200 in 24ms
- GET /api/invoices 200 in 53ms
- GET /api/customers 200 in 58ms
- GET /api/customers 200 in 60ms
- GET /api/invoices 200 in 71ms
- GET /api/invoices/1 200 in 115ms
- GET /api/invoices/1 200 in 118ms
- GET /api/invoices 200 in 65ms
- GET /api/invoices 200 in 64ms
- GET /api/customers 200 in 68ms
- GET /api/customers 200 in 77ms
- GET /reports?_rsc=1pa75 200 in 19ms
- ○ Compiling /api/reports ...
- ✓ Compiled /api/reports in 555ms (1295 modules)
- GET /api/reports 200 in 664ms
- GET /api/reports 200 in 704ms
- GET /invoices?_rsc=1pk80 200 in 75ms
- GET /api/invoices 200 in 40ms
- GET /api/customers 200 in 44ms
- GET /api/invoices 200 in 52ms
- GET /api/customers 200 in 50ms
- GET /api/reports 200 in 35ms
- GET /api/reports 200 in 43ms
- GET /customers?_rsc=xb5uw 200 in 20ms
- GET /api/customers 200 in 30ms
- GET /api/customers 200 in 30ms
- GET /api/customers 200 in 34ms
- GET /api/reports 200 in 41ms
- GET /api/invoices 200 in 43ms
- GET /dashboard?_rsc=16jui 200 in 89ms
- GET /api/customers 200 in 38ms
- GET /api/customers 200 in 42ms
- GET /invoices?_rsc=1pk80 200 in 49ms
- GET /api/customers 200 in 75ms
- GET /api/customers 200 in 79ms
- GET /api/invoices 200 in 80ms
- GET /api/invoices 200 in 82ms
- GET /invoices 200 in 135ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 25ms
- GET /favicon.ico 200 in 27ms
- GET /api/customers 200 in 55ms
- GET /api/customers 200 in 59ms
- GET /api/invoices 200 in 67ms
- GET /api/invoices 200 in 70ms
- ○ Compiling /api/customers ...
- ✓ Compiled /api/customers in 1653ms (2318 modules)
- ✓ Compiled in 1ms (1261 modules)
- GET /invoices?_rsc=1t6lu 200 in 658ms
- GET /api/invoices 200 in 1374ms
- GET /api/invoices 200 in 1377ms
- GET /api/customers 200 in 1372ms
- GET /api/customers 200 in 1369ms
- ✓ Compiled in 358ms (2346 modules)
- GET /invoices?_rsc=1t6lu 200 in 114ms
- ✓ Compiled in 1290ms (2346 modules)
- GET /invoices?_rsc=1t6lu 200 in 206ms
- ✓ Compiled in 1254ms (2346 modules)
- GET /invoices?_rsc=1t6lu 200 in 1104ms
- GET /invoices?_rsc=1t6lu 200 in 15ms
- ✓ Compiled /api/invoice-items in 369ms (1259 modules)
- POST /api/invoice-items 201 in 533ms
- ✓ Compiled in 920ms (2344 modules)
- GET /invoices?_rsc=1t6lu 200 in 131ms
- ✓ Compiled in 883ms (2344 modules)
- GET /invoices?_rsc=1t6lu 200 in 117ms
- ✓ Compiled in 445ms (1085 modules)
- GET /invoices?_rsc=1t6lu 200 in 41ms
- ○ Compiling /api/invoices/[id] ...
- ✓ Compiled /api/invoices/[id] in 950ms (1259 modules)
- GET /invoices?_rsc=1t6lu 200 in 108ms
- GET /api/invoices/1 404 in 1106ms
- GET /api/invoices/1 404 in 55ms
- GET /api/invoices/1 404 in 23ms
- GET /invoices 200 in 175ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 1485ms (2333 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1618ms
- ✓ Compiled /api/customers in 293ms (1289 modules)
- ✓ Compiled (1293 modules)
- GET /favicon.ico 200 in 816ms
- GET /api/invoices 200 in 808ms
- GET /api/invoices 200 in 791ms
- GET /api/customers 200 in 809ms
- GET /api/customers 200 in 799ms
- GET /api/invoices/1 404 in 42ms
- GET /api/invoices/1 404 in 46ms
- GET /api/customers 200 in 48ms
- GET /api/customers 200 in 46ms
- GET /api/invoices 200 in 56ms
- GET /api/invoices 200 in 53ms
- DELETE /api/invoices/1 200 in 53ms
- GET /api/invoices 200 in 51ms
- DELETE /api/invoices/2 200 in 40ms
- GET /api/invoices 200 in 22ms
- POST /api/invoices 201 in 54ms
- ✓ Compiled /api/invoice-items in 480ms (1261 modules)
- POST /api/invoice-items 201 in 615ms
- POST /api/invoices 400 in 31ms
- POST /api/invoice-items 201 in 26ms
- GET /api/invoices 200 in 38ms
- GET /invoices 200 in 189ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 748ms (2335 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 889ms
- ✓ Compiled /api/customers in 184ms (1291 modules)
- ✓ Compiled (1293 modules)
- GET /favicon.ico 200 in 480ms
- GET /api/invoices 200 in 482ms
- GET /api/invoices 200 in 491ms
- GET /api/customers 200 in 493ms
- GET /api/customers 200 in 506ms
- ✓ Compiled /api/invoices/[id] in 419ms (1295 modules)
- GET /api/invoices/6 404 in 544ms
- GET /api/invoices/6 404 in 613ms
- GET /api/invoices 200 in 48ms
+ ✓ Compiled /customers in 969ms (1104 modules)
+ GET /customers?_rsc=xb5uw 200 in 77ms
+ ✓ Compiled /api/customers in 108ms (730 modules)
+ GET /api/customers 200 in 288ms
+ GET /api/customers 200 in 39ms
+ ✓ Compiled /api/customers in 316ms (701 modules)
+ ✓ Compiled (705 modules)
+ GET /api/customers 200 in 751ms
+ GET /api/invoices 200 in 769ms
+ GET /api/reports 200 in 777ms
+ GET /dashboard?_rsc=pcfej 200 in 902ms
+ GET /customers?_rsc=g3qqw 200 in 116ms
  GET /api/customers 200 in 51ms
- GET /api/invoices 200 in 57ms
- GET /api/customers 200 in 58ms
- GET /reports?_rsc=1pa75 200 in 53ms
- ✓ Compiled /api/reports in 335ms (1297 modules)
- GET /api/reports 200 in 464ms
- GET /api/reports 200 in 465ms
- GET /customers?_rsc=xb5uw 200 in 29ms
- GET /api/customers 200 in 22ms
- GET /api/customers 200 in 24ms
- ✓ Compiled /api/customers/[id] in 489ms (1299 modules)
- DELETE /api/customers/2 200 in 599ms
+ GET /api/customers 200 in 30ms
+ ✓ Compiled /api/customers/[id] in 319ms (707 modules)
+ DELETE /api/customers/4 200 in 1395ms
  GET /api/customers 200 in 25ms
- DELETE /api/customers/3 200 in 68ms
- GET /api/customers 200 in 42ms
- DELETE /api/customers/1 200 in 47ms
- GET /api/customers 200 in 18ms
- GET /api/customers 200 in 35ms
- GET /api/invoices 200 in 38ms
- GET /api/reports 200 in 41ms
- GET /dashboard?_rsc=16jui 200 in 93ms
- ○ Compiling /settings ...
- ✓ Compiled /settings in 1424ms (2312 modules)
- GET /settings?_rsc=1n6hx 200 in 91ms
- ✓ Compiled /api/customers in 163ms (1266 modules)
- ✓ Compiled (1270 modules)
- GET /api/customers 200 in 593ms
- GET /api/invoices 200 in 597ms
- GET /api/reports 200 in 609ms
- GET /dashboard?_rsc=pcfej 200 in 663ms
- GET /customers?_rsc=g3qqw 200 in 80ms
- GET /api/customers 200 in 24ms
+ ○ Compiling /invoices ...
+ ✓ Compiled /invoices in 956ms (1117 modules)
+ GET /invoices?_rsc=7qj29 200 in 148ms
+ GET /api/customers 200 in 118ms
+ GET /api/invoices 200 in 137ms
+ GET /api/customers 200 in 66ms
+ GET /api/invoices 200 in 73ms
+ ○ Compiling /reports ...
+ ✓ Compiled /reports in 2.6s (2201 modules)
+ GET /reports?_rsc=1pa75 200 in 108ms
+ ✓ Compiled /api/reports in 215ms (1258 modules)
+ GET /api/reports 200 in 303ms
+ GET /api/reports 200 in 14ms
+ GET /customers?_rsc=g3qqw 200 in 46ms
+ GET /api/customers 200 in 74ms
  GET /api/customers 200 in 26ms
- GET /customers 200 in 153ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 508ms (2338 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 659ms
- ✓ Compiled /favicon.ico in 284ms (1293 modules)
- GET /favicon.ico 200 in 640ms
- GET /api/customers 200 in 620ms
- GET /api/customers 200 in 626ms
- GET /api/invoices 200 in 43ms
- GET /api/customers 200 in 49ms
- GET /api/reports 200 in 52ms
- GET /dashboard?_rsc=16jui 200 in 106ms
+ GET /invoices?_rsc=1pk80 200 in 32ms
+ GET /api/customers 200 in 146ms
+ GET /api/invoices 200 in 162ms
+ GET /api/customers 200 in 84ms
+ GET /api/invoices 200 in 93ms
+ GET /customers?_rsc=g3qqw 200 in 28ms
+ GET /api/customers 200 in 29ms
+ GET /api/customers 200 in 22ms
+ GET /api/customers 200 in 32ms
+ GET /api/invoices 200 in 40ms
+ GET /api/customers 200 in 41ms
+ GET /api/invoices 200 in 48ms
+ GET /reports?_rsc=182s1 200 in 29ms
+ GET /api/reports 200 in 13ms
+ GET /api/reports 200 in 18ms
+ GET /api/invoices 200 in 41ms
+ GET /api/customers 200 in 48ms
+ GET /api/reports 200 in 49ms
+ GET /dashboard?_rsc=pcfej 200 in 108ms
+ GET /api/customers 200 in 44ms
+ GET /api/customers 200 in 21ms
+ GET /api/customers 200 in 30ms
+ GET /api/invoices 200 in 36ms
+ GET /api/customers 200 in 24ms
+ GET /api/invoices 200 in 28ms
+ ○ Compiling /invoices/[id]/preview ...
+ ✓ Compiled /invoices/[id]/preview in 1202ms (2217 modules)
+ ○ Compiling /api/invoices/[id] ...
+ ✓ Compiled /api/invoices/[id] in 729ms (1267 modules)
+ GET /api/invoices/6 200 in 1301ms
+ GET /api/invoices/6 200 in 59ms

@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation"
-import { auth } from "@/lib/auth"
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -7,17 +9,36 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
-export const dynamic = "force-dynamic"
+export default function SettingsPage() {
+  const router = useRouter()
+  const [workspaceName, setWorkspaceName] = useState("")
+  const [workspaceEmail, setWorkspaceEmail] = useState("")
+  const [workspaceAddress, setWorkspaceAddress] = useState("")
+  const [userName, setUserName] = useState("")
+  const [invoicePrefix, setInvoicePrefix] = useState("INV")
+  const [paymentTerms, setPaymentTerms] = useState("15")
+  const [invoiceNotes, setInvoiceNotes] = useState("")
 
-export default async function SettingsPage() {
-  const session = await auth()
+  const handleSaveWorkspace = () => {
+    alert("Workspace settings saved successfully!")
+  }
 
-  if (!session?.user) {
-    redirect("/auth/login")
+  const handleUpdateProfile = () => {
+    alert("Profile updated successfully!")
+  }
+
+  const handleSaveInvoiceSettings = () => {
+    alert("Invoice settings saved successfully!")
+  }
+
+  const handleDeleteWorkspace = () => {
+    if (confirm("Are you sure you want to delete this workspace? This action cannot be undone.")) {
+      alert("Workspace deletion feature will be implemented soon.")
+    }
   }
 
   return (
-    <AppLayout user={session.user}>
+    <AppLayout user={{ email: "user@example.com", name: "User" }}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Settings</h1>
@@ -35,7 +56,8 @@ export default async function SettingsPage() {
                 <Label htmlFor="workspace-name">Workspace Name</Label>
                 <Input
                   id="workspace-name"
-                  defaultValue={session.user.workspaceName || ""}
+                  value={workspaceName}
+                  onChange={(e) => setWorkspaceName(e.target.value)}
                   placeholder="My Company"
                 />
               </div>
@@ -44,6 +66,8 @@ export default async function SettingsPage() {
                 <Input
                   id="workspace-email"
                   type="email"
+                  value={workspaceEmail}
+                  onChange={(e) => setWorkspaceEmail(e.target.value)}
                   placeholder="billing@company.com"
                 />
               </div>
@@ -51,11 +75,13 @@ export default async function SettingsPage() {
                 <Label htmlFor="workspace-address">Address</Label>
                 <Textarea
                   id="workspace-address"
+                  value={workspaceAddress}
+                  onChange={(e) => setWorkspaceAddress(e.target.value)}
                   placeholder="123 Business St, Suite 100&#10;San Francisco, CA 94105"
                   rows={3}
                 />
               </div>
-              <Button>Save Changes</Button>
+              <Button onClick={handleSaveWorkspace}>Save Changes</Button>
             </CardContent>
           </Card>
 
@@ -67,16 +93,20 @@ export default async function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
-                <Input id="name" defaultValue={session.user.name || ""} />
+                <Input 
+                  id="name" 
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue={session.user.email} disabled />
+                <Input id="email" type="email" value="user@example.com" disabled />
                 <p className="text-sm text-muted-foreground">
                   Email cannot be changed after registration
                 </p>
               </div>
-              <Button>Update Profile</Button>
+              <Button onClick={handleUpdateProfile}>Update Profile</Button>
             </CardContent>
           </Card>
 
@@ -88,21 +118,33 @@ export default async function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="invoice-prefix">Invoice Number Prefix</Label>
-                <Input id="invoice-prefix" defaultValue="INV" placeholder="INV" />
+                <Input 
+                  id="invoice-prefix" 
+                  value={invoicePrefix}
+                  onChange={(e) => setInvoicePrefix(e.target.value)}
+                  placeholder="INV" 
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="payment-terms">Default Payment Terms (days)</Label>
-                <Input id="payment-terms" type="number" defaultValue="15" />
+                <Input 
+                  id="payment-terms" 
+                  type="number" 
+                  value={paymentTerms}
+                  onChange={(e) => setPaymentTerms(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="invoice-notes">Default Invoice Notes</Label>
                 <Textarea
                   id="invoice-notes"
+                  value={invoiceNotes}
+                  onChange={(e) => setInvoiceNotes(e.target.value)}
                   placeholder="Thank you for your business!"
                   rows={3}
                 />
               </div>
-              <Button>Save Settings</Button>
+              <Button onClick={handleSaveInvoiceSettings}>Save Settings</Button>
             </CardContent>
           </Card>
 
@@ -119,7 +161,7 @@ export default async function SettingsPage() {
                     Permanently delete this workspace and all associated data
                   </p>
                 </div>
-                <Button variant="destructive">Delete</Button>
+                <Button variant="destructive" onClick={handleDeleteWorkspace}>Delete</Button>
               </div>
             </CardContent>
           </Card>

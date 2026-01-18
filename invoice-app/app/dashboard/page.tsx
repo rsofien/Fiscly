@@ -4,6 +4,7 @@ import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FileText, DollarSign, Users, AlertCircle, CheckCircle2 } from "lucide-react"
+import { GetStartedButton } from "@/components/dashboard/get-started-button"
 
 export const dynamic = "force-dynamic"
 
@@ -93,9 +94,7 @@ export default async function DashboardPage() {
               Welcome to Fiscly! Start by adding your first customer and creating your first invoice. 
               Need help getting started? Check out our documentation or contact support.
             </p>
-            <Button size="sm" variant="outline">
-              Get Started Guide
-            </Button>
+            <GetStartedButton />
           </CardContent>
         </Card>
 

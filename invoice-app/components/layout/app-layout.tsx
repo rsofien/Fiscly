@@ -82,12 +82,12 @@ export function AppLayout({ children, user }: AppLayoutProps) {
           </nav>
 
           <div className="flex items-center space-x-2 ml-auto">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" onClick={() => alert('Notifications feature coming soon!')}>
               <Bell className="h-5 w-5" />
               <span className="absolute top-2 right-2 h-2 w-2 bg-destructive rounded-full" />
             </Button>
 
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={() => window.open('https://docs.fiscly.com', '_blank')}>
               <HelpCircle className="h-5 w-5" />
             </Button>
 
@@ -125,13 +125,9 @@ export function AppLayout({ children, user }: AppLayoutProps) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <form action="/api/auth/signout" method="POST">
-                    <button type="submit" className="flex w-full items-center">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Logout
-                    </button>
-                  </form>
+                <DropdownMenuItem onClick={() => window.location.href = '/api/auth/signout'}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
