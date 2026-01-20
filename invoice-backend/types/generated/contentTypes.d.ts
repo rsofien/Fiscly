@@ -560,6 +560,8 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    currency: Schema.Attribute.Enumeration<['USD', 'CAD', 'EUR', 'USDT']> &
+      Schema.Attribute.DefaultTo<'USD'>;
     customer: Schema.Attribute.Relation<'manyToOne', 'api::customer.customer'>;
     description: Schema.Attribute.Text;
     dueDate: Schema.Attribute.Date & Schema.Attribute.Required;
@@ -627,6 +629,8 @@ export interface ApiWorkspaceWorkspace extends Struct.CollectionTypeSchema {
       'api::workspace.workspace'
     > &
       Schema.Attribute.Private;
+    logo: Schema.Attribute.Media;
+    matriculeFiscale: Schema.Attribute.String;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;

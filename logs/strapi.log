@@ -3,9 +3,9 @@
 > strapi develop
 
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✖ Error cleaning dist dir: Error: ENOENT: no such file or directory, lstat '/Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist/tsconfig.tsbuildinfo' (22ms)
+✔ Cleaning dist dir (10ms)
 - Loading Strapi
-[2026-01-18 11:32:10.639] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+[2026-01-20 12:24:28.327] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
 🔧 Configuring API permissions...
 - Building build context
 
@@ -15,20 +15,563 @@
     - STRAPI_TELEMETRY_DISABLED
     - STRAPI_AI_URL
     - STRAPI_ANALYTICS_URL
-✔ Building build context (325ms)
+✔ Building build context (115ms)
 - Creating admin
-✔ Creating admin (1263ms)
-✔ Loading Strapi (8916ms)
+✔ Creating admin (810ms)
+✔ Loading Strapi (4831ms)
 - Generating types
-✔ Generating types (346ms)
+✔ Generating types (191ms)
 - Compiling TS
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (70ms)
-✔ Compiling TS (4161ms)
-[2026-01-18 11:32:16.969] [31merror[39m: The port 1337 is already used by another application.
-[2026-01-18 11:32:16.969] [32minfo[39m: Shutting down Strapi
-npm notice
-npm notice New major version of npm available! 10.8.2 -> 11.7.0
-npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.7.0
-npm notice To update run: npm install -g npm@11.7.0
-npm notice
+✔ Cleaning dist dir (3ms)
+✔ Compiling TS (2263ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 12:24:31 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 7304 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 11413                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 12:24:31.980] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+12:24:34 PM [vite] page reload .strapi/client/index.html
+[2026-01-20 12:24:46.337] [32mhttp[39m: POST /api/auth/local (112 ms) 200
+[2026-01-20 12:24:46.623] [32mhttp[39m: GET /api/customers (20 ms) 200
+[2026-01-20 12:24:46.642] [32mhttp[39m: GET /api/invoices?populate=* (25 ms) 200
+[2026-01-20 12:24:46.643] [32mhttp[39m: GET /api/invoices?populate=* (30 ms) 200
+[2026-01-20 12:24:51.145] [32mhttp[39m: GET /api/customers (9 ms) 200
+[2026-01-20 12:24:51.148] [32mhttp[39m: GET /api/invoices?populate=* (17 ms) 200
+[2026-01-20 12:24:51.170] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-20 12:24:51.175] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-20 12:24:52.737] [32mhttp[39m: GET /api/customers (14 ms) 200
+[2026-01-20 12:24:52.755] [32mhttp[39m: GET /api/customers (7 ms) 200
+[2026-01-20 12:24:53.242] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-20 12:24:53.246] [32mhttp[39m: GET /api/invoices?populate=* (17 ms) 200
+[2026-01-20 12:24:53.275] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-20 12:24:53.279] [32mhttp[39m: GET /api/invoices?populate=* (10 ms) 200
+[2026-01-20 12:24:54.423] [32mhttp[39m: GET /api/customers (6 ms) 200
+[2026-01-20 12:24:54.446] [32mhttp[39m: GET /api/customers (6 ms) 200
+[2026-01-20 12:24:54.969] [32mhttp[39m: GET /api/customers (11 ms) 200
+[2026-01-20 12:24:54.975] [32mhttp[39m: GET /api/invoices?populate=* (21 ms) 200
+[2026-01-20 12:24:54.991] [32mhttp[39m: GET /api/customers (9 ms) 200
+[2026-01-20 12:24:54.997] [32mhttp[39m: GET /api/invoices?populate=* (11 ms) 200
+[2026-01-20 12:24:57.132] [32mhttp[39m: GET /api/workspaces?populate=logo (19 ms) 200
+[2026-01-20 12:24:57.151] [32mhttp[39m: GET /api/workspaces?populate=logo (7 ms) 200
+[2026-01-20 12:24:57.312] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&populate=* (10 ms) 200
+[2026-01-20 12:24:57.333] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&populate=* (11 ms) 200
+[2026-01-20 12:25:01.851] [32mhttp[39m: GET /api/customers (9 ms) 200
+[2026-01-20 12:25:01.853] [32mhttp[39m: GET /api/invoices?populate=* (20 ms) 200
+[2026-01-20 12:25:01.884] [32mhttp[39m: GET /api/customers (8 ms) 200
+[2026-01-20 12:25:01.887] [32mhttp[39m: GET /api/invoices?populate=* (9 ms) 200
+[2026-01-20 12:25:04.108] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:25:04.131] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:25:11.023] [32mhttp[39m: POST /api/upload (7 ms) 403
+[2026-01-20 12:25:11.041] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:25:11.058] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (14 ms) 200
+[2026-01-20 12:25:12.313] [32mhttp[39m: GET /api/workspaces?populate=logo (11 ms) 200
+[2026-01-20 12:25:18.463] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:25:18.997] [32mhttp[39m: GET /api/workspaces?populate=logo (7 ms) 200
+[2026-01-20 12:25:43.484] [32mhttp[39m: GET /api/workspaces?populate=logo (15 ms) 200
+[2026-01-20 12:25:43.484] [32mhttp[39m: GET /api/workspaces?populate=logo (10 ms) 200
+[2026-01-20 12:25:49.925] [32mhttp[39m: POST /api/upload (10 ms) 403
+[2026-01-20 12:25:49.962] [32mhttp[39m: GET /api/workspaces?populate=logo (15 ms) 200
+[2026-01-20 12:25:49.979] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (14 ms) 200
+[2026-01-20 12:25:51.879] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:26:31.414] [32mhttp[39m: GET /api/workspaces?populate=logo (11 ms) 200
+[2026-01-20 12:26:31.414] [32mhttp[39m: GET /api/workspaces?populate=logo (15 ms) 200
+[2026-01-20 12:26:36.369] [32mhttp[39m: POST /api/upload (8 ms) 403
+[2026-01-20 12:26:36.405] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:26:36.421] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (12 ms) 200
+[2026-01-20 12:26:48.442] [32mhttp[39m: GET /api/workspaces?populate=logo (13 ms) 200
+[2026-01-20 12:29:59.118] [32mhttp[39m: GET /api/workspaces?populate=logo (21 ms) 200
+[2026-01-20 12:29:59.119] [32mhttp[39m: GET /api/workspaces?populate=logo (14 ms) 200
+[2026-01-20 12:30:06.159] [32mhttp[39m: POST /api/upload (6 ms) 403
+[2026-01-20 12:30:06.242] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:30:06.257] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (13 ms) 200
+[2026-01-20 12:30:13.677] [32mhttp[39m: GET /api/workspaces?populate=logo (16 ms) 200
+[2026-01-20 12:35:27.798] [32mhttp[39m: GET /api/workspaces?populate=logo (17 ms) 200
+[2026-01-20 12:35:27.799] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:35:39.052] [32mhttp[39m: POST /api/upload (5 ms) 403
+[2026-01-20 12:35:41.667] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:35:41.683] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (12 ms) 200
+[2026-01-20 12:35:42.858] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:36:40.096] [32mhttp[39m: GET /api/workspaces?populate=logo (25 ms) 200
+[2026-01-20 12:36:40.097] [32mhttp[39m: GET /api/workspaces?populate=logo (17 ms) 200
+[2026-01-20 12:36:45.998] [32mhttp[39m: POST /api/upload (5 ms) 403
+[2026-01-20 12:36:48.889] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:36:48.912] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (18 ms) 200
+[2026-01-20 12:36:51.638] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:38:01.885] [32mhttp[39m: POST /api/upload (14 ms) 403
+[2026-01-20 12:38:48.864] [32mhttp[39m: GET /api/workspaces?populate=logo (13 ms) 200
+[2026-01-20 12:38:48.865] [32mhttp[39m: GET /api/workspaces?populate=logo (10 ms) 200
+[2026-01-20 12:38:54.987] [32mhttp[39m: POST /api/upload (17 ms) 403
+[2026-01-20 12:39:03.816] [32mhttp[39m: GET /api/workspaces?populate=logo (11 ms) 200
+[2026-01-20 12:39:03.836] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (15 ms) 200
+[2026-01-20 12:39:05.221] [32mhttp[39m: GET /api/workspaces?populate=logo (11 ms) 200
+[2026-01-20 12:40:43.400] [32mhttp[39m: GET /admin/settings/users-permissions/roles (118 ms) 200
+[2026-01-20 12:40:44.177] [32mhttp[39m: GET /admin/project-type (3 ms) 200
+[2026-01-20 12:40:44.322] [32mhttp[39m: GET /admin/users/me (3 ms) 401
+[2026-01-20 12:40:44.324] [32mhttp[39m: GET /admin/users/me/permissions (2 ms) 401
+[2026-01-20 12:40:44.327] [32mhttp[39m: GET /admin/init (10 ms) 200
+[2026-01-20 12:40:44.338] [32mhttp[39m: GET /admin/ai-usage (3 ms) 401
+[2026-01-20 12:40:44.342] [32mhttp[39m: GET /admin/information (4 ms) 401
+[2026-01-20 12:40:44.343] [32mhttp[39m: GET /admin/telemetry-properties (3 ms) 401
+[2026-01-20 12:40:44.349] [32mhttp[39m: POST /admin/access-token (18 ms) 200
+[2026-01-20 12:40:44.390] [32mhttp[39m: GET /admin/users/me (37 ms) 200
+[2026-01-20 12:40:44.413] [32mhttp[39m: GET /admin/users/me/permissions (59 ms) 200
+[2026-01-20 12:40:44.414] [32mhttp[39m: GET /admin/information (59 ms) 200
+[2026-01-20 12:40:44.470] [32mhttp[39m: GET /admin/guided-tour-meta (26 ms) 200
+[2026-01-20 12:40:44.501] [32mhttp[39m: GET /admin/license-limit-information (55 ms) 200
+[2026-01-20 12:40:44.520] [32mhttp[39m: GET /users-permissions/roles (39 ms) 200
+[2026-01-20 12:40:44.985] [32mhttp[39m: GET /admin/ai-usage (630 ms) 200
+[2026-01-20 12:40:45.027] [32mhttp[39m: GET /admin/license-trial-time-left (506 ms) 200
+[2026-01-20 12:40:47.144] [32mhttp[39m: GET /users-permissions/permissions (20 ms) 200
+[2026-01-20 12:40:47.153] [32mhttp[39m: GET /users-permissions/routes (25 ms) 200
+[2026-01-20 12:40:47.172] [32mhttp[39m: GET /users-permissions/roles/2 (41 ms) 200
+[2026-01-20 12:41:13.464] [32mhttp[39m: PUT /users-permissions/roles/2 (39 ms) 200
+[2026-01-20 12:41:13.489] [32mhttp[39m: GET /users-permissions/roles/2 (21 ms) 200
+[2026-01-20 12:41:37.573] [32mhttp[39m: GET /api/workspaces?populate=logo (17 ms) 200
+[2026-01-20 12:41:37.574] [32mhttp[39m: GET /api/workspaces?populate=logo (16 ms) 200
+[2026-01-20 12:41:42.186] [32mhttp[39m: POST /api/upload (113 ms) 201
+[2026-01-20 12:41:42.212] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:41:42.233] [32mhttp[39m: PUT /api/workspaces/tqmt3yap4kwamguqxau5ih8t (18 ms) 200
+[2026-01-20 12:41:45.140] [32mhttp[39m: GET /api/workspaces?populate=logo (15 ms) 200
+[2026-01-20 12:41:45.159] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (6 ms) 200
+[2026-01-20 12:42:53.136] [32mhttp[39m: GET /api/workspaces?populate=logo (17 ms) 200
+[2026-01-20 12:42:53.138] [32mhttp[39m: GET /api/workspaces?populate=logo (24 ms) 200
+[2026-01-20 12:42:53.152] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (2 ms) 200
+[2026-01-20 12:42:57.207] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:42:57.230] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (15 ms) 200
+[2026-01-20 12:42:57.385] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:42:57.402] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:42:57.825] [32mhttp[39m: GET /api/workspaces?populate=logo (18 ms) 200
+[2026-01-20 12:42:57.845] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (12 ms) 200
+[2026-01-20 12:42:57.984] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:42:57.996] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (8 ms) 200
+[2026-01-20 12:43:00.639] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:43:00.647] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:43:00.662] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:43:00.670] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (7 ms) 200
+[2026-01-20 12:45:10.887] [32mhttp[39m: GET /api/workspaces (19 ms) 200
+[2026-01-20 12:45:10.915] [32mhttp[39m: POST /api/customers (20 ms) 201
+[2026-01-20 12:45:10.938] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:45:10.949] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:45:13.610] [32mhttp[39m: GET /api/invoices?populate=* (14 ms) 200
+[2026-01-20 12:45:14.348] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:45:14.359] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (8 ms) 200
+[2026-01-20 12:45:14.377] [32mhttp[39m: GET /api/workspaces (4 ms) 200
+[2026-01-20 12:45:14.385] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:45:15.904] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:45:15.907] [32mhttp[39m: GET /api/workspaces (10 ms) 200
+[2026-01-20 12:45:15.921] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:45:15.924] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (16 ms) 200
+[2026-01-20 12:45:15.946] [32mhttp[39m: GET /api/workspaces (9 ms) 200
+[2026-01-20 12:45:15.948] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:45:15.960] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:45:15.961] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (10 ms) 200
+[2026-01-20 12:45:18.801] [32mhttp[39m: GET /api/workspaces (4 ms) 200
+[2026-01-20 12:45:18.804] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:45:18.812] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:45:18.813] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (6 ms) 200
+[2026-01-20 12:45:18.834] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:45:18.839] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:45:18.847] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (6 ms) 200
+[2026-01-20 12:45:18.849] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (13 ms) 200
+[2026-01-20 12:45:19.483] [32mhttp[39m: GET /api/invoices?populate=* (11 ms) 200
+[2026-01-20 12:45:24.113] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:45:24.115] [32mhttp[39m: GET /api/workspaces?populate=logo (10 ms) 200
+[2026-01-20 12:45:24.127] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (9 ms) 200
+[2026-01-20 12:45:24.442] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (39 ms) 200
+[2026-01-20 12:45:24.542] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:45:24.543] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:45:24.557] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:45:24.558] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (14 ms) 200
+[2026-01-20 12:45:24.925] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:45:24.932] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:45:24.955] [32mhttp[39m: GET /api/workspaces (12 ms) 200
+[2026-01-20 12:45:24.963] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:45:27.160] [32mhttp[39m: GET /api/invoices?populate=* (9 ms) 200
+[2026-01-20 12:45:28.778] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:45:28.787] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:45:28.807] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:45:28.814] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:45:29.276] [32mhttp[39m: GET /api/workspaces (4 ms) 200
+[2026-01-20 12:45:29.284] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:45:29.303] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:45:29.312] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (7 ms) 200
+[2026-01-20 12:45:30.723] [32mhttp[39m: GET /api/invoices?populate=* (10 ms) 200
+[2026-01-20 12:45:31.866] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:45:31.867] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:45:31.876] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (7 ms) 200
+[2026-01-20 12:45:31.877] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (7 ms) 200
+[2026-01-20 12:45:31.897] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:45:31.900] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:45:31.908] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:45:31.908] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (6 ms) 200
+[2026-01-20 12:46:23.658] [32minfo[39m: File created: /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/assign-workspace.js
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (10ms)
+[2026-01-20 12:46:25.297] [32minfo[39m: Shutting down Strapi
+[2026-01-20 12:46:25.335] [32minfo[39m: Strapi has been shut down
+- Loading Strapi
+[2026-01-20 12:46:33.268] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+🔧 Configuring API permissions...
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (44ms)
+- Creating admin
+✔ Creating admin (482ms)
+✔ Loading Strapi (2744ms)
+- Generating types
+✔ Generating types (142ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (6ms)
+✔ Compiling TS (1368ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 12:46:35 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 4268 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 13364                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 12:46:35.431] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+[2026-01-20 12:46:38.917] [32minfo[39m: File created: /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/fix-workspace.js
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (8ms)
+[2026-01-20 12:46:39.865] [32minfo[39m: Shutting down Strapi
+[2026-01-20 12:46:39.874] [32minfo[39m: Strapi has been shut down
+- Loading Strapi
+[2026-01-20 12:46:42.781] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+🔧 Configuring API permissions...
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (38ms)
+- Creating admin
+✔ Creating admin (390ms)
+✔ Loading Strapi (1361ms)
+- Generating types
+✔ Generating types (187ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (12ms)
+✔ Compiling TS (1425ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 12:46:44 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 2985 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 13434                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 12:46:44.932] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+[2026-01-20 12:46:45.351] [32mhttp[39m: GET /api/workspaces (21 ms) 200
+[2026-01-20 12:46:45.400] [32mhttp[39m: GET /api/invoices?populate=* (37 ms) 200
+[2026-01-20 12:46:45.432] [32mhttp[39m: PUT /api/invoices/d3u6af8ylqgyufom163tnerf (28 ms) 200
+[2026-01-20 12:46:45.449] [32mhttp[39m: GET /api/customers (15 ms) 200
+[2026-01-20 12:46:45.469] [32mhttp[39m: PUT /api/customers/x9cx99fnjgtlz6ev5y6xlyua (18 ms) 200
+[2026-01-20 12:46:45.485] [32mhttp[39m: PUT /api/customers/exrqip45ffrm29hlwnmvccdw (14 ms) 200
+[2026-01-20 12:46:57.809] [32mhttp[39m: GET /api/invoices?populate=* (13 ms) 200
+[2026-01-20 12:46:59.680] [32mhttp[39m: GET /api/workspaces (10 ms) 200
+[2026-01-20 12:46:59.695] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
+[2026-01-20 12:46:59.718] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:46:59.728] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (8 ms) 200
+[2026-01-20 12:47:09.747] [32mhttp[39m: GET /api/customers?filters[id][$eq]=7 (18 ms) 200
+[2026-01-20 12:47:09.763] [32mhttp[39m: DELETE /api/customers/exrqip45ffrm29hlwnmvccdw (12 ms) 204
+[2026-01-20 12:47:09.803] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:47:09.813] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:47:10.227] [32mhttp[39m: GET /api/workspaces (6 ms) 200
+[2026-01-20 12:47:10.237] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:47:10.257] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:47:10.265] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (7 ms) 200
+[2026-01-20 12:47:11.650] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:47:11.656] [32mhttp[39m: GET /api/workspaces?populate=logo (15 ms) 200
+[2026-01-20 12:47:11.665] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:47:11.671] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (13 ms) 200
+[2026-01-20 12:47:11.688] [32mhttp[39m: GET /api/workspaces (9 ms) 200
+[2026-01-20 12:47:11.696] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:47:11.700] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (10 ms) 200
+[2026-01-20 12:47:11.713] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (15 ms) 200
+[2026-01-20 12:47:14.219] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&populate=* (11 ms) 200
+[2026-01-20 12:47:14.246] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:47:14.260] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (3 ms) 200
+[2026-01-20 12:47:14.275] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&populate=* (26 ms) 200
+[2026-01-20 12:47:14.280] [32mhttp[39m: GET /api/workspaces?populate=logo (6 ms) 200
+[2026-01-20 12:49:02.616] [32mhttp[39m: GET /api/workspaces (18 ms) 200
+[2026-01-20 12:49:02.619] [32mhttp[39m: GET /api/workspaces?populate=logo (12 ms) 200
+[2026-01-20 12:49:02.637] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (17 ms) 200
+[2026-01-20 12:49:02.648] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (26 ms) 200
+[2026-01-20 12:49:02.672] [32mhttp[39m: GET /api/workspaces (11 ms) 200
+[2026-01-20 12:49:02.685] [32mhttp[39m: GET /api/workspaces?populate=logo (16 ms) 200
+[2026-01-20 12:49:02.690] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (15 ms) 200
+[2026-01-20 12:49:02.706] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (19 ms) 200
+[2026-01-20 12:50:12.712] [32mhttp[39m: GET /api/workspaces (10 ms) 200
+[2026-01-20 12:50:12.715] [32mhttp[39m: GET /api/workspaces?populate=logo (16 ms) 200
+[2026-01-20 12:50:12.727] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
+[2026-01-20 12:50:12.740] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (22 ms) 200
+[2026-01-20 12:50:12.761] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:50:12.772] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:50:12.773] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:50:12.790] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (15 ms) 200
+[2026-01-20 12:51:15.308] [32mhttp[39m: GET /api/workspaces (7 ms) 200
+[2026-01-20 12:51:15.309] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:51:15.321] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (8 ms) 200
+[2026-01-20 12:51:15.323] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (12 ms) 200
+[2026-01-20 12:51:15.354] [32mhttp[39m: GET /api/workspaces (12 ms) 200
+[2026-01-20 12:51:15.358] [32mhttp[39m: GET /api/workspaces?populate=logo (13 ms) 200
+[2026-01-20 12:51:15.368] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:51:15.372] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (11 ms) 200
+[2026-01-20 12:51:17.893] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&populate=* (12 ms) 200
+[2026-01-20 12:51:25.526] [32mhttp[39m: GET /api/workspaces?populate=logo (22 ms) 200
+[2026-01-20 12:51:25.531] [32mhttp[39m: GET /api/workspaces?populate=logo (25 ms) 200
+[2026-01-20 12:51:25.539] [32mhttp[39m: GET /api/workspaces (24 ms) 200
+[2026-01-20 12:51:25.541] [32mhttp[39m: GET /api/workspaces (23 ms) 200
+[2026-01-20 12:51:25.558] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (17 ms) 200
+[2026-01-20 12:51:25.559] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (15 ms) 200
+[2026-01-20 12:51:25.570] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (36 ms) 200
+[2026-01-20 12:51:25.570] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (33 ms) 200
+[2026-01-20 12:51:27.108] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&populate=* (18 ms) 200
+[2026-01-20 12:53:08.028] [32mhttp[39m: GET /api/workspaces (14 ms) 200
+[2026-01-20 12:53:08.034] [32mhttp[39m: GET /api/workspaces?populate=logo (27 ms) 200
+[2026-01-20 12:53:08.043] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
+[2026-01-20 12:53:08.049] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (13 ms) 200
+[2026-01-20 12:53:08.071] [32mhttp[39m: GET /api/workspaces (11 ms) 200
+[2026-01-20 12:53:08.079] [32mhttp[39m: GET /api/workspaces?populate=logo (14 ms) 200
+[2026-01-20 12:53:08.084] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 12:53:08.094] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (13 ms) 200
+[2026-01-20 12:55:23.078] [32minfo[39m: File changed: /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/fix-workspace.js
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (12ms)
+[2026-01-20 12:55:24.997] [32minfo[39m: Shutting down Strapi
+[2026-01-20 12:55:25.023] [32minfo[39m: Strapi has been shut down
+- Loading Strapi
+[2026-01-20 12:55:30.796] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+🔧 Configuring API permissions...
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (37ms)
+- Creating admin
+✔ Creating admin (380ms)
+✔ Loading Strapi (2233ms)
+- Generating types
+✔ Generating types (143ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (7ms)
+✔ Compiling TS (1479ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 12:55:32 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 3868 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 13750                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 12:55:32.947] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+[2026-01-20 12:55:33.464] [32mhttp[39m: GET /api/workspaces (21 ms) 200
+[2026-01-20 12:55:33.468] [32mhttp[39m: GET /api/workspaces?populate=logo (41 ms) 200
+[2026-01-20 12:55:33.485] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (16 ms) 200
+[2026-01-20 12:55:33.500] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (29 ms) 200
+[2026-01-20 12:55:33.509] [32mhttp[39m: GET /api/workspaces (8 ms) 200
+[2026-01-20 12:55:33.526] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (13 ms) 200
+[2026-01-20 12:55:33.528] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:55:33.545] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (15 ms) 200
+[2026-01-20 12:55:34.461] [32mhttp[39m: GET /api/workspaces (10 ms) 200
+[2026-01-20 12:55:34.475] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
+[2026-01-20 12:55:34.501] [32mhttp[39m: GET /api/workspaces (5 ms) 200
+[2026-01-20 12:55:34.510] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (6 ms) 200
+[2026-01-20 12:55:36.060] [32mhttp[39m: GET /api/workspaces?populate=logo (15 ms) 200
+[2026-01-20 12:55:36.061] [32mhttp[39m: GET /api/workspaces (9 ms) 200
+[2026-01-20 12:55:36.074] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (10 ms) 200
+[2026-01-20 12:55:36.078] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (16 ms) 200
+[2026-01-20 12:55:36.103] [32mhttp[39m: GET /api/workspaces (8 ms) 200
+[2026-01-20 12:55:36.106] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:55:36.114] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 12:55:36.118] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (10 ms) 200
+[2026-01-20 12:55:50.479] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8 (7 ms) 200
+[2026-01-20 12:55:50.519] [32mhttp[39m: PUT /api/invoices/d3u6af8ylqgyufom163tnerf (33 ms) 200
+[2026-01-20 12:55:50.780] [32mhttp[39m: POST /api/invoice-items (48 ms) 201
+[2026-01-20 12:55:50.856] [32mhttp[39m: GET /api/workspaces?populate=logo (7 ms) 200
+[2026-01-20 12:55:50.868] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (11 ms) 200
+[2026-01-20 12:55:55.793] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8 (13 ms) 200
+[2026-01-20 12:55:55.816] [32mhttp[39m: PUT /api/invoices/d3u6af8ylqgyufom163tnerf (19 ms) 200
+[2026-01-20 12:55:55.843] [32mhttp[39m: POST /api/invoice-items (8 ms) 201
+[2026-01-20 12:55:55.862] [32mhttp[39m: POST /api/invoice-items (8 ms) 201
+[2026-01-20 12:55:55.886] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:55:55.898] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (10 ms) 200
+[2026-01-20 12:57:53.976] [32mhttp[39m: GET /api/workspaces (41 ms) 200
+[2026-01-20 12:57:53.979] [32mhttp[39m: GET /api/workspaces (30 ms) 200
+[2026-01-20 12:57:53.985] [32mhttp[39m: GET /api/workspaces?populate=logo (28 ms) 200
+[2026-01-20 12:57:54.001] [32mhttp[39m: GET /api/workspaces?populate=logo (38 ms) 200
+[2026-01-20 12:57:54.008] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (27 ms) 200
+[2026-01-20 12:57:54.012] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (29 ms) 200
+[2026-01-20 12:57:54.030] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (37 ms) 200
+[2026-01-20 12:57:54.050] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (44 ms) 200
+[2026-01-20 12:58:52.449] [32minfo[39m: File created: /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/clean-duplicates.js
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (11ms)
+[2026-01-20 12:58:52.647] [32minfo[39m: File changed: /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/clean-duplicates.js
+[2026-01-20 12:58:53.776] [32minfo[39m: Shutting down Strapi
+[2026-01-20 12:58:53.783] [32minfo[39m: Strapi has been shut down
+- Loading Strapi
+[2026-01-20 12:58:58.167] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+🔧 Configuring API permissions...
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (38ms)
+- Creating admin
+✔ Creating admin (355ms)
+✔ Loading Strapi (1983ms)
+- Generating types
+✔ Generating types (140ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (8ms)
+✔ Compiling TS (1368ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 12:59:00 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 3583 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 13868                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 12:59:00.274] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+[2026-01-20 12:59:29.704] [32mhttp[39m: GET /api/invoice-items?populate=* (29 ms) 200
+[2026-01-20 12:59:29.732] [32mhttp[39m: DELETE /api/invoice-items/urrvoeg71rz2vedqyoe416mg (18 ms) 204
+[2026-01-20 12:59:29.746] [32mhttp[39m: DELETE /api/invoice-items/y56afpnb34caffyl1q8v334z (12 ms) 204
+[2026-01-20 12:59:29.757] [32mhttp[39m: DELETE /api/invoice-items/ld7xcea9rcj1ycwk8ogiaj4i (7 ms) 204
+[2026-01-20 12:59:40.241] [32mhttp[39m: GET /api/workspaces?populate=logo (20 ms) 200
+[2026-01-20 12:59:40.243] [32mhttp[39m: GET /api/workspaces?populate=logo (19 ms) 200
+[2026-01-20 12:59:40.265] [32mhttp[39m: GET /api/workspaces (22 ms) 200
+[2026-01-20 12:59:40.270] [32mhttp[39m: GET /api/workspaces (21 ms) 200
+[2026-01-20 12:59:40.278] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (32 ms) 200
+[2026-01-20 12:59:40.288] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (32 ms) 200
+[2026-01-20 12:59:40.290] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (17 ms) 200
+[2026-01-20 12:59:40.292] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (24 ms) 200
+[2026-01-20 12:59:47.060] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8 (11 ms) 200
+[2026-01-20 12:59:47.097] [32mhttp[39m: PUT /api/invoices/d3u6af8ylqgyufom163tnerf (33 ms) 200
+[2026-01-20 12:59:47.157] [32mhttp[39m: GET /api/workspaces?populate=logo (11 ms) 200
+[2026-01-20 12:59:47.171] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (12 ms) 200
+[2026-01-20 12:59:49.498] [32mhttp[39m: GET /api/workspaces?populate=logo (8 ms) 200
+[2026-01-20 12:59:49.506] [32mhttp[39m: GET /api/workspaces (11 ms) 200
+[2026-01-20 12:59:49.515] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (8 ms) 200
+[2026-01-20 12:59:49.517] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (16 ms) 200
+[2026-01-20 12:59:49.543] [32mhttp[39m: GET /api/workspaces (8 ms) 200
+[2026-01-20 12:59:49.546] [32mhttp[39m: GET /api/workspaces?populate=logo (9 ms) 200
+[2026-01-20 12:59:49.555] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
+[2026-01-20 12:59:49.567] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (18 ms) 200
+[2026-01-20 13:01:55.710] [32mhttp[39m: GET /admin/settings/users-permissions/roles/2 (75 ms) 200
+[2026-01-20 13:01:56.366] [32mhttp[39m: GET /admin/project-type (9 ms) 200
+[2026-01-20 13:01:56.490] [32mhttp[39m: GET /admin/init (10 ms) 200
+[2026-01-20 13:01:56.510] [32mhttp[39m: GET /admin/users/me (27 ms) 200
+[2026-01-20 13:01:56.522] [32mhttp[39m: GET /admin/users/me/permissions (38 ms) 200
+[2026-01-20 13:01:56.529] [32mhttp[39m: GET /admin/telemetry-properties (29 ms) 200
+[2026-01-20 13:01:56.543] [32mhttp[39m: GET /admin/information (46 ms) 200
+[2026-01-20 13:01:56.598] [32mhttp[39m: GET /admin/license-limit-information (26 ms) 200
+[2026-01-20 13:01:56.600] [32mhttp[39m: GET /admin/guided-tour-meta (31 ms) 200
+[2026-01-20 13:01:56.613] [32mhttp[39m: GET /users-permissions/routes (18 ms) 200
+[2026-01-20 13:01:56.626] [32mhttp[39m: GET /users-permissions/permissions (32 ms) 200
+[2026-01-20 13:01:56.668] [32mhttp[39m: GET /users-permissions/roles/2 (71 ms) 200
+[2026-01-20 13:01:57.127] [32mhttp[39m: GET /admin/ai-usage (631 ms) 200
+[2026-01-20 13:01:57.203] [32mhttp[39m: GET /admin/license-trial-time-left (576 ms) 200

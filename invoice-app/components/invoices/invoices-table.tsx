@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Download, Trash2, Eye, Printer } from "lucide-react"
+import { Plus, Download, Trash2, Eye, Printer, Pencil } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,6 +24,7 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { MoreHorizontal } from "lucide-react"
+import { formatCurrency, type Currency } from "@/lib/currency"
 
 type LineItem = {
   description: string
@@ -38,6 +39,7 @@ type Invoice = {
   customerName?: string
   customer?: string
   amount: number
+  currency?: Currency
   status: "draft" | "sent" | "paid" | "overdue" | "cancelled"
   issueDate: string
   dueDate: string
@@ -60,10 +62,11 @@ export function InvoicesTable() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<"all" | Invoice["status"]>("all")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
   const [formData, setFormData] = useState<Partial<Invoice>>({ 
     status: "draft", 
-    paymentMethod: "bank_transfer",
-    items: [{ description: "", quantity: 1, unitPrice: 0, total: 0 }]
+    currency: "USD",
   })
 
   useEffect(() => {
@@ -188,6 +191,82 @@ export function InvoicesTable() {
     }
   }
 
+  const handleEditInvoice = async (invoice: Invoice) => {
+    console.log('Editing invoice:', invoice)
+    setEditingInvoice(invoice)
+    
+    // Pre-fill form with existing invoice data
+    const items = invoice.items && invoice.items.length > 0 
+      ? invoice.items 
+      : [{ description: '', quantity: 1, unitPrice: invoice.amount || 0, total: invoice.amount || 0 }]
+    
+    setFormData({
+      invoiceNumber: invoice.invoiceNumber || '',
+      customer: invoice.customer || '',
+      issueDate: invoice.issueDate || '',
+      dueDate: invoice.dueDate || '',
+      amount: invoice.amount || 0,
+      currency: invoice.currency || 'USD',
+      status: invoice.status || 'draft',
+      description: invoice.description || '',
+      notes: invoice.notes || '',
+      paymentMethod: invoice.paymentMethod || 'bank_transfer',
+      items: items
+    })
+    
+    console.log('Form data set:', {
+      customer: invoice.customer,
+      paymentMethod: invoice.paymentMethod,
+      notes: invoice.notes,
+      items: items
+    })
+    
+    setIsEditDialogOpen(true)
+  }
+
+  const handleUpdateInvoice = async () => {
+    if (!editingInvoice) return
+    
+    try {
+      // Calculate total amount from line items
+      const totalAmount = formData.items?.reduce((sum, item) => sum + item.total, 0) || 0
+      
+      // Convert customer string ID to number for Strapi
+      const invoiceData = {
+        ...formData,
+        customer: formData.customer ? parseInt(formData.customer as string) : undefined,
+        amount: totalAmount,
+        items: undefined, // Remove items from invoice data
+      }
+      
+      const response = await fetch(`/api/invoices/${editingInvoice.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(invoiceData),
+      })
+      
+      if (response.ok) {
+        // Note: Line items need separate management - skipping for now to avoid duplicates
+        // TODO: Implement proper item update/delete logic
+        
+        setIsEditDialogOpen(false)
+        setEditingInvoice(null)
+        setFormData({ 
+          status: "draft", 
+          currency: "USD",
+        })
+        fetchInvoices()
+      } else {
+        const error = await response.json()
+        console.error("Failed to update invoice:", error)
+        alert(`Failed to update invoice: ${error.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error("Failed to update invoice:", error)
+      alert("Failed to update invoice. Please try again.")
+    }
+  }
+
   const exportToCSV = () => {
     const headers = ["Invoice Number", "Customer", "Amount", "Status", "Issue Date", "Due Date"]
     const rows = data.map((inv) => [
@@ -296,7 +375,7 @@ export function InvoicesTable() {
                 <TableRow key={invoice.id}>
                   <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
                   <TableCell>{invoice.customerName || "-"}</TableCell>
-                  <TableCell>${invoice.amount.toLocaleString()}</TableCell>
+                  <TableCell>{formatCurrency(invoice.amount, invoice.currency || 'USD')}</TableCell>
                   <TableCell>
                     <Badge variant={statusColors[invoice.status] as any}>
                       {invoice.status}
@@ -312,6 +391,10 @@ export function InvoicesTable() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => handleEditInvoice(invoice)}>
+                          <Pencil className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link href={`/invoices/${invoice.id}/preview`} className="flex items-center">
                             <Printer className="mr-2 h-4 w-4" />
@@ -464,13 +547,27 @@ export function InvoicesTable() {
                 <div className="text-right">
                   <div className="text-sm text-gray-600">Total Amount</div>
                   <div className="text-2xl font-bold">
-                    ${(formData.items?.reduce((sum, item) => sum + item.total, 0) || 0).toFixed(2)}
+                    {formatCurrency(formData.items?.reduce((sum, item) => sum + item.total, 0) || 0, formData.currency || 'USD')}
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="currency">Currency</Label>
+                <select
+                  id="currency"
+                  value={formData.currency || "USD"}
+                  onChange={(e) => setFormData({ ...formData, currency: e.target.value as Currency })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="CAD">CAD - Canadian Dollar</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="USDT">USDT - Tether</option>
+                </select>
+              </div>
               <div>
                 <Label htmlFor="payment-method">Payment Method</Label>
                 <select
@@ -526,6 +623,221 @@ export function InvoicesTable() {
               Cancel
             </Button>
             <Button onClick={handleAddInvoice}>Create Invoice</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Invoice Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Edit Invoice</DialogTitle>
+            <DialogDescription>Update invoice details</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-number">Invoice Number *</Label>
+                <Input
+                  id="edit-number"
+                  value={formData.invoiceNumber || ""}
+                  onChange={(e) => setFormData({ ...formData, invoiceNumber: e.target.value })}
+                  placeholder="INV-2026-001"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-customer">Customer *</Label>
+                <select
+                  id="edit-customer"
+                  value={formData.customer || ""}
+                  onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="">Select customer...</option>
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-issue-date">Issue Date *</Label>
+                <Input
+                  id="edit-issue-date"
+                  type="date"
+                  value={formData.issueDate || ""}
+                  onChange={(e) => setFormData({ ...formData, issueDate: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-due-date">Due Date *</Label>
+                <Input
+                  id="edit-due-date"
+                  type="date"
+                  value={formData.dueDate || ""}
+                  onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                />
+              </div>
+            </div>
+            
+            {/* Line Items */}
+            <div className="border-t pt-4 mt-4">
+              <div className="flex justify-between items-center mb-3">
+                <Label className="text-base font-semibold">Invoice Items</Label>
+                <Button type="button" variant="outline" size="sm" onClick={addLineItem}>
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Item
+                </Button>
+              </div>
+              
+              <div className="space-y-3">
+                {formData.items?.map((item, index) => (
+                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-gray-50">
+                    <div className="col-span-4">
+                      <Label htmlFor={`edit-item-desc-${index}`} className="text-xs">Description *</Label>
+                      <Input
+                        id={`edit-item-desc-${index}`}
+                        value={item.description}
+                        onChange={(e) => updateLineItem(index, 'description', e.target.value)}
+                        placeholder="Item description"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Label htmlFor={`edit-item-qty-${index}`} className="text-xs">Quantity *</Label>
+                      <Input
+                        id={`edit-item-qty-${index}`}
+                        type="number"
+                        step="0.01"
+                        value={item.quantity}
+                        onChange={(e) => updateLineItem(index, 'quantity', parseFloat(e.target.value) || 0)}
+                        placeholder="1"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Label htmlFor={`edit-item-price-${index}`} className="text-xs">Unit Price *</Label>
+                      <Input
+                        id={`edit-item-price-${index}`}
+                        type="number"
+                        step="0.01"
+                        value={item.unitPrice}
+                        onChange={(e) => updateLineItem(index, 'unitPrice', parseFloat(e.target.value) || 0)}
+                        placeholder="0.00"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Label className="text-xs">Total</Label>
+                      <Input
+                        value={item.total.toFixed(2)}
+                        readOnly
+                        className="text-sm bg-gray-100"
+                      />
+                    </div>
+                    <div className="col-span-2 flex items-end">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeLineItem(index)}
+                        disabled={(formData.items?.length || 0) <= 1}
+                        className="w-full"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Total Amount Display */}
+              <div className="flex justify-end mt-4 p-3 bg-blue-50 rounded-md">
+                <div className="text-right">
+                  <div className="text-sm text-gray-600">Total Amount</div>
+                  <div className="text-2xl font-bold">
+                    {formatCurrency(formData.items?.reduce((sum, item) => sum + item.total, 0) || 0, formData.currency || 'USD')}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-currency">Currency</Label>
+                <select
+                  id="edit-currency"
+                  value={formData.currency || "USD"}
+                  onChange={(e) => setFormData({ ...formData, currency: e.target.value as Currency })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="CAD">CAD - Canadian Dollar</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="USDT">USDT - Tether</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="edit-payment-method">Payment Method</Label>
+                <select
+                  id="edit-payment-method"
+                  value={formData.paymentMethod || "bank_transfer"}
+                  onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="bank_transfer">Bank Transfer</option>
+                  <option value="card">Card</option>
+                  <option value="crypto">Crypto</option>
+                  <option value="cash">Cash</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="edit-status">Status</Label>
+              <select
+                id="edit-status"
+                value={formData.status || "draft"}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="draft">Draft</option>
+                <option value="sent">Sent</option>
+                <option value="paid">Paid</option>
+                <option value="overdue">Overdue</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div>
+              <Label htmlFor="edit-description">Description</Label>
+              <Input
+                id="edit-description"
+                value={formData.description || ""}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Brief description of services..."
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-notes">Notes</Label>
+              <textarea
+                id="edit-notes"
+                value={formData.notes || ""}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                placeholder="Additional notes or payment terms..."
+                className="w-full px-3 py-2 border rounded-md min-h-[80px]"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              setIsEditDialogOpen(false)
+              setEditingInvoice(null)
+            }}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateInvoice}>Update Invoice</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

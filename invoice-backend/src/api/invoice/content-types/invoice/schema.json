@@ -65,6 +65,11 @@
     },
     "paidDate": {
       "type": "date"
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["USD", "CAD", "EUR", "USDT"],
+      "default": "USD"
     }
   }
 }

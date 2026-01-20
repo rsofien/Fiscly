@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { FileText, DollarSign, Users, AlertCircle, CheckCircle2 } from "lucide-react"
 import { GetStartedButton } from "@/components/dashboard/get-started-button"
+import { formatCurrency } from "@/lib/currency"
 
 export const dynamic = "force-dynamic"
 
@@ -69,9 +70,6 @@ export default async function DashboardPage() {
   )
     .sort((a, b) => b.totalSpent - a.totalSpent)
     .slice(0, 5)
-
-  const formatCurrency = (value: number) =>
-    `$${(Number(value) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
   return (
     <AppLayout user={user}>

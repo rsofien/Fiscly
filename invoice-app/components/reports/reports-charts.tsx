@@ -19,6 +19,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { formatCurrency } from "@/lib/currency"
 
 export function ReportsCharts() {
   const [data, setData] = useState<any>(null)
@@ -79,7 +80,7 @@ export function ReportsCharts() {
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${data.totalRevenue.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -87,7 +88,7 @@ export function ReportsCharts() {
             <CardTitle className="text-sm font-medium">Paid Amount</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${data.paidAmount.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{formatCurrency(data.paidAmount)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -95,7 +96,7 @@ export function ReportsCharts() {
             <CardTitle className="text-sm font-medium">Outstanding</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">${data.outstanding.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-orange-600">{formatCurrency(data.outstanding)}</div>
           </CardContent>
         </Card>
         <Card>

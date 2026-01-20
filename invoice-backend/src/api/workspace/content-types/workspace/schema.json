@@ -39,6 +39,13 @@
     "defaultNotes": {
       "type": "text"
     },
+    "logo": {
+      "type": "media",
+      "multiple": false
+    },
+    "matriculeFiscale": {
+      "type": "string"
+    },
     "customers": {
       "type": "relation",
       "relation": "oneToMany",

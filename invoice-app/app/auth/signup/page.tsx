@@ -43,18 +43,17 @@ export default function SignupPage() {
     setError("")
 
     try {
-      // Create workspace and user via Strapi API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local/register`, {
+      // Create user via our API route (which handles the Strapi registration)
+      const response = await fetch('/api/auth/register', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: data.email,
           email: data.email,
           password: data.password,
           name: data.name,
-          workspaceName: data.companyName,
+          companyName: data.companyName,
         }),
       })
 

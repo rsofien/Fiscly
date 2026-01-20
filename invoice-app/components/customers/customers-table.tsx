@@ -16,6 +16,7 @@ import { MoreHorizontal, Plus, Search, Download, Pencil, Trash2 } from "lucide-r
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Table,
   TableBody,
@@ -381,6 +382,16 @@ export function CustomersTable() {
               />
             </div>
             <div>
+              <Label htmlFor="address">Address</Label>
+              <Textarea
+                id="address"
+                value={formData.address || ""}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                placeholder="Street address, city, state, zip"
+                rows={3}
+              />
+            </div>
+            <div>
               <Label htmlFor="status">Status</Label>
               <select
                 id="status"
@@ -445,6 +456,16 @@ export function CustomersTable() {
                 value={formData.company || ""}
                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                 placeholder="Company name"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-address">Address</Label>
+              <Textarea
+                id="edit-address"
+                value={formData.address || ""}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                placeholder="Street address, city, state, zip"
+                rows={3}
               />
             </div>
             <div>
