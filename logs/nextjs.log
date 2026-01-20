@@ -2,11 +2,144 @@
 > invoice-app@0.1.0 dev
 > next dev
 
- ⚠ Port 3000 is in use, trying 3001 instead.
   ▲ Next.js 14.2.35
-  - Local:        http://localhost:3001
+  - Local:        http://localhost:3000
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1770ms
-[?25h
+ ✓ Ready in 3.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 2.1s (488 modules)
+ ✓ Compiled in 352ms (234 modules)
+ GET / 307 in 2552ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1148ms (1025 modules)
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ GET /dashboard 500 in 1405ms
+ ✓ Compiled /favicon.ico in 140ms (684 modules)
+ GET /favicon.ico 200 in 224ms
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ GET /dashboard 500 in 167ms
+ GET /favicon.ico 200 in 29ms
