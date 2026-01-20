@@ -21,6 +21,9 @@ type Workspace = {
   defaultPaymentTerms: number
   defaultNotes: string
   matriculeFiscale: string
+  personal_name?: string
+  personal_email?: string
+  personal_phone?: string
   logo?: {
     id: string
     url: string
@@ -228,6 +231,9 @@ export default function SettingsPage() {
           defaultPaymentTerms: workspace.defaultPaymentTerms ?? 15,
           defaultNotes: workspace.defaultNotes,
           matriculeFiscale: workspace.matriculeFiscale,
+          personal_name: workspace.personal_name,
+          personal_email: workspace.personal_email,
+          personal_phone: workspace.personal_phone,
           ...(logoIdToSave && { logoId: logoIdToSave }),
           ...(signatureIdToSave && { signatureId: signatureIdToSave }),
         }),
@@ -329,6 +335,53 @@ export default function SettingsPage() {
                   </>
                 ) : (
                   "Save Changes"
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Information</CardTitle>
+              <CardDescription>Your personal details for invoices (optional)</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="personal-name">Your Name</Label>
+                <Input
+                  id="personal-name"
+                  value={workspace.personal_name || ""}
+                  onChange={(e) => setWorkspace({ ...workspace, personal_name: e.target.value })}
+                  placeholder="John Doe"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="personal-email">Your Email</Label>
+                <Input
+                  id="personal-email"
+                  type="email"
+                  value={workspace.personal_email || ""}
+                  onChange={(e) => setWorkspace({ ...workspace, personal_email: e.target.value })}
+                  placeholder="john@example.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="personal-phone">Your Phone</Label>
+                <Input
+                  id="personal-phone"
+                  value={workspace.personal_phone || ""}
+                  onChange={(e) => setWorkspace({ ...workspace, personal_phone: e.target.value })}
+                  placeholder="+1 (555) 000-0000"
+                />
+              </div>
+              <Button onClick={handleSaveWorkspace} disabled={saving}>
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Personal Info"
                 )}
               </Button>
             </CardContent>

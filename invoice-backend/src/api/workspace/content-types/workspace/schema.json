@@ -59,6 +59,15 @@
     "matriculeFiscale": {
       "type": "string"
     },
+    "personal_name": {
+      "type": "string"
+    },
+    "personal_email": {
+      "type": "email"
+    },
+    "personal_phone": {
+      "type": "string"
+    },
     "customers": {
       "type": "relation",
       "relation": "oneToMany",

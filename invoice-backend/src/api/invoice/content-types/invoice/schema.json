@@ -75,6 +75,11 @@
       "type": "enumeration",
       "enum": ["en", "fr"],
       "default": "en"
+    },
+    "issuerType": {
+      "type": "enumeration",
+      "enum": ["company", "personal"],
+      "default": "company"
     }
   }
 }

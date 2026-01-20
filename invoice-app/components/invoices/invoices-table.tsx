@@ -41,6 +41,7 @@ type Invoice = {
   amount: number
   currency?: Currency
   language?: "en" | "fr"
+  issuerType?: "company" | "personal"
   status: "draft" | "sent" | "paid" | "overdue" | "cancelled"
   issueDate: string
   dueDate: string
@@ -69,6 +70,7 @@ export function InvoicesTable() {
     status: "draft", 
     currency: "USD",
     language: "en",
+    issuerType: "company",
   })
 
   useEffect(() => {
@@ -212,6 +214,7 @@ export function InvoicesTable() {
       amount: invoice.amount || 0,
       currency: invoice.currency || 'USD',
       language: invoice.language || 'en',
+      issuerType: invoice.issuerType || 'company',
       status: invoice.status || 'draft',
       description: invoice.description || '',
       notes: invoice.notes || '',
@@ -601,6 +604,18 @@ export function InvoicesTable() {
               </div>
             </div>
             <div>
+              <Label htmlFor="issuer-type">Invoice From</Label>
+              <select
+                id="issuer-type"
+                value={formData.issuerType || "company"}
+                onChange={(e) => setFormData({ ...formData, issuerType: e.target.value as "company" | "personal" })}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="company">Company</option>
+                <option value="personal">Personal</option>
+              </select>
+            </div>
+            <div>
               <Label htmlFor="status">Status</Label>
               <select
                 id="status"
@@ -823,6 +838,18 @@ export function InvoicesTable() {
                   <option value="cash">Cash</option>
                 </select>
               </div>
+            </div>
+            <div>
+              <Label htmlFor="edit-issuer-type">Invoice From</Label>
+              <select
+                id="edit-issuer-type"
+                value={formData.issuerType || "company"}
+                onChange={(e) => setFormData({ ...formData, issuerType: e.target.value as "company" | "personal" })}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="company">Company</option>
+                <option value="personal">Personal</option>
+              </select>
             </div>
             <div>
               <Label htmlFor="edit-status">Status</Label>

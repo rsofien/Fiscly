@@ -65,6 +65,7 @@ export async function GET() {
       amount: item.amount,
       currency: item.currency,
       language: item.language || 'en',
+      issuerType: item.issuerType || 'company',
       status: item.status,
       issueDate: item.issueDate,
       dueDate: item.dueDate,

@@ -86,6 +86,7 @@ type Invoice = {
   amount: number
   currency?: Currency
   language?: "en" | "fr"
+  issuerType?: "company" | "personal"
   status: string
   issueDate: string
   dueDate: string
@@ -102,6 +103,9 @@ type Workspace = {
   phone: string
   address: string
   matriculeFiscale: string
+  personal_name?: string
+  personal_email?: string
+  personal_phone?: string
   logo?: {
     url: string
   }
@@ -205,7 +209,7 @@ export default function InvoicePreviewPage() {
             {/* Header */}
             <div className="flex justify-between items-start mb-4">
               <div>
-                {logoUrl && (
+                {logoUrl && invoice.issuerType !== "personal" && (
                   <img
                     src={logoUrl}
                     alt="Company Logo"
@@ -214,7 +218,7 @@ export default function InvoicePreviewPage() {
                 )}
                 <h1 className="text-xl font-bold">{t.invoice}</h1>
                 <p className="text-xs text-muted-foreground">#{invoice.invoiceNumber}</p>
-                {workspace?.matriculeFiscale && (
+                {workspace?.matriculeFiscale && invoice.issuerType !== "personal" && (
                   <p className="text-xs text-muted-foreground mt-1">
                     {t.matriculeFiscale}: {workspace.matriculeFiscale}
                   </p>
@@ -243,11 +247,21 @@ export default function InvoicePreviewPage() {
               <div>
                 <h3 className="text-xs font-semibold mb-1">{t.from}</h3>
                 <div className="text-xs">
-                  <p className="font-medium">{workspace?.name || "Your Company"}</p>
-                  {workspace?.email && <p className="text-muted-foreground">{workspace.email}</p>}
-                  {workspace?.phone && <p className="text-muted-foreground">{workspace.phone}</p>}
-                  {workspace?.address && (
-                    <p className="text-muted-foreground whitespace-pre-line">{workspace.address}</p>
+                  {invoice.issuerType === "personal" ? (
+                    <>
+                      <p className="font-medium">{workspace?.personal_name || "Your Name"}</p>
+                      {workspace?.personal_email && <p className="text-muted-foreground">{workspace.personal_email}</p>}
+                      {workspace?.personal_phone && <p className="text-muted-foreground">{workspace.personal_phone}</p>}
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-medium">{workspace?.name || "Your Company"}</p>
+                      {workspace?.email && <p className="text-muted-foreground">{workspace.email}</p>}
+                      {workspace?.phone && <p className="text-muted-foreground">{workspace.phone}</p>}
+                      {workspace?.address && (
+                        <p className="text-muted-foreground whitespace-pre-line">{workspace.address}</p>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -334,9 +348,11 @@ export default function InvoicePreviewPage() {
             </div>
 
             {/* Tax Clarification */}
-            <div className="mb-3 text-xs text-muted-foreground italic">
-              {t.taxClarification}
-            </div>
+            {invoice.issuerType !== "personal" && (
+              <div className="mb-3 text-xs text-muted-foreground italic">
+                {t.taxClarification}
+              </div>
+            )}
 
             {/* Notes */}
             {invoice.notes && (
@@ -347,7 +363,7 @@ export default function InvoicePreviewPage() {
             )}
 
             {/* Signature */}
-            {workspace?.signature?.url && (
+            {workspace?.signature?.url && invoice.issuerType !== "personal" && (
               <div className="mt-4 mb-3">
                 <div className="flex flex-col items-end">
                   <img

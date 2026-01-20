@@ -569,6 +569,8 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     issueDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    issuerType: Schema.Attribute.Enumeration<['company', 'personal']> &
+      Schema.Attribute.DefaultTo<'company'>;
     items: Schema.Attribute.Relation<
       'oneToMany',
       'api::invoice-item.invoice-item'
@@ -634,6 +636,9 @@ export interface ApiWorkspaceWorkspace extends Struct.CollectionTypeSchema {
     logo: Schema.Attribute.Media;
     matriculeFiscale: Schema.Attribute.String;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    personal_email: Schema.Attribute.Email;
+    personal_name: Schema.Attribute.String;
+    personal_phone: Schema.Attribute.String;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     signature: Schema.Attribute.Media<'images'>;

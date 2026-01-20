@@ -257,3 +257,99 @@ http://localhost:1337
 [2026-01-20 14:28:42.618] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (10 ms) 200
 [2026-01-20 14:28:42.638] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (6 ms) 200
 [2026-01-20 14:28:42.646] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (7 ms) 200
+[2026-01-20 14:29:59.269] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (19 ms) 200
+[2026-01-20 14:29:59.280] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (8 ms) 200
+[2026-01-20 14:29:59.313] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (10 ms) 200
+[2026-01-20 14:29:59.324] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 14:30:03.980] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (7 ms) 200
+[2026-01-20 14:30:03.992] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (10 ms) 200
+[2026-01-20 14:30:03.992] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
+[2026-01-20 14:30:04.008] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (15 ms) 200
+[2026-01-20 14:30:04.008] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (6 ms) 200
+[2026-01-20 14:30:04.024] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
+[2026-01-20 14:30:04.027] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (8 ms) 200
+[2026-01-20 14:30:04.038] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (9 ms) 200
+[2026-01-20 14:30:06.003] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (6 ms) 200
+[2026-01-20 14:30:06.010] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (12 ms) 200
+[2026-01-20 14:30:06.016] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&filters[workspace][id][$eq]=1&populate=* (11 ms) 200
+[2026-01-20 14:30:06.032] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (5 ms) 200
+[2026-01-20 14:30:06.032] [32mhttp[39m: GET /uploads/Signature_9d3875397a.png (3 ms) 200
+[2026-01-20 14:30:06.037] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (17 ms) 200
+[2026-01-20 14:30:06.041] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (8 ms) 200
+[2026-01-20 14:30:06.053] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&filters[workspace][id][$eq]=1&populate=* (11 ms) 200
+[2026-01-20 14:32:42.578] [32mhttp[39m: GET /admin/settings/api-tokens/3 (71 ms) 200
+[2026-01-20 14:32:43.360] [32mhttp[39m: GET /admin/project-type (4 ms) 200
+[2026-01-20 14:32:43.863] [32mhttp[39m: GET /admin/init (6 ms) 200
+[2026-01-20 14:32:43.891] [32mhttp[39m: GET /admin/users/me (20 ms) 200
+[2026-01-20 14:32:43.912] [32mhttp[39m: GET /admin/users/me/permissions (36 ms) 200
+[2026-01-20 14:32:43.938] [32mhttp[39m: GET /admin/information (32 ms) 200
+[2026-01-20 14:32:43.940] [32mhttp[39m: GET /admin/telemetry-properties (28 ms) 200
+[2026-01-20 14:32:44.006] [32mhttp[39m: GET /admin/license-limit-information (19 ms) 200
+[2026-01-20 14:32:44.016] [32mhttp[39m: GET /admin/guided-tour-meta (35 ms) 200
+[2026-01-20 14:32:44.068] [32mhttp[39m: GET /admin/content-api/permissions (13 ms) 200
+[2026-01-20 14:32:44.072] [32mhttp[39m: GET /admin/content-api/routes (15 ms) 200
+[2026-01-20 14:32:44.552] [32mhttp[39m: GET /admin/ai-usage (654 ms) 200
+[2026-01-20 14:32:44.778] [32mhttp[39m: GET /admin/license-trial-time-left (574 ms) 200
+[2026-01-20 14:33:03.314] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (15 ms) 200
+[2026-01-20 14:33:03.323] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (21 ms) 200
+[2026-01-20 14:33:03.334] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (16 ms) 200
+[2026-01-20 14:33:03.341] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (15 ms) 200
+[2026-01-20 14:33:03.385] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (20 ms) 200
+[2026-01-20 14:33:03.396] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (35 ms) 200
+[2026-01-20 14:33:03.400] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (12 ms) 200
+[2026-01-20 14:33:03.424] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (26 ms) 200
+[2026-01-20 14:33:06.596] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (10 ms) 200
+[2026-01-20 14:33:06.607] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (3 ms) 200
+[2026-01-20 14:33:06.607] [32mhttp[39m: GET /uploads/Signature_9d3875397a.png (2 ms) 200
+[2026-01-20 14:33:06.619] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (10 ms) 200
+[2026-01-20 14:34:29.497] [32minfo[39m: File changed: /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/src/api/workspace/content-types/workspace/schema.json
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (14ms)
+[2026-01-20 14:34:33.163] [32minfo[39m: Shutting down Strapi
+[2026-01-20 14:34:33.185] [32minfo[39m: Strapi has been shut down
+- Loading Strapi
+[2026-01-20 14:34:46.811] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+🔧 Configuring API permissions...
+- Building build context
+
+[INFO] Including the following ENV variables as part of the JS bundle:
+    - ADMIN_PATH
+    - STRAPI_ADMIN_BACKEND_URL
+    - STRAPI_TELEMETRY_DISABLED
+    - STRAPI_AI_URL
+    - STRAPI_ANALYTICS_URL
+✔ Building build context (190ms)
+- Creating admin
+✔ Creating admin (848ms)
+✔ Loading Strapi (5265ms)
+- Generating types
+✔ Generating types (190ms)
+- Compiling TS
+- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
+✔ Cleaning dist dir (12ms)
+✔ Compiling TS (1622ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 14:34:49 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 7089 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 19621                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 14:34:49.820] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs
+[2026-01-20 14:37:08.728] [32minfo[39m: Shutting down Strapi

@@ -284,3 +284,138 @@ Workspace GET error: TypeError: fetch failed
  GET /customers?_rsc=jq4ko 200 in 156ms
  ✓ Compiled in 226ms (1390 modules)
  GET /customers?_rsc=jq4ko 200 in 91ms
+ GET /customers 200 in 142ms
+ ✓ Compiled /api/customers in 113ms (846 modules)
+ ✓ Compiled (869 modules)
+ GET /favicon.ico 200 in 381ms
+ GET /api/customers 200 in 396ms
+ GET /api/customers 200 in 41ms
+ GET /invoices?_rsc=7qj29 200 in 30ms
+ ✓ Compiled /api/invoices in 104ms (871 modules)
+ GET /api/customers 200 in 337ms
+ GET /api/invoices 200 in 353ms
+ GET /api/customers 200 in 29ms
+ GET /api/invoices 200 in 27ms
+ ✓ Compiled /api/invoices/[id] in 276ms (873 modules)
+ ✓ Compiled (875 modules)
+ GET /api/workspace 200 in 519ms
+ GET /api/invoices/8 200 in 521ms
+ GET /api/workspace 200 in 26ms
+ GET /api/invoices/8 200 in 34ms
+ GET /api/invoices 200 in 91ms
+ GET /api/customers 200 in 87ms
+ GET /api/customers 200 in 55ms
+ GET /api/invoices 200 in 86ms
+ ✓ Compiled /settings in 311ms (849 modules)
+ ✓ Compiled /api/workspace in 119ms (851 modules)
+ GET /api/workspace 200 in 226ms
+ GET /api/workspace 200 in 22ms
+ ✓ Compiled in 572ms (1247 modules)
+ ✓ Compiled in 231ms (1247 modules)
+ ✓ Compiled in 352ms (1247 modules)
+ ✓ Compiled in 141ms (548 modules)
+ ✓ Compiled in 110ms (548 modules)
+ ✓ Compiled in 460ms (1247 modules)
+ ✓ Compiled in 379ms (1247 modules)
+ ✓ Compiled in 378ms (1247 modules)
+ ✓ Compiled in 377ms (1247 modules)
+ ✓ Compiled in 428ms (1247 modules)
+ ✓ Compiled in 173ms (548 modules)
+ GET /settings 200 in 136ms
+ ✓ Compiled /favicon.ico in 406ms (725 modules)
+ ✓ Compiled in 0ms (754 modules)
+ ✓ Compiled in 1ms (754 modules)
+ ✓ Compiled in 0ms (754 modules)
+ GET /api/workspace 200 in 1003ms
+ GET /favicon.ico 200 in 1066ms
+ GET /api/workspace 200 in 202ms
+ PUT /api/workspace 200 in 115ms
+ GET /api/workspace 200 in 31ms
+ GET /invoices?_rsc=7qj29 200 in 19ms
+ ✓ Compiled /api/customers in 264ms (756 modules)
+ ✓ Compiled in 0ms (758 modules)
+ ✓ Compiled in 0ms (758 modules)
+ ✓ Compiled in 0ms (758 modules)
+ GET /api/invoices 200 in 722ms
+ GET /invoices?_rsc=1t6lu 200 in 536ms
+ GET /api/customers 200 in 879ms
+ GET /api/invoices 200 in 204ms
+ GET /api/customers 200 in 49ms
+ GET /api/workspace 200 in 126ms
+ ✓ Compiled /api/invoices/[id] in 277ms (760 modules)
+ GET /api/workspace 200 in 342ms
+ GET /api/invoices/8 200 in 502ms
+ GET /api/invoices/8 200 in 43ms
+ GET /api/customers 200 in 70ms
+ GET /api/invoices 200 in 77ms
+ GET /api/customers 200 in 38ms
+ GET /api/invoices 200 in 38ms
+ ✓ Compiled in 449ms (1277 modules)
+ GET /invoices?_rsc=1t6lu 200 in 217ms
+ GET /invoices/8/preview 200 in 103ms
+ ✓ Compiled /api/invoices/[id] in 220ms (725 modules)
+ ✓ Compiled (756 modules)
+ GET /favicon.ico 200 in 385ms
+ GET /api/workspace 200 in 465ms
+ GET /api/invoices/8 200 in 490ms
+ GET /api/workspace 200 in 42ms
+ GET /api/invoices/8 200 in 56ms
+ ✓ Compiled in 296ms (1304 modules)
+ GET /invoices?_rsc=1t6lu 200 in 110ms
+ GET /invoices/8/preview 200 in 80ms
+ GET /favicon.ico 200 in 47ms
+ GET /api/workspace 200 in 113ms
+ GET /api/invoices/8 200 in 139ms
+ GET /api/workspace 200 in 38ms
+ GET /api/invoices/8 200 in 51ms
+ GET /invoices?_rsc=1pk80 200 in 22ms
+ ✓ Compiled /api/customers in 133ms (758 modules)
+ ✓ Compiled (760 modules)
+ GET /api/customers 200 in 434ms
+ GET /api/invoices 200 in 452ms
+ GET /api/customers 200 in 37ms
+ GET /api/invoices 200 in 48ms
+ GET /dashboard?_rsc=16jui 200 in 75ms
+ GET /customers?_rsc=xb5uw 200 in 14ms
+ GET /api/customers 200 in 41ms
+ GET /api/customers 200 in 32ms
+ GET /api/customers 200 in 60ms
+ GET /api/invoices 200 in 69ms
+ GET /api/customers 200 in 55ms
+ GET /api/invoices 200 in 60ms
+ ✓ Compiled in 693ms (1247 modules)
+ GET /invoices?_rsc=1t6lu 200 in 122ms
+ GET /invoices?_rsc=1t6lu 200 in 20ms
+ GET /invoices 200 in 184ms
+ ✓ Compiled /api/customers in 120ms (731 modules)
+ ✓ Compiled (756 modules)
+ GET /favicon.ico 200 in 433ms
+ GET /api/customers 200 in 497ms
+ GET /api/invoices 200 in 535ms
+ GET /api/customers 200 in 52ms
+ GET /api/invoices 200 in 36ms
+ ✓ Compiled /api/invoices/[id] in 105ms (758 modules)
+ PUT /api/invoices/8 200 in 264ms
+ GET /api/invoices 200 in 45ms
+ ✓ Compiled /api/workspace in 220ms (760 modules)
+ GET /api/workspace 200 in 415ms
+ GET /api/invoices/8 200 in 420ms
+ GET /api/workspace 200 in 35ms
+ GET /api/invoices/8 200 in 41ms
+ ✓ Compiled in 534ms (1247 modules)
+ GET /invoices?_rsc=1t6lu 200 in 204ms
+ GET /invoices/8/preview 200 in 103ms
+ ✓ Compiled /api/invoices/[id] in 194ms (725 modules)
+ ✓ Compiled (756 modules)
+ GET /favicon.ico 200 in 367ms
+ GET /api/workspace 200 in 438ms
+ GET /api/invoices/8 200 in 459ms
+ GET /api/workspace 200 in 60ms
+ GET /api/invoices/8 200 in 75ms
+ GET /invoices/8/preview 200 in 101ms
+ GET /favicon.ico 200 in 28ms
+ GET /api/workspace 200 in 68ms
+ GET /api/invoices/8 200 in 92ms
+ GET /api/workspace 200 in 46ms
+ GET /api/invoices/8 200 in 46ms
+[?25h
