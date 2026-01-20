@@ -3,9 +3,9 @@
 > strapi develop
 
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (26ms)
+✔ Cleaning dist dir (12ms)
 - Loading Strapi
-[2026-01-14 13:41:58.018] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+[2026-01-18 11:32:10.639] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
 🔧 Configuring API permissions...
 - Building build context
 
@@ -15,24 +15,24 @@
     - STRAPI_TELEMETRY_DISABLED
     - STRAPI_AI_URL
     - STRAPI_ANALYTICS_URL
-✔ Building build context (375ms)
+✔ Building build context (328ms)
 - Creating admin
-✔ Creating admin (1379ms)
-✔ Loading Strapi (7381ms)
+✔ Creating admin (1259ms)
+✔ Loading Strapi (8919ms)
 - Generating types
-✔ Generating types (265ms)
+✔ Generating types (384ms)
 - Compiling TS
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (43ms)
-✔ Compiling TS (3563ms)
+✖ Error cleaning dist dir: Error: ENOENT: no such file or directory, lstat '/Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist/tsconfig.tsbuildinfo' (32ms)
+✔ Compiling TS (4098ms)
 
  Project information
 
 [90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
-[90m│[39m Time               [90m│[39m Wed Jan 14 2026 13:42:03 GMT+0100 (Central Euro… [90m│[39m
-[90m│[39m Launched in        [90m│[39m 11281 ms                                         [90m│[39m
+[90m│[39m Time               [90m│[39m Sun Jan 18 2026 11:32:16 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 13457 ms                                         [90m│[39m
 [90m│[39m Environment        [90m│[39m development                                      [90m│[39m
-[90m│[39m Process PID        [90m│[39m 6671                                             [90m│[39m
+[90m│[39m Process PID        [90m│[39m 46218                                            [90m│[39m
 [90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
 [90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
 [90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
@@ -46,43 +46,6 @@ Welcome back!
 To access the server ⚡️, go to:
 http://localhost:1337
 
-[2026-01-14 13:42:04.066] [32minfo[39m: Strapi started successfully
+[2026-01-18 11:32:17.000] [32minfo[39m: Strapi started successfully
 ✅ API permissions configured successfully
    Enabled 5 actions for 4 APIs
-[2026-01-14 13:43:25.019] [32mhttp[39m: GET /api/customers (47 ms) 200
-[2026-01-14 13:43:25.061] [32mhttp[39m: GET /api/customers (20 ms) 200
-[2026-01-14 13:44:45.321] [32mhttp[39m: GET /api/customers (50 ms) 200
-[2026-01-14 13:44:45.343] [32mhttp[39m: GET /api/invoices?populate=* (86 ms) 200
-[2026-01-14 13:44:45.348] [32mhttp[39m: GET /api/invoices?populate=* (59 ms) 200
-[2026-01-14 13:45:29.793] [32mhttp[39m: GET /api/customers (26 ms) 200
-[2026-01-14 13:45:29.827] [32mhttp[39m: GET /api/customers (12 ms) 200
-[2026-01-14 13:45:42.693] [32mhttp[39m: GET /api/customers?filters[id][$eq]=4 (18 ms) 200
-[2026-01-14 13:45:42.719] [32mhttp[39m: DELETE /api/customers/hd9u3pab64z8o3nt8u1yzvbq (19 ms) 204
-[2026-01-14 13:45:42.748] [32mhttp[39m: GET /api/customers (11 ms) 200
-[2026-01-14 13:45:48.956] [32mhttp[39m: GET /api/customers (38 ms) 200
-[2026-01-14 13:45:48.964] [32mhttp[39m: GET /api/invoices?populate=* (66 ms) 200
-[2026-01-14 13:45:49.037] [32mhttp[39m: GET /api/customers (45 ms) 200
-[2026-01-14 13:45:49.045] [32mhttp[39m: GET /api/invoices?populate=* (46 ms) 200
-[2026-01-14 13:47:16.779] [32mhttp[39m: GET /api/customers (39 ms) 200
-[2026-01-14 13:47:16.812] [32mhttp[39m: GET /api/customers (13 ms) 200
-[2026-01-14 13:47:47.353] [32mhttp[39m: GET /api/customers (48 ms) 200
-[2026-01-14 13:47:47.366] [32mhttp[39m: GET /api/invoices?populate=* (75 ms) 200
-[2026-01-14 13:47:47.442] [32mhttp[39m: GET /api/customers (33 ms) 200
-[2026-01-14 13:47:47.459] [32mhttp[39m: GET /api/invoices?populate=* (38 ms) 200
-[2026-01-14 13:47:58.090] [32mhttp[39m: GET /api/customers (12 ms) 200
-[2026-01-14 13:47:58.114] [32mhttp[39m: GET /api/customers (10 ms) 200
-[2026-01-14 13:47:59.909] [32mhttp[39m: GET /api/customers (11 ms) 200
-[2026-01-14 13:47:59.914] [32mhttp[39m: GET /api/invoices?populate=* (24 ms) 200
-[2026-01-14 13:47:59.956] [32mhttp[39m: GET /api/customers (23 ms) 200
-[2026-01-14 13:47:59.964] [32mhttp[39m: GET /api/invoices?populate=* (19 ms) 200
-[2026-01-14 13:48:01.376] [32mhttp[39m: GET /api/invoices?populate=* (24 ms) 200
-[2026-01-14 13:48:01.378] [32mhttp[39m: GET /api/invoices?populate=* (28 ms) 200
-[2026-01-14 13:48:01.383] [32mhttp[39m: GET /api/customers (18 ms) 200
-[2026-01-14 13:48:05.174] [32mhttp[39m: GET /api/customers (12 ms) 200
-[2026-01-14 13:48:05.203] [32mhttp[39m: GET /api/customers (11 ms) 200
-[2026-01-14 13:48:06.103] [32mhttp[39m: GET /api/customers (10 ms) 200
-[2026-01-14 13:48:06.106] [32mhttp[39m: GET /api/invoices?populate=* (22 ms) 200
-[2026-01-14 13:48:06.130] [32mhttp[39m: GET /api/customers (13 ms) 200
-[2026-01-14 13:48:06.136] [32mhttp[39m: GET /api/invoices?populate=* (16 ms) 200
-[2026-01-14 13:48:11.312] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=6&populate=* (33 ms) 200
-[2026-01-14 13:48:11.377] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=6&populate=* (32 ms) 200

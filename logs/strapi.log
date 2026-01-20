@@ -3,9 +3,9 @@
 > strapi develop
 
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✖ Error cleaning dist dir: Error: ENOENT: no such file or directory, lstat '/Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist/tsconfig.tsbuildinfo' (35ms)
+✖ Error cleaning dist dir: Error: ENOENT: no such file or directory, lstat '/Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist/tsconfig.tsbuildinfo' (22ms)
 - Loading Strapi
-[2026-01-14 13:41:58.019] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+[2026-01-18 11:32:10.639] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
 🔧 Configuring API permissions...
 - Building build context
 
@@ -15,15 +15,20 @@
     - STRAPI_TELEMETRY_DISABLED
     - STRAPI_AI_URL
     - STRAPI_ANALYTICS_URL
-✔ Building build context (341ms)
+✔ Building build context (325ms)
 - Creating admin
-✔ Creating admin (1388ms)
-✔ Loading Strapi (7381ms)
+✔ Creating admin (1263ms)
+✔ Loading Strapi (8916ms)
 - Generating types
-✔ Generating types (266ms)
+✔ Generating types (346ms)
 - Compiling TS
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (42ms)
-✔ Compiling TS (3577ms)
-[2026-01-14 13:42:03.994] [31merror[39m: The port 1337 is already used by another application.
-[2026-01-14 13:42:03.995] [32minfo[39m: Shutting down Strapi
+✔ Cleaning dist dir (70ms)
+✔ Compiling TS (4161ms)
+[2026-01-18 11:32:16.969] [31merror[39m: The port 1337 is already used by another application.
+[2026-01-18 11:32:16.969] [32minfo[39m: Shutting down Strapi
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.7.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.7.0
+npm notice To update run: npm install -g npm@11.7.0
+npm notice
