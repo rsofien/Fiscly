@@ -16,60 +16,132 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  const userId = session.user.id
 
-  const [reportsRes, invoicesRes, customersRes] = await Promise.all([
-    fetch(`${baseUrl}/api/reports`, { cache: "no-store" }),
-    fetch(`${baseUrl}/api/invoices`, { cache: "no-store" }),
-    fetch(`${baseUrl}/api/customers`, { cache: "no-store" }),
-  ])
+  if (!userId) {
+    redirect("/auth/login")
+  }
 
-  const reports = reportsRes.ok ? await reportsRes.json() : null
-  const invoicesData = invoicesRes.ok ? await invoicesRes.json() : []
-  const customersData = customersRes.ok ? await customersRes.json() : []
-  const invoices = Array.isArray(invoicesData) ? invoicesData : []
+  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
+  const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN
+
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  }
+  if (STRAPI_API_TOKEN) {
+    headers["Authorization"] = `Bearer ${STRAPI_API_TOKEN}`
+  }
+
+  // Get user's workspace
+  const workspaceRes = await fetch(
+    `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+    { headers, cache: "no-store" }
+  )
+
+  let invoices: any[] = []
+  let customers: any[] = []
+  let paidThisMonth = 0
+  let outstandingAmount = 0
+  let totalInvoices = 0
+  let totalCustomers = 0
+  let dueInvoices = 0
+  let overdueInvoices = 0
+  let topCustomers: any[] = []
+  let reports = null
+
+  if (workspaceRes.ok) {
+    const workspaceData = await workspaceRes.json()
+    const workspaces = workspaceData.data || []
+    
+    if (workspaces.length > 0) {
+      const workspaceId = workspaces[0].id
+
+      // Fetch data directly from Strapi
+      const [invoicesRes, customersRes] = await Promise.all([
+        fetch(`${STRAPI_URL}/api/invoices?filters[workspace][id][$eq]=${workspaceId}&populate=*`, { 
+          headers, 
+          cache: "no-store" 
+        }),
+        fetch(`${STRAPI_URL}/api/customers?filters[workspace][id][$eq]=${workspaceId}`, { 
+          headers, 
+          cache: "no-store" 
+        }),
+      ])
+
+      const invoicesData = invoicesRes.ok ? await invoicesRes.json() : { data: [] }
+      const customersData = customersRes.ok ? await customersRes.json() : { data: [] }
+      
+      invoices = (invoicesData.data || []).map((item: any) => ({
+        id: item.id.toString(),
+        invoiceNumber: item.invoiceNumber,
+        customerName: item.customer?.name || '',
+        amount: item.amount,
+        currency: item.currency,
+        status: item.status,
+        issueDate: item.issueDate,
+        dueDate: item.dueDate,
+      }))
+      
+      customers = customersData.data || []
+
+      const now = new Date()
+      paidThisMonth = invoices
+        .filter((inv: any) => {
+          if (inv.status !== "paid" || !inv.issueDate) return false
+          const issued = new Date(inv.issueDate)
+          return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
+        })
+        .reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+
+      const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+      const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
+      const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+      outstandingAmount = totalRevenue - paidAmount
+
+      totalInvoices = invoices.length
+      totalCustomers = customers.length
+      dueInvoices = invoices.filter((inv: any) => inv.status === 'sent').length
+      overdueInvoices = invoices.filter((inv: any) => inv.status === 'overdue').length
+
+      reports = {
+        totalRevenue,
+        paidAmount,
+        outstanding: outstandingAmount,
+        invoiceCount: totalInvoices,
+        byStatus: {
+          draft: invoices.filter((inv: any) => inv.status === 'draft').length,
+          sent: dueInvoices,
+          paid: paidInvoices.length,
+          overdue: overdueInvoices,
+          cancelled: invoices.filter((inv: any) => inv.status === 'cancelled').length,
+        }
+      }
+
+      topCustomers = Object.values(
+        invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
+          (acc: any, inv: any) => {
+            const name = inv.customerName || "Unknown"
+            const amount = Number(inv.amount) || 0
+            if (!acc[name]) {
+              acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
+            }
+            acc[name].totalSpent += amount
+            acc[name].invoiceCount += 1
+            return acc
+          },
+          {}
+        )
+      )
+        .sort((a: any, b: any) => b.totalSpent - a.totalSpent)
+        .slice(0, 5)
+    }
+  }
+
   const user = {
     name: session.user.name,
     email: session.user.email || "",
     workspaceName: (session.user as any).workspaceName ?? null,
   }
-
-  const now = new Date()
-  const paidThisMonth = invoices
-    .filter((inv) => {
-      if (inv.status !== "paid" || !inv.issueDate) return false
-      const issued = new Date(inv.issueDate)
-      return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
-    })
-    .reduce((sum, inv) => sum + (Number(inv.amount) || 0), 0)
-
-  const outstandingAmount = reports?.outstanding
-    ?? invoices
-      .filter((inv) => inv.status !== "paid")
-      .reduce((sum, inv) => sum + (Number(inv.amount) || 0), 0)
-
-  const totalInvoices = reports?.invoiceCount ?? invoices.length
-  const totalCustomers = Array.isArray(customersData) ? customersData.length : 0
-  const dueInvoices = reports?.byStatus?.sent ?? 0
-  const overdueInvoices = reports?.byStatus?.overdue ?? 0
-
-  const topCustomers = Object.values(
-    invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
-      (acc, inv) => {
-        const name = inv.customerName || "Unknown"
-        const amount = Number(inv.amount) || 0
-        if (!acc[name]) {
-          acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
-        }
-        acc[name].totalSpent += amount
-        acc[name].invoiceCount += 1
-        return acc
-      },
-      {}
-    )
-  )
-    .sort((a, b) => b.totalSpent - a.totalSpent)
-    .slice(0, 5)
 
   return (
     <AppLayout user={user}>

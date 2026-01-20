@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -16,7 +17,40 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const response = await fetch(`${STRAPI_URL}/api/customers/${params.id}`, {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userId = session.user.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
+    // Get user's workspace to verify ownership
+    const workspaceResponse = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+      {
+        headers: buildHeaders(true),
+      }
+    );
+
+    if (!workspaceResponse.ok) {
+      return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
+    }
+
+    const workspaceData = await workspaceResponse.json();
+    const workspaces = workspaceData.data || [];
+    
+    if (workspaces.length === 0) {
+      return NextResponse.json({ error: 'No workspace found' }, { status: 403 });
+    }
+
+    const workspaceId = workspaces[0].id;
+
+    // Fetch customer with workspace filter
+    const response = await fetch(`${STRAPI_URL}/api/customers?filters[id][$eq]=${params.id}&filters[workspace][id][$eq]=${workspaceId}`, {
       headers: buildHeaders(),
     });
 
@@ -25,13 +59,19 @@ export async function GET(
     }
 
     const data = await response.json();
+    
+    if (!data.data || data.data.length === 0) {
+      return NextResponse.json({ error: 'Customer not found or access denied' }, { status: 403 });
+    }
+
+    const customerData = data.data[0];
     const customer = {
-      id: data.data.id.toString(),
-      name: data.data.name,
-      email: data.data.email,
-      phone: data.data.phone,
-      company: data.data.company,
-      status: data.data.status,
+      id: customerData.id.toString(),
+      name: customerData.name,
+      email: customerData.email,
+      phone: customerData.phone,
+      company: customerData.company,
+      status: customerData.status,
     };
 
     return NextResponse.json(customer);
@@ -47,10 +87,42 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
     
-    // First, get the customer to find its documentId
-    const getResponse = await fetch(`${STRAPI_URL}/api/customers?filters[id][$eq]=${params.id}`, {
+    const userId = session.user.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
+    // Get user's workspace to verify ownership
+    const workspaceResponse = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+      {
+        headers: buildHeaders(true),
+      }
+    );
+
+    if (!workspaceResponse.ok) {
+      return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
+    }
+
+    const workspaceData = await workspaceResponse.json();
+    const workspaces = workspaceData.data || [];
+    
+    if (workspaces.length === 0) {
+      return NextResponse.json({ error: 'No workspace found' }, { status: 403 });
+    }
+
+    const workspaceId = workspaces[0].id;
+    
+    // Verify the customer belongs to user's workspace
+    const getResponse = await fetch(`${STRAPI_URL}/api/customers?filters[id][$eq]=${params.id}&filters[workspace][id][$eq]=${workspaceId}`, {
       headers: buildHeaders(),
     });
     
@@ -60,17 +132,68 @@ export async function PUT(
     
     const getData = await getResponse.json();
     if (!getData.data || getData.data.length === 0) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Customer not found or access denied' }, { status: 403 });
     }
     
     const documentId = getData.data[0].documentId;
+    const existingCustomer = getData.data[0];
 
-    // Now update using documentId
+    // ============ VALIDATION ============
+    
+    // Validate name if provided
+    if (body.name !== undefined && body.name.trim() === '') {
+      return NextResponse.json({ error: 'Customer name cannot be empty' }, { status: 400 });
+    }
+
+    // Validate email if provided and changed
+    if (body.email && body.email !== existingCustomer.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(body.email)) {
+        return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+      }
+
+      // Check email uniqueness within workspace
+      const duplicateResponse = await fetch(
+        `${STRAPI_URL}/api/customers?filters[workspace][id][$eq]=${workspaceId}&filters[email][$eq]=${body.email}&filters[id][$ne]=${params.id}`,
+        { headers: buildHeaders() }
+      );
+      
+      if (duplicateResponse.ok) {
+        const duplicateData = await duplicateResponse.json();
+        if (duplicateData.data && duplicateData.data.length > 0) {
+          return NextResponse.json({ error: 'Customer with this email already exists' }, { status: 400 });
+        }
+      }
+    }
+
+    // Validate phone format if provided
+    if (body.phone && body.phone.trim()) {
+      const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+      if (!phoneRegex.test(body.phone)) {
+        return NextResponse.json({ error: 'Invalid phone format' }, { status: 400 });
+      }
+    }
+
+    // Validate status if provided
+    if (body.status) {
+      const validStatuses = ['active', 'inactive'];
+      if (!validStatuses.includes(body.status)) {
+        return NextResponse.json({ error: 'Invalid status. Must be active or inactive' }, { status: 400 });
+      }
+    }
+
+    // ============ END VALIDATION ============
+
+    // Ensure workspace ID cannot be changed
+    const updateData = { ...body };
+    delete updateData.workspace;
+
+    // Update using documentId
     const response = await fetch(`${STRAPI_URL}/api/customers/${documentId}`, {
       method: 'PUT',
       headers: buildHeaders(true),
       body: JSON.stringify({
-        data: body,
+        data: updateData,
       }),
     });
 
@@ -92,8 +215,40 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // First, get the customer to find its documentId
-    const getResponse = await fetch(`${STRAPI_URL}/api/customers?filters[id][$eq]=${params.id}`, {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userId = session.user.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
+    // Get user's workspace to verify ownership
+    const workspaceResponse = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+      {
+        headers: buildHeaders(true),
+      }
+    );
+
+    if (!workspaceResponse.ok) {
+      return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
+    }
+
+    const workspaceData = await workspaceResponse.json();
+    const workspaces = workspaceData.data || [];
+    
+    if (workspaces.length === 0) {
+      return NextResponse.json({ error: 'No workspace found' }, { status: 403 });
+    }
+
+    const workspaceId = workspaces[0].id;
+    
+    // Verify the customer belongs to user's workspace
+    const getResponse = await fetch(`${STRAPI_URL}/api/customers?filters[id][$eq]=${params.id}&filters[workspace][id][$eq]=${workspaceId}`, {
       headers: buildHeaders(),
     });
     
@@ -103,12 +258,12 @@ export async function DELETE(
     
     const getData = await getResponse.json();
     if (!getData.data || getData.data.length === 0) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Customer not found or access denied' }, { status: 403 });
     }
     
     const documentId = getData.data[0].documentId;
 
-    // Now delete using documentId
+    // Delete using documentId
     const response = await fetch(`${STRAPI_URL}/api/customers/${documentId}`, {
       method: 'DELETE',
       headers: buildHeaders(),

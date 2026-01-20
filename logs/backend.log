@@ -3,9 +3,9 @@
 > strapi develop
 
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (8ms)
+✔ Cleaning dist dir (7ms)
 - Loading Strapi
-[2026-01-20 12:24:34.415] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+[2026-01-20 14:22:11.432] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
 🔧 Configuring API permissions...
 - Building build context
 
@@ -15,15 +15,15 @@
     - STRAPI_TELEMETRY_DISABLED
     - STRAPI_AI_URL
     - STRAPI_ANALYTICS_URL
-✔ Building build context (41ms)
+✔ Building build context (64ms)
 - Creating admin
-✔ Creating admin (244ms)
-✔ Loading Strapi (1361ms)
+✔ Creating admin (421ms)
+✔ Loading Strapi (1714ms)
 - Generating types
-✔ Generating types (170ms)
+✔ Generating types (202ms)
 - Compiling TS
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (14ms)
-✔ Compiling TS (1619ms)
-[2026-01-20 12:24:36.600] [31merror[39m: The port 1337 is already used by another application.
-[2026-01-20 12:24:36.600] [32minfo[39m: Shutting down Strapi
+✔ Cleaning dist dir (17ms)
+✔ Compiling TS (1847ms)
+[2026-01-20 14:22:14.066] [31merror[39m: The port 1337 is already used by another application.
+[2026-01-20 14:22:14.066] [32minfo[39m: Shutting down Strapi

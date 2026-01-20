@@ -40,6 +40,7 @@ type Invoice = {
   customer?: string
   amount: number
   currency?: Currency
+  language?: "en" | "fr"
   status: "draft" | "sent" | "paid" | "overdue" | "cancelled"
   issueDate: string
   dueDate: string
@@ -67,6 +68,7 @@ export function InvoicesTable() {
   const [formData, setFormData] = useState<Partial<Invoice>>({ 
     status: "draft", 
     currency: "USD",
+    language: "en",
   })
 
   useEffect(() => {
@@ -140,6 +142,8 @@ export function InvoicesTable() {
         setFormData({ 
           status: "draft", 
           paymentMethod: "bank_transfer",
+          currency: "USD",
+          language: "en",
           items: [{ description: "", quantity: 1, unitPrice: 0, total: 0 }]
         })
         setIsAddDialogOpen(false)
@@ -207,6 +211,7 @@ export function InvoicesTable() {
       dueDate: invoice.dueDate || '',
       amount: invoice.amount || 0,
       currency: invoice.currency || 'USD',
+      language: invoice.language || 'en',
       status: invoice.status || 'draft',
       description: invoice.description || '',
       notes: invoice.notes || '',
@@ -553,7 +558,7 @@ export function InvoicesTable() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="currency">Currency</Label>
                 <select
@@ -566,6 +571,18 @@ export function InvoicesTable() {
                   <option value="CAD">CAD - Canadian Dollar</option>
                   <option value="EUR">EUR - Euro</option>
                   <option value="USDT">USDT - Tether</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="language">Language</Label>
+                <select
+                  id="language"
+                  value={formData.language || "en"}
+                  onChange={(e) => setFormData({ ...formData, language: e.target.value as "en" | "fr" })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
                 </select>
               </div>
               <div>
@@ -765,11 +782,11 @@ export function InvoicesTable() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="edit-currency">Currency</Label>
+                <Label htmlFor="currency">Currency</Label>
                 <select
-                  id="edit-currency"
+                  id="currency"
                   value={formData.currency || "USD"}
                   onChange={(e) => setFormData({ ...formData, currency: e.target.value as Currency })}
                   className="w-full px-3 py-2 border rounded-md"
@@ -778,6 +795,18 @@ export function InvoicesTable() {
                   <option value="CAD">CAD - Canadian Dollar</option>
                   <option value="EUR">EUR - Euro</option>
                   <option value="USDT">USDT - Tether</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="language">Language</Label>
+                <select
+                  id="language"
+                  value={formData.language || "en"}
+                  onChange={(e) => setFormData({ ...formData, language: e.target.value as "en" | "fr" })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
                 </select>
               </div>
               <div>

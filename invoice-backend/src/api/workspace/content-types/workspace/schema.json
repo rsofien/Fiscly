@@ -12,6 +12,14 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "user_id": {
+      "type": "integer",
+      "required": true
+    },
+    "user_email": {
+      "type": "email",
+      "required": true
+    },
     "name": {
       "type": "string",
       "required": true
@@ -42,6 +50,11 @@
     "logo": {
       "type": "media",
       "multiple": false
+    },
+    "signature": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
     },
     "matriculeFiscale": {
       "type": "string"

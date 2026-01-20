@@ -11,13 +11,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Get workspace for the current user (assuming first workspace)
-    const response = await fetch(`${STRAPI_URL}/api/workspaces?populate=logo`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
-      },
-    })
+    const userId = session.user.id
+    const userEmail = session.user.email
+
+    if (!userId || !userEmail) {
+      return NextResponse.json({ error: "Invalid session" }, { status: 401 })
+    }
+
+    // Get workspace for the current user by user_id
+    const response = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}&populate=logo&populate=signature`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
+        },
+      }
+    )
 
     if (!response.ok) {
       return NextResponse.json({ error: "Failed to fetch workspace" }, { status: response.status })
@@ -27,7 +37,7 @@ export async function GET(request: NextRequest) {
     const workspaces = data.data || []
 
     if (workspaces.length === 0) {
-      // No workspace exists - create a default one
+      // No workspace exists - create a default one for this user
       const createResponse = await fetch(`${STRAPI_URL}/api/workspaces`, {
         method: "POST",
         headers: {
@@ -36,6 +46,8 @@ export async function GET(request: NextRequest) {
         },
         body: JSON.stringify({
           data: {
+            user_id: parseInt(userId),
+            user_email: userEmail,
             name: "My Company",
             invoicePrefix: "INV",
             defaultPaymentTerms: 15,
@@ -44,6 +56,8 @@ export async function GET(request: NextRequest) {
       })
 
       if (!createResponse.ok) {
+        const errorText = await createResponse.text()
+        console.error("Failed to create workspace:", errorText)
         return NextResponse.json({ error: "Failed to create workspace" }, { status: createResponse.status })
       }
 
@@ -62,10 +76,11 @@ export async function GET(request: NextRequest) {
         defaultNotes: newWorkspace.defaultNotes || "",
         matriculeFiscale: newWorkspace.matriculeFiscale || "",
         logo: newWorkspace.logo || null,
+        signature: newWorkspace.signature || null,
       })
     }
 
-    // Return the first workspace
+    // Return the user's workspace
     const workspace = workspaces[0]
     return NextResponse.json({
       id: workspace.id,
@@ -79,6 +94,7 @@ export async function GET(request: NextRequest) {
       defaultNotes: workspace.defaultNotes || "",
       matriculeFiscale: workspace.matriculeFiscale || "",
       logo: workspace.logo || null,
+      signature: workspace.signature || null,
     })
   } catch (error) {
     console.error("Workspace GET error:", error)
@@ -93,15 +109,25 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    const userId = session.user.id
+    const userEmail = session.user.email
+
+    if (!userId || !userEmail) {
+      return NextResponse.json({ error: "Invalid session" }, { status: 401 })
+    }
+
     const body = await request.json()
 
-    // Get workspace to find documentId
-    const getResponse = await fetch(`${STRAPI_URL}/api/workspaces?populate=logo`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
-      },
-    })
+    // Get workspace to find documentId - filter by user_id
+    const getResponse = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}&populate=logo&populate=signature`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
+        },
+      }
+    )
 
     if (!getResponse.ok) {
       return NextResponse.json({ error: "Failed to fetch workspace" }, { status: getResponse.status })
@@ -111,7 +137,7 @@ export async function PUT(request: NextRequest) {
     const workspaces = data.data || []
 
     if (workspaces.length === 0) {
-      // Create new workspace instead of failing
+      // Create new workspace instead of failing - assign to this user
       const createResponse = await fetch(`${STRAPI_URL}/api/workspaces`, {
         method: "POST",
         headers: {
@@ -120,6 +146,8 @@ export async function PUT(request: NextRequest) {
         },
         body: JSON.stringify({
           data: {
+            user_id: parseInt(userId),
+            user_email: userEmail,
             name: body.name || "My Company",
             email: body.email,
             address: body.address,
@@ -129,6 +157,7 @@ export async function PUT(request: NextRequest) {
             defaultNotes: body.defaultNotes,
             matriculeFiscale: body.matriculeFiscale,
             ...(body.logoId && { logo: body.logoId }),
+            ...(body.signatureId && { signature: body.signatureId }),
           },
         }),
       })
@@ -149,7 +178,16 @@ export async function PUT(request: NextRequest) {
     const workspace = workspaces[0]
     const documentId = workspace.documentId
 
-    // Update workspace
+    // Ensure user can only update their own workspace
+    if (workspace.user_id !== parseInt(userId)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 })
+    }
+
+    // Update workspace - prevent user_id and user_email from being modified
+    const updateData = { ...body }
+    delete updateData.user_id
+    delete updateData.user_email
+
     const updateResponse = await fetch(`${STRAPI_URL}/api/workspaces/${documentId}`, {
       method: "PUT",
       headers: {
@@ -158,15 +196,16 @@ export async function PUT(request: NextRequest) {
       },
       body: JSON.stringify({
         data: {
-          name: body.name,
-          email: body.email,
-          address: body.address,
-          phone: body.phone,
-          invoicePrefix: body.invoicePrefix,
-          defaultPaymentTerms: body.defaultPaymentTerms,
-          defaultNotes: body.defaultNotes,
-          matriculeFiscale: body.matriculeFiscale,
-          ...(body.logoId && { logo: body.logoId }),
+          name: updateData.name,
+          email: updateData.email,
+          address: updateData.address,
+          phone: updateData.phone,
+          invoicePrefix: updateData.invoicePrefix,
+          defaultPaymentTerms: updateData.defaultPaymentTerms,
+          defaultNotes: updateData.defaultNotes,
+          matriculeFiscale: updateData.matriculeFiscale,
+          ...(updateData.logoId && { logo: updateData.logoId }),
+          ...(updateData.signatureId && { signature: updateData.signatureId }),
         },
       }),
     })

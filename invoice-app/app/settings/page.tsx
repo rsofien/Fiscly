@@ -26,6 +26,11 @@ type Workspace = {
     url: string
     name: string
   }
+  signature?: {
+    id: string
+    url: string
+    name: string
+  }
 }
 
 export default function SettingsPage() {
@@ -37,6 +42,10 @@ export default function SettingsPage() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadedLogoId, setUploadedLogoId] = useState<string | null>(null)
+  const [signaturePreview, setSignaturePreview] = useState<string | null>(null)
+  const [selectedSignatureFile, setSelectedSignatureFile] = useState<File | null>(null)
+  const [uploadedSignatureId, setUploadedSignatureId] = useState<string | null>(null)
+  const [signatureUploading, setSignatureUploading] = useState(false)
 
   useEffect(() => {
     fetchWorkspace()
@@ -53,6 +62,12 @@ export default function SettingsPage() {
           const fullUrl = data.logo.url.startsWith('http') ? data.logo.url : `${STRAPI_URL}${data.logo.url}`
           setLogoPreview(fullUrl)
           setUploadedLogoId(data.logo.id)
+        }
+        if (data.signature?.url) {
+          const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
+          const fullUrl = data.signature.url.startsWith('http') ? data.signature.url : `${STRAPI_URL}${data.signature.url}`
+          setSignaturePreview(fullUrl)
+          setUploadedSignatureId(data.signature.id)
         }
       }
     } catch (error) {
@@ -74,10 +89,21 @@ export default function SettingsPage() {
     reader.readAsDataURL(file)
   }
 
+  const handleSignatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setSelectedSignatureFile(file)
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      setSignaturePreview(event.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
+
   const uploadLogo = async (): Promise<string | null> => {
     if (!selectedFile) return null
-    console.log('========== CLIENT UPLOAD START (DIRECT TO STRAPI) ==========')
-    console.log('File to upload:', {
+    console.log('========== CLIENT UPLOAD START ==========', {
       name: selectedFile.name,
       type: selectedFile.type,
       size: selectedFile.size
@@ -86,11 +112,9 @@ export default function SettingsPage() {
     setLogoUploading(true)
     try {
       const formData = new FormData()
-      formData.append("files", selectedFile) // Strapi expects "files" not "file"
-      console.log('Uploading directly to Strapi...')
+      formData.append("file", selectedFile)
 
-      const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-      const response = await fetch(`${STRAPI_URL}/api/upload`, {
+      const response = await fetch('/api/upload', {
         method: "POST",
         body: formData,
       })
@@ -102,8 +126,7 @@ export default function SettingsPage() {
       })
 
       if (response.ok) {
-        const uploadedFiles = await response.json()
-        const uploaded = uploadedFiles[0]
+        const uploaded = await response.json()
         console.log('Upload successful:', uploaded)
         console.log('========== CLIENT UPLOAD SUCCESS ==========')
         setUploadedLogoId(uploaded.id)
@@ -128,6 +151,45 @@ export default function SettingsPage() {
     }
   }
 
+  const uploadSignature = async (): Promise<string | null> => {
+    if (!selectedSignatureFile) return null
+    console.log('========== SIGNATURE UPLOAD START ==========', {
+      name: selectedSignatureFile.name,
+      type: selectedSignatureFile.type,
+      size: selectedSignatureFile.size
+    })
+
+    setSignatureUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", selectedSignatureFile)
+
+      const response = await fetch('/api/upload', {
+        method: "POST",
+        body: formData,
+      })
+
+      if (response.ok) {
+        const uploaded = await response.json()
+        console.log('========== SIGNATURE UPLOAD SUCCESS ==========', uploaded)
+        setUploadedSignatureId(uploaded.id)
+        setSelectedSignatureFile(null)
+        return uploaded.id.toString()
+      } else {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('Signature upload failed:', errorData)
+        alert(`Failed to upload signature: ${JSON.stringify(errorData)}`)
+        return null
+      }
+    } catch (error) {
+      console.error('========== SIGNATURE UPLOAD ERROR ==========', error)
+      alert("Failed to upload signature")
+      return null
+    } finally {
+      setSignatureUploading(false)
+    }
+  }
+
   const handleSaveWorkspace = async () => {
     if (!workspace.name) {
       alert("Workspace name is required")
@@ -136,12 +198,21 @@ export default function SettingsPage() {
     setSaving(true)
     try {
       let logoIdToSave = uploadedLogoId
+      let signatureIdToSave = uploadedSignatureId
 
       // Upload logo if a new file was selected
       if (selectedFile) {
         const newLogoId = await uploadLogo()
         if (newLogoId) {
           logoIdToSave = newLogoId
+        }
+      }
+
+      // Upload signature if a new file was selected
+      if (selectedSignatureFile) {
+        const newSignatureId = await uploadSignature()
+        if (newSignatureId) {
+          signatureIdToSave = newSignatureId
         }
       }
 
@@ -158,6 +229,7 @@ export default function SettingsPage() {
           defaultNotes: workspace.defaultNotes,
           matriculeFiscale: workspace.matriculeFiscale,
           ...(logoIdToSave && { logoId: logoIdToSave }),
+          ...(signatureIdToSave && { signatureId: signatureIdToSave }),
         }),
       })
 
@@ -303,6 +375,54 @@ export default function SettingsPage() {
                     <>
                       <Upload className="mr-2 h-4 w-4" />
                       Upload & Save Logo
+                    </>
+                  )}
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Agency Signature</CardTitle>
+              <CardDescription>Upload your signature for invoices (PNG recommended)</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {signaturePreview && (
+                <div className="flex justify-center p-4 border rounded-lg bg-gray-50">
+                  <img
+                    src={signaturePreview}
+                    alt="Signature preview"
+                    className="h-24 object-contain"
+                  />
+                </div>
+              )}
+              <div className="space-y-2">
+                <Label htmlFor="signature">Select Signature</Label>
+                <Input
+                  id="signature"
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg"
+                  onChange={handleSignatureChange}
+                />
+                <p className="text-sm text-muted-foreground">
+                  Supported formats: PNG, JPG (Max 5MB). PNG with transparent background recommended.
+                </p>
+              </div>
+              {selectedSignatureFile && (
+                <Button 
+                  onClick={handleSaveWorkspace} 
+                  disabled={saving || signatureUploading}
+                >
+                  {signatureUploading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Uploading Signature...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload & Save Signature
                     </>
                   )}
                 </Button>

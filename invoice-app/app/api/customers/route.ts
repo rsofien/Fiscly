@@ -19,10 +19,19 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's workspace first
-    const workspaceResponse = await fetch(`${STRAPI_URL}/api/workspaces`, {
-      headers: buildHeaders(true),
-    });
+    const userId = session.user.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
+    // Get user's workspace by user_id
+    const workspaceResponse = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+      {
+        headers: buildHeaders(true),
+      }
+    );
 
     if (!workspaceResponse.ok) {
       return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
@@ -74,10 +83,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's workspace
-    const workspaceResponse = await fetch(`${STRAPI_URL}/api/workspaces`, {
-      headers: buildHeaders(true),
-    });
+    const userId = session.user.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
+    // Get user's workspace by user_id
+    const workspaceResponse = await fetch(
+      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+      {
+        headers: buildHeaders(true),
+      }
+    );
 
     if (!workspaceResponse.ok) {
       return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
@@ -92,6 +110,52 @@ export async function POST(request: NextRequest) {
 
     const workspaceId = workspaces[0].id;
     const body = await request.json();
+
+    // ============ VALIDATION ============
+    
+    // Validate required fields
+    if (!body.name || body.name.trim() === '') {
+      return NextResponse.json({ error: 'Customer name is required' }, { status: 400 });
+    }
+
+    // Validate email format if provided
+    if (body.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(body.email)) {
+        return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+      }
+
+      // Check email uniqueness within workspace
+      const existingCustomerResponse = await fetch(
+        `${STRAPI_URL}/api/customers?filters[workspace][id][$eq]=${workspaceId}&filters[email][$eq]=${body.email}`,
+        { headers: buildHeaders() }
+      );
+      
+      if (existingCustomerResponse.ok) {
+        const existingData = await existingCustomerResponse.json();
+        if (existingData.data && existingData.data.length > 0) {
+          return NextResponse.json({ error: 'Customer with this email already exists' }, { status: 400 });
+        }
+      }
+    }
+
+    // Validate phone format if provided
+    if (body.phone && body.phone.trim()) {
+      const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+      if (!phoneRegex.test(body.phone)) {
+        return NextResponse.json({ error: 'Invalid phone format' }, { status: 400 });
+      }
+    }
+
+    // Validate status if provided
+    if (body.status) {
+      const validStatuses = ['active', 'inactive'];
+      if (!validStatuses.includes(body.status)) {
+        return NextResponse.json({ error: 'Invalid status. Must be active or inactive' }, { status: 400 });
+      }
+    }
+
+    // ============ END VALIDATION ============
 
     // Add workspace ID to the customer
     const customerData = {
@@ -108,6 +172,8 @@ export async function POST(request: NextRequest) {
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Strapi error:', errorData);
       return NextResponse.json({ error: 'Failed to create customer' }, { status: response.status });
     }
 

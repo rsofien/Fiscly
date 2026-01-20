@@ -573,6 +573,8 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::invoice-item.invoice-item'
     >;
+    language: Schema.Attribute.Enumeration<['en', 'fr']> &
+      Schema.Attribute.DefaultTo<'en'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -634,10 +636,13 @@ export interface ApiWorkspaceWorkspace extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    signature: Schema.Attribute.Media<'images'>;
     taxId: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user_email: Schema.Attribute.Email & Schema.Attribute.Required;
+    user_id: Schema.Attribute.Integer & Schema.Attribute.Required;
   };
 }
 

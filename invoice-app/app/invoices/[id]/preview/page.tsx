@@ -8,6 +8,69 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ArrowLeft, Printer, Download } from "lucide-react"
 import { formatCurrency, type Currency } from "@/lib/currency"
 
+const translations = {
+  en: {
+    invoice: "INVOICE",
+    status: "Status",
+    from: "From:",
+    billTo: "Bill To:",
+    issueDate: "Issue Date",
+    dueDate: "Due Date",
+    description: "Description",
+    items: "Items",
+    itemDescription: "Description",
+    quantity: "Quantity",
+    unitPrice: "Unit Price",
+    total: "Total",
+    totalAmount: "Total Amount",
+    notes: "Notes",
+    paymentMethod: "Payment Method",
+    matriculeFiscale: "Matricule Fiscale",
+    noCustomer: "No customer assigned",
+    back: "Back",
+    print: "Print",
+    downloadPDF: "Download PDF",
+    thankYou: "Thank you for your business!",
+    statusDraft: "DRAFT",
+    statusSent: "SENT",
+    statusPaid: "PAID",
+    statusOverdue: "OVERDUE",
+    statusCancelled: "CANCELLED",
+    taxClarification: "VAT not applicable – DevSync SUARL, fully exporting company.",
+    authorizedSignature: "Authorized Signature",
+  },
+  fr: {
+    invoice: "FACTURE",
+    status: "Statut",
+    from: "De :",
+    billTo: "Facturer à :",
+    issueDate: "Date d'émission",
+    dueDate: "Date d'échéance",
+    description: "Description",
+    items: "Articles",
+    itemDescription: "Description",
+    quantity: "Quantité",
+    unitPrice: "Prix unitaire",
+    total: "Total",
+    totalAmount: "Montant total",
+    notes: "Notes",
+    paymentMethod: "Mode de paiement",
+    matriculeFiscale: "Matricule Fiscale",
+    noCustomer: "Aucun client assigné",
+    back: "Retour",
+    print: "Imprimer",
+    downloadPDF: "Télécharger PDF",
+    thankYou: "Merci pour votre confiance !",
+    statusDraft: "BROUILLON",
+    statusSent: "ENVOYÉ",
+    statusPaid: "PAYÉ",
+    statusOverdue: "EN RETARD",
+    statusCancelled: "ANNULÉ",
+    taxClarification: "TVA non applicable – DevSync SUARL, société totalement exportatrice.",
+    authorizedSignature: "Signature autorisée",
+  },
+}
+
 type LineItem = {
   id: string
   description: string
@@ -19,9 +82,10 @@ type LineItem = {
 type Invoice = {
   id: string
   invoiceNumber: string
-  customer?: { name: string; email: string; phone?: string; address?: string }
+  customer?: { name: string; email: string; phone?: string; address?: string; company?: string }
   amount: number
   currency?: Currency
+  language?: "en" | "fr"
   status: string
   issueDate: string
   dueDate: string
@@ -39,6 +103,9 @@ type Workspace = {
   address: string
   matriculeFiscale: string
   logo?: {
+    url: string
+  }
+  signature?: {
     url: string
   }
 }
@@ -104,6 +171,8 @@ export default function InvoicePreviewPage() {
     )
   }
 
+  const lang = invoice.language || "en"
+  const t = translations[lang]
   const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
   const logoUrl = workspace?.logo?.url ? 
     (workspace.logo.url.startsWith('http') ? workspace.logo.url : `${STRAPI_URL}${workspace.logo.url}`) 
@@ -115,60 +184,65 @@ export default function InvoicePreviewPage() {
         <div className="container flex items-center justify-between h-16">
           <Button variant="ghost" onClick={() => router.back()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            {t.back}
           </Button>
           <div className="flex gap-2">
             <Button variant="outline" onClick={handlePrint}>
               <Printer className="mr-2 h-4 w-4" />
-              Print
+              {t.print}
             </Button>
             <Button variant="outline" onClick={handlePrint}>
               <Download className="mr-2 h-4 w-4" />
-              Download PDF
+              {t.downloadPDF}
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="container py-8 max-w-4xl">
+      <div className="container py-4 max-w-4xl">
         <Card>
-          <CardContent className="p-12">
+          <CardContent className="p-6">
             {/* Header */}
-            <div className="flex justify-between items-start mb-12">
+            <div className="flex justify-between items-start mb-4">
               <div>
                 {logoUrl && (
                   <img
                     src={logoUrl}
                     alt="Company Logo"
-                    className="h-16 object-contain mb-4"
+                    className="h-8 object-contain mb-1"
                   />
                 )}
-                <h1 className="text-4xl font-bold">INVOICE</h1>
-                <p className="text-muted-foreground">#{invoice.invoiceNumber}</p>
+                <h1 className="text-xl font-bold">{t.invoice}</h1>
+                <p className="text-xs text-muted-foreground">#{invoice.invoiceNumber}</p>
                 {workspace?.matriculeFiscale && (
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Matricule Fiscale: {workspace.matriculeFiscale}
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t.matriculeFiscale}: {workspace.matriculeFiscale}
                   </p>
                 )}
               </div>
               <div className="text-right">
-                <div className="text-sm text-muted-foreground mb-1">Status</div>
-                <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                <div className="text-xs text-muted-foreground mb-1">{t.status}</div>
+                <div className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                   invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
                   invoice.status === 'sent' ? 'bg-blue-100 text-blue-800' :
                   invoice.status === 'overdue' ? 'bg-red-100 text-red-800' :
                   'bg-gray-100 text-gray-800'
                 }`}>
-                  {invoice.status.toUpperCase()}
+                  {invoice.status === 'draft' ? t.statusDraft :
+                   invoice.status === 'sent' ? t.statusSent :
+                   invoice.status === 'paid' ? t.statusPaid :
+                   invoice.status === 'overdue' ? t.statusOverdue :
+                   invoice.status === 'cancelled' ? t.statusCancelled :
+                   invoice.status.toUpperCase()}
                 </div>
               </div>
             </div>
 
             {/* From/To */}
-            <div className="grid grid-cols-2 gap-8 mb-12">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <h3 className="font-semibold mb-3">From:</h3>
-                <div className="text-sm">
+                <h3 className="text-xs font-semibold mb-1">{t.from}</h3>
+                <div className="text-xs">
                   <p className="font-medium">{workspace?.name || "Your Company"}</p>
                   {workspace?.email && <p className="text-muted-foreground">{workspace.email}</p>}
                   {workspace?.phone && <p className="text-muted-foreground">{workspace.phone}</p>}
@@ -178,11 +252,11 @@ export default function InvoicePreviewPage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold mb-3">Bill To:</h3>
-                <div className="text-sm">
+                <h3 className="text-xs font-semibold mb-1">{t.billTo}</h3>
+                <div className="text-xs">
                   {invoice.customer ? (
                     <>
-                      <p className="font-medium">{invoice.customer.name}</p>
+                      <p className="font-medium">{invoice.customer.company || invoice.customer.name}</p>
                       {invoice.customer.email && (
                         <p className="text-muted-foreground">{invoice.customer.email}</p>
                       )}
@@ -194,50 +268,50 @@ export default function InvoicePreviewPage() {
                       )}
                     </>
                   ) : (
-                    <p className="text-muted-foreground">No customer assigned</p>
+                    <p className="text-muted-foreground">{t.noCustomer}</p>
                   )}
                 </div>
               </div>
             </div>
 
             {/* Dates */}
-            <div className="grid grid-cols-3 gap-8 mb-12">
+            <div className="grid grid-cols-3 gap-4 mb-4">
               <div>
-                <div className="text-sm text-muted-foreground mb-1">Issue Date</div>
+                <div className="text-xs text-muted-foreground mb-0.5">{t.issueDate}</div>
                 <div className="font-medium">{invoice.issueDate}</div>
               </div>
               <div>
-                <div className="text-sm text-muted-foreground mb-1">Due Date</div>
-                <div className="font-medium">{invoice.dueDate}</div>
+                <div className="text-xs text-muted-foreground mb-0.5">{t.dueDate}</div>
+                <div className="font-medium text-xs">{invoice.dueDate}</div>
               </div>
               {invoice.description && (
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Description</div>
-                  <div className="font-medium text-sm">{invoice.description}</div>
+                  <div className="text-xs text-muted-foreground mb-0.5">{t.description}</div>
+                  <div className="font-medium text-xs">{invoice.description}</div>
                 </div>
               )}
             </div>
 
             {/* Items */}
             {invoice.items && invoice.items.length > 0 && (
-              <div className="mb-8">
-                <h3 className="font-semibold mb-4">Items</h3>
-                <table className="w-full">
+              <div className="mb-4">
+                <h3 className="text-xs font-semibold mb-2">{t.items}</h3>
+                <table className="w-full text-xs">
                   <thead className="border-b">
                     <tr>
-                      <th className="text-left py-2 font-semibold">Description</th>
-                      <th className="text-right py-2 font-semibold">Quantity</th>
-                      <th className="text-right py-2 font-semibold">Unit Price</th>
-                      <th className="text-right py-2 font-semibold">Total</th>
+                      <th className="text-left py-1 font-semibold">{t.itemDescription}</th>
+                      <th className="text-right py-1 font-semibold">{t.quantity}</th>
+                      <th className="text-right py-1 font-semibold">{t.unitPrice}</th>
+                      <th className="text-right py-1 font-semibold">{t.total}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoice.items.map((item, index) => (
                       <tr key={index} className="border-b">
-                        <td className="py-3">{item.description}</td>
-                        <td className="text-right py-3">{item.quantity}</td>
-                        <td className="text-right py-3">{formatCurrency(item.unitPrice, invoice.currency || 'USD')}</td>
-                        <td className="text-right py-3 font-medium">{formatCurrency(item.total, invoice.currency || 'USD')}</td>
+                        <td className="py-1">{item.description}</td>
+                        <td className="text-right py-1">{item.quantity}</td>
+                        <td className="text-right py-1">{formatCurrency(item.unitPrice, invoice.currency || 'USD')}</td>
+                        <td className="text-right py-1 font-medium">{formatCurrency(item.total, invoice.currency || 'USD')}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -246,30 +320,51 @@ export default function InvoicePreviewPage() {
             )}
 
             {/* Amount */}
-            <div className="border-t border-b py-6 mb-8">
+            <div className="border-t border-b py-2 mb-4">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-medium">Total Amount</span>
-                <span className="text-3xl font-bold">{formatCurrency(invoice.amount, invoice.currency || 'USD')}</span>
+                <span className="text-sm font-medium">{t.totalAmount}</span>
+                <span className="text-xl font-bold">{formatCurrency(invoice.amount, invoice.currency || 'USD')}</span>
               </div>
               {invoice.paymentMethod && (
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-sm text-muted-foreground">Payment Method</span>
-                  <span className="text-sm capitalize">{invoice.paymentMethod.replace('_', ' ')}</span>
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-xs text-muted-foreground">{t.paymentMethod}</span>
+                  <span className="text-xs capitalize">{invoice.paymentMethod.replace('_', ' ')}</span>
                 </div>
               )}
             </div>
 
+            {/* Tax Clarification */}
+            <div className="mb-3 text-xs text-muted-foreground italic">
+              {t.taxClarification}
+            </div>
+
             {/* Notes */}
             {invoice.notes && (
-              <div className="mb-8">
-                <h3 className="font-semibold mb-2">Notes</h3>
-                <p className="text-sm text-muted-foreground whitespace-pre-line">{invoice.notes}</p>
+              <div className="mb-4">
+                <h3 className="text-xs font-semibold mb-1">{t.notes}</h3>
+                <p className="text-xs text-muted-foreground whitespace-pre-line">{invoice.notes}</p>
+              </div>
+            )}
+
+            {/* Signature */}
+            {workspace?.signature?.url && (
+              <div className="mt-4 mb-3">
+                <div className="flex flex-col items-end">
+                  <img
+                    src={workspace.signature.url.startsWith('http') ? workspace.signature.url : `${STRAPI_URL}${workspace.signature.url}`}
+                    alt="Signature"
+                    className="h-12 object-contain mb-1"
+                  />
+                  <div className="border-t border-gray-400 pt-0.5 text-xs text-muted-foreground">
+                    {t.authorizedSignature}
+                  </div>
+                </div>
               </div>
             )}
 
             {/* Footer */}
-            <div className="text-center text-sm text-muted-foreground pt-8 border-t">
-              <p>Thank you for your business!</p>
+            <div className="text-center text-xs text-muted-foreground pt-3 border-t">
+              <p>{t.thankYou}</p>
             </div>
           </CardContent>
         </Card>

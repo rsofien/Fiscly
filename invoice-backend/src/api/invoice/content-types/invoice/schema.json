@@ -70,6 +70,11 @@
       "type": "enumeration",
       "enum": ["USD", "CAD", "EUR", "USDT"],
       "default": "USD"
+    },
+    "language": {
+      "type": "enumeration",
+      "enum": ["en", "fr"],
+      "default": "en"
     }
   }
 }
