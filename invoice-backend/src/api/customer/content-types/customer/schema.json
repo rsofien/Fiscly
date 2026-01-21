@@ -32,6 +32,12 @@
     "taxId": {
       "type": "string"
     },
+    "vatNumber": {
+      "type": "string"
+    },
+    "siren": {
+      "type": "string"
+    },
     "status": {
       "type": "enumeration",
       "enum": ["active", "inactive"],

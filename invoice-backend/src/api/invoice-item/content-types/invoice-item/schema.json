@@ -28,12 +28,6 @@
     "total": {
       "type": "float",
       "required": true
-    },
-    "invoice": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::invoice.invoice",
-      "inversedBy": "items"
     }
   }
 }

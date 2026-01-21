@@ -53,10 +53,7 @@
       "type": "text"
     },
     "items": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::invoice-item.invoice-item",
-      "mappedBy": "invoice"
+      "type": "json"
     },
     "paymentMethod": {
       "type": "enumeration",
@@ -80,6 +77,9 @@
       "type": "enumeration",
       "enum": ["company", "personal"],
       "default": "company"
+    },
+    "exchangeRateToUSD": {
+      "type": "float"
     }
   }
 }

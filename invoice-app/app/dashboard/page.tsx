@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { FileText, DollarSign, Users, AlertCircle, CheckCircle2 } from "lucide-react"
 import { GetStartedButton } from "@/components/dashboard/get-started-button"
 import { formatCurrency } from "@/lib/currency"
+import { toUSD } from "@/lib/exchange-rates"
 
 export const dynamic = "force-dynamic"
 
@@ -77,6 +78,7 @@ export default async function DashboardPage() {
         customerName: item.customer?.name || '',
         amount: item.amount,
         currency: item.currency,
+        exchangeRateToUSD: item.exchangeRateToUSD,
         status: item.status,
         issueDate: item.issueDate,
         dueDate: item.dueDate,
@@ -85,17 +87,41 @@ export default async function DashboardPage() {
       customers = customersData.data || []
 
       const now = new Date()
+      // Convert all amounts to USD for accurate totals
+      // Use stored exchange rate if available, otherwise use current rate
       paidThisMonth = invoices
         .filter((inv: any) => {
           if (inv.status !== "paid" || !inv.issueDate) return false
           const issued = new Date(inv.issueDate)
           return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
         })
-        .reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+        .reduce((sum: number, inv: any) => {
+          const amount = Number(inv.amount) || 0
+          // Use stored rate if available, otherwise calculate current rate
+          const amountInUSD = inv.exchangeRateToUSD 
+            ? amount * inv.exchangeRateToUSD 
+            : toUSD(amount, inv.currency || 'USD')
+          return sum + amountInUSD
+        }, 0)
 
-      const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+      // Calculate total revenue in USD
+      const totalRevenue = invoices.reduce((sum: number, inv: any) => {
+        const amount = Number(inv.amount) || 0
+        const amountInUSD = inv.exchangeRateToUSD 
+          ? amount * inv.exchangeRateToUSD 
+          : toUSD(amount, inv.currency || 'USD')
+        return sum + amountInUSD
+      }, 0)
+      
       const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
-      const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+      const paidAmount = paidInvoices.reduce((sum: number, inv: any) => {
+        const amount = Number(inv.amount) || 0
+        const amountInUSD = inv.exchangeRateToUSD 
+          ? amount * inv.exchangeRateToUSD 
+          : toUSD(amount, inv.currency || 'USD')
+        return sum + amountInUSD
+      }, 0)
+      
       outstandingAmount = totalRevenue - paidAmount
 
       totalInvoices = invoices.length
@@ -117,15 +143,19 @@ export default async function DashboardPage() {
         }
       }
 
+      // Calculate top customers with currency conversion to USD
       topCustomers = Object.values(
         invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
           (acc: any, inv: any) => {
             const name = inv.customerName || "Unknown"
             const amount = Number(inv.amount) || 0
+            const amountInUSD = inv.exchangeRateToUSD 
+              ? amount * inv.exchangeRateToUSD 
+              : toUSD(amount, inv.currency || 'USD')
             if (!acc[name]) {
               acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
             }
-            acc[name].totalSpent += amount
+            acc[name].totalSpent += amountInUSD
             acc[name].invoiceCount += 1
             return acc
           },
@@ -193,9 +223,9 @@ export default async function DashboardPage() {
               <DollarSign className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">{formatCurrency(outstandingAmount)}</div>
+              <div className="text-2xl font-semibold">{formatCurrency(outstandingAmount, 'USD')}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                Pending payment
+                Pending payment (USD)
               </p>
             </CardContent>
           </Card>
@@ -208,9 +238,9 @@ export default async function DashboardPage() {
               <CheckCircle2 className="h-4 w-4 text-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">{formatCurrency(paidThisMonth)}</div>
+              <div className="text-2xl font-semibold">{formatCurrency(paidThisMonth, 'USD')}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                Paid invoices issued this month
+                Paid invoices this month (USD)
               </p>
             </CardContent>
           </Card>
@@ -236,7 +266,7 @@ export default async function DashboardPage() {
           <Card>
             <CardHeader>
               <CardTitle>Top Customers</CardTitle>
-              <CardDescription>Your highest spending clients this year</CardDescription>
+              <CardDescription>Your highest spending clients (converted to USD)</CardDescription>
             </CardHeader>
             <CardContent>
               {topCustomers.length > 0 ? (
@@ -255,7 +285,7 @@ export default async function DashboardPage() {
                         </div>
                       </div>
                       <div className="text-sm font-semibold">
-                        {formatCurrency(customer.totalSpent)}
+                        {formatCurrency(customer.totalSpent, 'USD')}
                       </div>
                     </div>
                   ))}

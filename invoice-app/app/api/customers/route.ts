@@ -15,6 +15,7 @@ const buildHeaders = (json = false): HeadersInit => {
 export async function GET() {
   try {
     const session = await auth();
+    
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -58,12 +59,16 @@ export async function GET() {
     const data = await response.json();
     // Transform Strapi response to match frontend format
     const customers = data.data?.map((item: any) => ({
-      id: item.id.toString(),      documentId: item.documentId,      name: item.name,
+      id: item.id.toString(),
+      documentId: item.documentId,
+      name: item.name,
       email: item.email,
       phone: item.phone,
       company: item.company,
       address: item.address,
       taxId: item.taxId,
+      vatNumber: item.vatNumber,
+      siren: item.siren,
       status: item.status,
       notes: item.notes,
     })) || [];

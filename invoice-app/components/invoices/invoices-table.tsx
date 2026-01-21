@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { toast } from "sonner"
 import { Plus, Download, Trash2, Eye, Printer, Pencil } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -66,6 +67,7 @@ export function InvoicesTable() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Partial<Invoice>>({ 
     status: "draft", 
     currency: "USD",
@@ -105,6 +107,7 @@ export function InvoicesTable() {
   }
 
   const handleAddInvoice = async () => {
+    setIsSubmitting(true)
     try {
       // Calculate total amount from line items
       const totalAmount = formData.items?.reduce((sum, item) => sum + item.total, 0) || 0
@@ -150,14 +153,17 @@ export function InvoicesTable() {
         })
         setIsAddDialogOpen(false)
         fetchInvoices()
+        toast.success("Invoice created successfully!")
       } else {
         const error = await response.json()
         console.error("Failed to add invoice:", error)
-        alert(`Failed to create invoice: ${error.error || 'Unknown error'}`)
+        toast.error(`Failed to create invoice: ${error.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error("Failed to add invoice:", error)
-      alert("Failed to create invoice. Please try again.")
+      toast.error("Failed to create invoice. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -191,9 +197,13 @@ export function InvoicesTable() {
       const response = await fetch(`/api/invoices/${id}`, { method: "DELETE" })
       if (response.ok) {
         fetchInvoices()
+        toast.success("Invoice deleted successfully!")
+      } else {
+        toast.error("Failed to delete invoice")
       }
     } catch (error) {
       console.error("Failed to delete invoice:", error)
+      toast.error("Failed to delete invoice")
     }
   }
 
@@ -234,6 +244,7 @@ export function InvoicesTable() {
 
   const handleUpdateInvoice = async () => {
     if (!editingInvoice) return
+    setIsSubmitting(true)
     
     try {
       // Calculate total amount from line items
@@ -241,10 +252,19 @@ export function InvoicesTable() {
       
       // Convert customer string ID to number for Strapi
       const invoiceData = {
-        ...formData,
+        invoiceNumber: formData.invoiceNumber,
         customer: formData.customer ? parseInt(formData.customer as string) : undefined,
+        issueDate: formData.issueDate,
+        dueDate: formData.dueDate,
         amount: totalAmount,
-        items: undefined, // Remove items from invoice data
+        currency: formData.currency,
+        language: formData.language,
+        issuerType: formData.issuerType,
+        status: formData.status,
+        description: formData.description,
+        notes: formData.notes,
+        paymentMethod: formData.paymentMethod,
+        items: formData.items,
       }
       
       const response = await fetch(`/api/invoices/${editingInvoice.id}`, {
@@ -254,9 +274,6 @@ export function InvoicesTable() {
       })
       
       if (response.ok) {
-        // Note: Line items need separate management - skipping for now to avoid duplicates
-        // TODO: Implement proper item update/delete logic
-        
         setIsEditDialogOpen(false)
         setEditingInvoice(null)
         setFormData({ 
@@ -264,14 +281,17 @@ export function InvoicesTable() {
           currency: "USD",
         })
         fetchInvoices()
+        toast.success("Invoice updated successfully!")
       } else {
         const error = await response.json()
         console.error("Failed to update invoice:", error)
-        alert(`Failed to update invoice: ${error.error || 'Unknown error'}`)
+        toast.error(`Failed to update invoice: ${error.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error("Failed to update invoice:", error)
-      alert("Failed to update invoice. Please try again.")
+      toast.error("Failed to update invoice. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -651,10 +671,12 @@ export function InvoicesTable() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button onClick={handleAddInvoice}>Create Invoice</Button>
+            <Button onClick={handleAddInvoice} disabled={isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create Invoice"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -890,10 +912,12 @@ export function InvoicesTable() {
             <Button variant="outline" onClick={() => {
               setIsEditDialogOpen(false)
               setEditingInvoice(null)
-            }}>
+            }} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button onClick={handleUpdateInvoice}>Update Invoice</Button>
+            <Button onClick={handleUpdateInvoice} disabled={isSubmitting}>
+              {isSubmitting ? "Updating..." : "Update Invoice"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
