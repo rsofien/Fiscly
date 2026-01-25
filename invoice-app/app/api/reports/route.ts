@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { toUSD } from '@/lib/exchange-rates';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -64,24 +63,10 @@ export async function GET() {
     const data = await response.json();
     const invoices = data.data || [];
 
-    // Calculate metrics - convert all amounts to USD
-    // Use stored exchange rate if available for accuracy
-    const totalRevenue = invoices.reduce((sum: number, inv: any) => {
-      const amount = inv.amount || 0;
-      const amountInUSD = inv.exchangeRateToUSD 
-        ? amount * inv.exchangeRateToUSD 
-        : toUSD(amount, inv.currency || 'USD');
-      return sum + amountInUSD;
-    }, 0);
-    
+    // Calculate metrics
+    const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
     const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid');
-    const paidAmount = paidInvoices.reduce((sum: number, inv: any) => {
-      const amount = inv.amount || 0;
-      const amountInUSD = inv.exchangeRateToUSD 
-        ? amount * inv.exchangeRateToUSD 
-        : toUSD(amount, inv.currency || 'USD');
-      return sum + amountInUSD;
-    }, 0);
+    const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
 
     // Group by status
     const byStatus = {
@@ -102,11 +87,6 @@ export async function GET() {
         id: inv.id,
         number: inv.invoiceNumber,
         amount: inv.amount,
-        currency: inv.currency,
-        exchangeRateToUSD: inv.exchangeRateToUSD,
-        amountInUSD: inv.exchangeRateToUSD 
-          ? (inv.amount || 0) * inv.exchangeRateToUSD 
-          : toUSD(inv.amount || 0, inv.currency || 'USD'),
         status: inv.status,
         issueDate: inv.issueDate,
       })),

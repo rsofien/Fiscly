@@ -496,14 +496,12 @@ export interface ApiCustomerCustomer extends Struct.CollectionTypeSchema {
     notes: Schema.Attribute.Text;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    siren: Schema.Attribute.String;
     status: Schema.Attribute.Enumeration<['active', 'inactive']> &
       Schema.Attribute.DefaultTo<'active'>;
     taxId: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    vatNumber: Schema.Attribute.String;
     workspace: Schema.Attribute.Relation<
       'manyToOne',
       'api::workspace.workspace'
@@ -527,6 +525,7 @@ export interface ApiInvoiceItemInvoiceItem extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.String & Schema.Attribute.Required;
+    invoice: Schema.Attribute.Relation<'manyToOne', 'api::invoice.invoice'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -566,14 +565,16 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
     customer: Schema.Attribute.Relation<'manyToOne', 'api::customer.customer'>;
     description: Schema.Attribute.Text;
     dueDate: Schema.Attribute.Date & Schema.Attribute.Required;
-    exchangeRateToUSD: Schema.Attribute.Float;
     invoiceNumber: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     issueDate: Schema.Attribute.Date & Schema.Attribute.Required;
     issuerType: Schema.Attribute.Enumeration<['company', 'personal']> &
       Schema.Attribute.DefaultTo<'company'>;
-    items: Schema.Attribute.JSON;
+    items: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::invoice-item.invoice-item'
+    >;
     language: Schema.Attribute.Enumeration<['en', 'fr']> &
       Schema.Attribute.DefaultTo<'en'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

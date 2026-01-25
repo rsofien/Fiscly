@@ -94,10 +94,6 @@ export async function PUT(
 
     const body = await request.json();
     
-    console.log("=== API UPDATE CUSTOMER ===");
-    console.log("Customer ID:", params.id);
-    console.log("Request Body:", body);
-    
     const userId = session.user.id;
 
     if (!userId) {
@@ -125,8 +121,6 @@ export async function PUT(
 
     const workspaceId = workspaces[0].id;
     
-    console.log("Workspace ID:", workspaceId);
-    
     // Verify the customer belongs to user's workspace
     const getResponse = await fetch(`${STRAPI_URL}/api/customers?filters[id][$eq]=${params.id}&filters[workspace][id][$eq]=${workspaceId}`, {
       headers: buildHeaders(),
@@ -137,16 +131,12 @@ export async function PUT(
     }
     
     const getData = await getResponse.json();
-    console.log("Existing Customer Data:", getData.data);
-    
     if (!getData.data || getData.data.length === 0) {
       return NextResponse.json({ error: 'Customer not found or access denied' }, { status: 403 });
     }
     
     const documentId = getData.data[0].documentId;
     const existingCustomer = getData.data[0];
-    
-    console.log("Document ID:", documentId);
 
     // ============ VALIDATION ============
     
@@ -198,8 +188,6 @@ export async function PUT(
     const updateData = { ...body };
     delete updateData.workspace;
 
-    console.log("Update Data to send to Strapi:", updateData);
-
     // Update using documentId
     const response = await fetch(`${STRAPI_URL}/api/customers/${documentId}`, {
       method: 'PUT',
@@ -209,16 +197,11 @@ export async function PUT(
       }),
     });
 
-    console.log("Strapi Response Status:", response.status);
-
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Strapi Update Error:", errorData);
       return NextResponse.json({ error: 'Failed to update customer' }, { status: response.status });
     }
 
     const data = await response.json();
-    console.log("Strapi Response Data:", data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Customer update error:', error);

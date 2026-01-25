@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { toast } from "sonner"
 import {
   ColumnDef,
   flexRender,
@@ -13,7 +12,7 @@ import {
   ColumnFiltersState,
   useReactTable,
 } from "@tanstack/react-table"
-import { MoreHorizontal, Plus, Search, Download, Pencil, Trash2, Eye } from "lucide-react"
+import { MoreHorizontal, Plus, Search, Download, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -45,8 +44,6 @@ type Customer = {
   company?: string
   address?: string
   taxId?: string
-  vatNumber?: string
-  siren?: string
   status: "active" | "inactive"
   notes?: string
 }
@@ -58,9 +55,7 @@ export function CustomersTable() {
   const [loading, setLoading] = useState(true)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Partial<Customer>>({
     status: "active",
   })
@@ -84,7 +79,6 @@ export function CustomersTable() {
   }
 
   const handleAddCustomer = async () => {
-    setIsSubmitting(true)
     try {
       const response = await fetch("/api/customers", {
         method: "POST",
@@ -95,45 +89,28 @@ export function CustomersTable() {
         setFormData({ status: "active" })
         setIsAddDialogOpen(false)
         fetchCustomers()
-        toast.success("Customer created successfully!")
-      } else {
-        toast.error("Failed to create customer")
       }
     } catch (error) {
       console.error("Failed to add customer:", error)
-      toast.error("Failed to create customer")
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
   const handleEditCustomer = async () => {
     if (!selectedCustomer) return
-    setIsSubmitting(true)
-    
     try {
       const response = await fetch(`/api/customers/${selectedCustomer.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       })
-      
-      const responseData = await response.json()
-      
       if (response.ok) {
         setFormData({ status: "active" })
         setIsEditDialogOpen(false)
         setSelectedCustomer(null)
         fetchCustomers()
-        toast.success("Customer updated successfully!")
-      } else {
-        toast.error("Failed to update customer")
       }
     } catch (error) {
       console.error("Failed to update customer:", error)
-      toast.error("Failed to update customer")
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -145,13 +122,9 @@ export function CustomersTable() {
       })
       if (response.ok) {
         fetchCustomers()
-        toast.success("Customer deleted successfully!")
-      } else {
-        toast.error("Failed to delete customer")
       }
     } catch (error) {
       console.error("Failed to delete customer:", error)
-      toast.error("Failed to delete customer")
     }
   }
 
@@ -220,15 +193,6 @@ export function CustomersTable() {
             <DropdownMenuItem
               onClick={() => {
                 setSelectedCustomer(row.original)
-                setIsViewDialogOpen(true)
-              }}
-            >
-              <Eye className="mr-2 h-4 w-4" />
-              View Details
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedCustomer(row.original)
                 setFormData({
                   name: row.original.name,
                   email: row.original.email,
@@ -236,8 +200,6 @@ export function CustomersTable() {
                   company: row.original.company,
                   address: row.original.address,
                   taxId: row.original.taxId,
-                  vatNumber: row.original.vatNumber,
-                  siren: row.original.siren,
                   status: row.original.status,
                   notes: row.original.notes,
                 })
@@ -297,10 +259,7 @@ export function CustomersTable() {
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Button onClick={() => {
-            setFormData({ status: "active" })
-            setIsAddDialogOpen(true)
-          }}>
+          <Button onClick={() => setIsAddDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Add Customer
           </Button>
@@ -378,10 +337,7 @@ export function CustomersTable() {
       </div>
 
       {/* Add Customer Dialog */}
-      <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
-        setIsAddDialogOpen(open)
-        if (!open) setFormData({ status: "active" })
-      }}>
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add Customer</DialogTitle>
@@ -436,24 +392,6 @@ export function CustomersTable() {
               />
             </div>
             <div>
-              <Label htmlFor="vatNumber">VAT Number</Label>
-              <Input
-                id="vatNumber"
-                value={formData.vatNumber || ""}
-                onChange={(e) => setFormData({ ...formData, vatNumber: e.target.value })}
-                placeholder="VAT or Tax ID"
-              />
-            </div>
-            <div>
-              <Label htmlFor="siren">SIREN</Label>
-              <Input
-                id="siren"
-                value={formData.siren || ""}
-                onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
-                placeholder="SIREN number"
-              />
-            </div>
-            <div>
               <Label htmlFor="status">Status</Label>
               <select
                 id="status"
@@ -467,30 +405,22 @@ export function CustomersTable() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} disabled={isSubmitting}>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleAddCustomer} disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create Customer"}
-            </Button>
+            <Button onClick={handleAddCustomer}>Create Customer</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Edit Customer Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
-        setIsEditDialogOpen(open)
-        if (!open) {
-          setFormData({ status: "active" })
-          setSelectedCustomer(null)
-        }
-      }}>
-        <DialogContent className="max-h-[90vh] flex flex-col">
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Customer</DialogTitle>
             <DialogDescription>Update customer information</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 overflow-y-auto flex-1 pr-2">
+          <div className="space-y-4">
             <div>
               <Label htmlFor="edit-name">Name *</Label>
               <Input
@@ -539,24 +469,6 @@ export function CustomersTable() {
               />
             </div>
             <div>
-              <Label htmlFor="edit-vatNumber">VAT Number</Label>
-              <Input
-                id="edit-vatNumber"
-                value={formData.vatNumber || ""}
-                onChange={(e) => setFormData({ ...formData, vatNumber: e.target.value })}
-                placeholder="VAT or Tax ID"
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-siren">SIREN</Label>
-              <Input
-                id="edit-siren"
-                value={formData.siren || ""}
-                onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
-                placeholder="SIREN number"
-              />
-            </div>
-            <div>
               <Label htmlFor="edit-status">Status</Label>
               <select
                 id="edit-status"
@@ -570,79 +482,10 @@ export function CustomersTable() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} disabled={isSubmitting}>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleEditCustomer} disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Changes"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* View Customer Dialog */}
-      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Customer Details</DialogTitle>
-            <DialogDescription>View customer information</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-xs text-muted-foreground">Name</Label>
-                <p className="text-sm font-medium">{selectedCustomer?.name || "-"}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Status</Label>
-                <div className="mt-1">
-                  <Badge variant={selectedCustomer?.status === "active" ? "success" : "secondary"}>
-                    {selectedCustomer?.status || "-"}
-                  </Badge>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-xs text-muted-foreground">Email</Label>
-                <p className="text-sm">{selectedCustomer?.email || "-"}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Phone</Label>
-                <p className="text-sm">{selectedCustomer?.phone || "-"}</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-xs text-muted-foreground">Company</Label>
-                <p className="text-sm">{selectedCustomer?.company || "-"}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">VAT Number</Label>
-                <p className="text-sm">{selectedCustomer?.vatNumber || "-"}</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-xs text-muted-foreground">SIREN</Label>
-                <p className="text-sm">{selectedCustomer?.siren || "-"}</p>
-              </div>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground">Address</Label>
-              <p className="text-sm whitespace-pre-line">{selectedCustomer?.address || "-"}</p>
-            </div>
-            {selectedCustomer?.notes && (
-              <div>
-                <Label className="text-xs text-muted-foreground">Notes</Label>
-                <p className="text-sm whitespace-pre-line">{selectedCustomer.notes}</p>
-              </div>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
-              Close
-            </Button>
+            <Button onClick={handleEditCustomer}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

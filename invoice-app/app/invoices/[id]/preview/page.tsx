@@ -25,11 +25,7 @@ const translations = {
     totalAmount: "Total Amount",
     notes: "Notes",
     paymentMethod: "Payment Method",
-    matriculeFiscale: "MF",
-    paymentBankTransfer: "Bank Transfer",
-    paymentCard: "Card",
-    paymentCrypto: "Crypto",
-    paymentCash: "Cash",
+    matriculeFiscale: "Matricule Fiscale",
     noCustomer: "No customer assigned",
     back: "Back",
     print: "Print",
@@ -59,11 +55,7 @@ const translations = {
     totalAmount: "Montant total",
     notes: "Notes",
     paymentMethod: "Mode de paiement",
-    matriculeFiscale: "MF",
-    paymentBankTransfer: "Virement bancaire",
-    paymentCard: "Carte",
-    paymentCrypto: "Crypto",
-    paymentCash: "Espèces",
+    matriculeFiscale: "Matricule Fiscale",
     noCustomer: "Aucun client assigné",
     back: "Retour",
     print: "Imprimer",
@@ -90,7 +82,7 @@ type LineItem = {
 type Invoice = {
   id: string
   invoiceNumber: string
-  customer?: { name: string; email: string; phone?: string; address?: string; company?: string; vatNumber?: string; siren?: string }
+  customer?: { name: string; email: string; phone?: string; address?: string; company?: string }
   amount: number
   currency?: Currency
   language?: "en" | "fr"
@@ -161,16 +153,7 @@ export default function InvoicePreviewPage() {
   }
 
   const handlePrint = () => {
-    // Set document title for PDF filename
-    const originalTitle = document.title
-    document.title = `DevSync - ${invoice?.invoiceNumber || 'Invoice'}`
-    
     window.print()
-    
-    // Restore original title after print
-    setTimeout(() => {
-      document.title = originalTitle
-    }, 100)
   }
 
   if (loading) {
@@ -241,7 +224,7 @@ export default function InvoicePreviewPage() {
                   </p>
                 )}
               </div>
-              <div className="text-right print:hidden">
+              <div className="text-right">
                 <div className="text-xs text-muted-foreground mb-1">{t.status}</div>
                 <div className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                   invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
@@ -296,12 +279,6 @@ export default function InvoicePreviewPage() {
                       )}
                       {invoice.customer.address && (
                         <p className="text-muted-foreground whitespace-pre-line">{invoice.customer.address}</p>
-                      )}
-                      {invoice.customer.vatNumber && (
-                        <p className="text-muted-foreground">VAT: {invoice.customer.vatNumber}</p>
-                      )}
-                      {invoice.customer.siren && (
-                        <p className="text-muted-foreground">SIREN: {invoice.customer.siren}</p>
                       )}
                     </>
                   ) : (
@@ -360,25 +337,12 @@ export default function InvoicePreviewPage() {
             <div className="border-t border-b py-2 mb-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">{t.totalAmount}</span>
-                <span className="text-xl font-bold">
-                  {formatCurrency(
-                    invoice.items && invoice.items.length > 0 
-                      ? invoice.items.reduce((sum, item) => sum + item.total, 0)
-                      : invoice.amount,
-                    invoice.currency || 'USD'
-                  )}
-                </span>
+                <span className="text-xl font-bold">{formatCurrency(invoice.amount, invoice.currency || 'USD')}</span>
               </div>
               {invoice.paymentMethod && (
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-xs text-muted-foreground">{t.paymentMethod}</span>
-                  <span className="text-xs capitalize">
-                    {invoice.paymentMethod === 'bank_transfer' ? t.paymentBankTransfer :
-                     invoice.paymentMethod === 'card' ? t.paymentCard :
-                     invoice.paymentMethod === 'crypto' ? t.paymentCrypto :
-                     invoice.paymentMethod === 'cash' ? t.paymentCash :
-                     invoice.paymentMethod.replace('_', ' ')}
-                  </span>
+                  <span className="text-xs capitalize">{invoice.paymentMethod.replace('_', ' ')}</span>
                 </div>
               )}
             </div>

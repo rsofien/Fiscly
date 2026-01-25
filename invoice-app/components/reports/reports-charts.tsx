@@ -78,28 +78,25 @@ export function ReportsCharts() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <CardDescription className="text-xs">All invoices in USD</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue, 'USD')}</div>
+            <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue)}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Paid Amount</CardTitle>
-            <CardDescription className="text-xs">Completed payments in USD</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(data.paidAmount, 'USD')}</div>
+            <div className="text-2xl font-bold">{formatCurrency(data.paidAmount)}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Outstanding</CardTitle>
-            <CardDescription className="text-xs">Pending payments in USD</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{formatCurrency(data.outstanding, 'USD')}</div>
+            <div className="text-2xl font-bold text-orange-600">{formatCurrency(data.outstanding)}</div>
           </CardContent>
         </Card>
         <Card>
@@ -115,8 +112,8 @@ export function ReportsCharts() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Revenue Summary (USD)</CardTitle>
-            <CardDescription>All amounts converted to USD</CardDescription>
+            <CardTitle>Revenue Summary</CardTitle>
+            <CardDescription>Total revenue, paid, and outstanding</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -124,7 +121,7 @@ export function ReportsCharts() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip formatter={(value: any) => `$${value.toLocaleString()}`} />
+                <Tooltip />
                 <Bar dataKey="value" fill="#2563eb" />
               </BarChart>
             </ResponsiveContainer>

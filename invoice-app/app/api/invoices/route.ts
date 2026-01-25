@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { getExchangeRate } from '@/lib/exchange-rates';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -73,7 +72,12 @@ export async function GET() {
       description: item.description || '',
       notes: item.notes || '',
       paymentMethod: item.paymentMethod || 'bank_transfer',
-      items: Array.isArray(item.items) ? item.items : [],
+      items: item.items?.map((lineItem: any) => ({
+        description: lineItem.description || '',
+        quantity: lineItem.quantity || 1,
+        unitPrice: lineItem.unitPrice || 0,
+        total: lineItem.total || 0,
+      })) || [],
     })) || [];
 
     return NextResponse.json(invoices);
@@ -201,14 +205,10 @@ export async function POST(request: NextRequest) {
 
     // ============ END VALIDATION ============
 
-    // Get exchange rate for the invoice currency to USD
-    const exchangeRateToUSD = getExchangeRate(body.currency || 'USD', 'USD');
-
-    // Add workspace ID and exchange rate to the invoice
+    // Add workspace ID to the invoice
     const invoiceData = {
       ...body,
       workspace: workspaceId,
-      exchangeRateToUSD,
     };
 
     const response = await fetch(`${STRAPI_URL}/api/invoices`, {

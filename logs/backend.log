@@ -3,9 +3,9 @@
 > strapi develop
 
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (7ms)
+✔ Cleaning dist dir (21ms)
 - Loading Strapi
-[2026-01-21 12:42:01.745] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+[2026-01-20 15:35:16.024] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
 🔧 Configuring API permissions...
 - Building build context
 
@@ -15,15 +15,37 @@
     - STRAPI_TELEMETRY_DISABLED
     - STRAPI_AI_URL
     - STRAPI_ANALYTICS_URL
-✔ Building build context (34ms)
+✔ Building build context (202ms)
 - Creating admin
-✔ Creating admin (230ms)
-✔ Loading Strapi (1061ms)
+✔ Creating admin (781ms)
+✔ Loading Strapi (5342ms)
 - Generating types
-✔ Generating types (135ms)
+✔ Generating types (189ms)
 - Compiling TS
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (7ms)
-✔ Compiling TS (1207ms)
-[2026-01-21 12:42:03.443] [31merror[39m: The port 1337 is already used by another application.
-[2026-01-21 12:42:03.443] [32minfo[39m: Shutting down Strapi
+✔ Cleaning dist dir (15ms)
+✔ Compiling TS (2138ms)
+
+ Project information
+
+[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
+[90m│[39m Time               [90m│[39m Tue Jan 20 2026 15:35:19 GMT+0100 (Central Euro… [90m│[39m
+[90m│[39m Launched in        [90m│[39m 7695 ms                                          [90m│[39m
+[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
+[90m│[39m Process PID        [90m│[39m 25817                                            [90m│[39m
+[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
+[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
+[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
+[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
+[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
+[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
+
+ Actions available
+
+Welcome back!
+To access the server ⚡️, go to:
+http://localhost:1337
+
+[2026-01-20 15:35:19.518] [32minfo[39m: Strapi started successfully
+✅ API permissions configured successfully
+   Enabled 5 actions for 4 APIs

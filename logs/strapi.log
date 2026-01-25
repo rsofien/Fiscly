@@ -3,9 +3,9 @@
 > strapi develop
 
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (7ms)
+✖ Error cleaning dist dir: Error: ENOENT: no such file or directory, lstat '/Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist/tsconfig.tsbuildinfo' (21ms)
 - Loading Strapi
-[2026-01-21 12:41:55.033] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
+[2026-01-20 15:35:16.040] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
 🔧 Configuring API permissions...
 - Building build context
 
@@ -15,77 +15,15 @@
     - STRAPI_TELEMETRY_DISABLED
     - STRAPI_AI_URL
     - STRAPI_ANALYTICS_URL
-✔ Building build context (47ms)
+✔ Building build context (205ms)
 - Creating admin
-✔ Creating admin (237ms)
-✔ Loading Strapi (1133ms)
+✔ Creating admin (775ms)
+✔ Loading Strapi (5340ms)
 - Generating types
-✔ Generating types (157ms)
+✔ Generating types (204ms)
 - Compiling TS
 - Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (9ms)
-✔ Compiling TS (1468ms)
-
- Project information
-
-[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
-[90m│[39m Time               [90m│[39m Wed Jan 21 2026 12:41:57 GMT+0100 (Central Euro… [90m│[39m
-[90m│[39m Launched in        [90m│[39m 2805 ms                                          [90m│[39m
-[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
-[90m│[39m Process PID        [90m│[39m 64641                                            [90m│[39m
-[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
-[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
-[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
-[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
-[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
-[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
-
- Actions available
-
-Welcome back!
-To access the server ⚡️, go to:
-http://localhost:1337
-
-[2026-01-21 12:41:57.125] [32minfo[39m: Strapi started successfully
-✅ API permissions configured successfully
-   Enabled 5 actions for 4 APIs
-12:42:01 PM [vite] page reload .strapi/client/index.html
-[2026-01-21 12:42:07.435] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (28 ms) 200
-[2026-01-21 12:42:07.499] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (25 ms) 200
-[2026-01-21 12:42:07.500] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (32 ms) 200
-[2026-01-21 12:42:13.415] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (7 ms) 200
-[2026-01-21 12:42:13.429] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
-[2026-01-21 12:42:13.449] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (11 ms) 200
-[2026-01-21 12:42:13.460] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
-[2026-01-21 12:42:14.792] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (10 ms) 200
-[2026-01-21 12:42:14.802] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (16 ms) 200
-[2026-01-21 12:42:14.806] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (11 ms) 200
-[2026-01-21 12:42:14.822] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (18 ms) 200
-[2026-01-21 12:42:14.823] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (7 ms) 200
-[2026-01-21 12:42:14.838] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (13 ms) 200
-[2026-01-21 12:42:14.843] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (11 ms) 200
-[2026-01-21 12:42:14.856] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (11 ms) 200
-[2026-01-21 12:42:21.601] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (10 ms) 200
-[2026-01-21 12:42:21.628] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (13 ms) 200
-[2026-01-21 12:42:21.810] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (6 ms) 200
-[2026-01-21 12:42:21.823] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&filters[workspace][id][$eq]=1&populate=* (10 ms) 200
-[2026-01-21 12:42:21.834] [32mhttp[39m: GET /uploads/Signature_9d3875397a.png (5 ms) 200
-[2026-01-21 12:42:21.834] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (2 ms) 200
-[2026-01-21 12:42:21.847] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (7 ms) 200
-[2026-01-21 12:42:21.863] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=8&filters[workspace][id][$eq]=1&populate=* (14 ms) 200
-[2026-01-21 12:42:24.327] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (14 ms) 200
-[2026-01-21 12:42:24.328] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (9 ms) 200
-[2026-01-21 12:42:24.345] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (14 ms) 200
-[2026-01-21 12:42:24.349] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (15 ms) 200
-[2026-01-21 12:42:24.375] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (8 ms) 200
-[2026-01-21 12:42:24.382] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo (13 ms) 200
-[2026-01-21 12:42:24.386] [32mhttp[39m: GET /api/customers?filters[workspace][id][$eq]=1 (9 ms) 200
-[2026-01-21 12:42:24.393] [32mhttp[39m: GET /api/invoices?filters[workspace][id][$eq]=1&populate=* (10 ms) 200
-[2026-01-21 12:42:26.762] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (11 ms) 200
-[2026-01-21 12:42:26.763] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (8 ms) 200
-[2026-01-21 12:42:26.777] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=9&filters[workspace][id][$eq]=1&populate=* (11 ms) 200
-[2026-01-21 12:42:26.784] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2&populate=logo&populate=signature (10 ms) 200
-[2026-01-21 12:42:26.784] [32mhttp[39m: GET /uploads/Signature_9d3875397a.png (1 ms) 200
-[2026-01-21 12:42:26.784] [32mhttp[39m: GET /uploads/dev_Sync_Logo_1bffeb4fd3.png (2 ms) 200
-[2026-01-21 12:42:26.797] [32mhttp[39m: GET /api/workspaces?filters[user_id][$eq]=2 (6 ms) 200
-[2026-01-21 12:42:26.810] [32mhttp[39m: GET /api/invoices?filters[id][$eq]=9&filters[workspace][id][$eq]=1&populate=* (11 ms) 200
+✖ Error cleaning dist dir: Error: ENOENT: no such file or directory, lstat '/Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist/tsconfig.tsbuildinfo' (1ms)
+✔ Compiling TS (2149ms)
+[2026-01-20 15:35:19.485] [31merror[39m: The port 1337 is already used by another application.
+[2026-01-20 15:35:19.485] [32minfo[39m: Shutting down Strapi

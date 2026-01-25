@@ -7,38 +7,139 @@
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1771ms
+ ✓ Ready in 3.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 2.1s (488 modules)
+ ✓ Compiled in 352ms (234 modules)
+ GET / 307 in 2552ms
  ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 2.7s (1047 modules)
- ✓ Compiled in 210ms (387 modules)
- GET /dashboard 200 in 3013ms
- ○ Compiling /icon ...
- ✓ Compiled /icon in 616ms (176 modules)
- GET /icon?d4eef3ff92e63d43 200 in 769ms
- ✓ Compiled /customers in 421ms (1086 modules)
- GET /customers?_rsc=xb5uw 200 in 44ms
- ✓ Compiled /api/customers in 205ms (713 modules)
- GET /api/customers 200 in 321ms
- GET /api/customers 200 in 31ms
- ✓ Compiled /invoices in 229ms (1127 modules)
- GET /invoices?_rsc=7qj29 200 in 17ms
- ✓ Compiled /api/invoices in 94ms (724 modules)
- GET /api/customers 200 in 217ms
- GET /api/invoices 200 in 235ms
- GET /api/customers 200 in 31ms
- GET /api/invoices 200 in 33ms
- ✓ Compiled /invoices/[id]/preview in 217ms (1139 modules)
- ✓ Compiled /api/invoices/[id] in 91ms (732 modules)
- ✓ Compiled (734 modules)
- GET /api/workspace 200 in 246ms
- GET /api/workspace 200 in 25ms
- GET /api/invoices/8 200 in 466ms
- GET /api/invoices/8 200 in 38ms
- GET /api/customers 200 in 51ms
- GET /api/invoices 200 in 56ms
- GET /api/customers 200 in 39ms
- GET /api/invoices 200 in 43ms
- GET /api/workspace 200 in 22ms
- GET /api/invoices/9 200 in 36ms
- GET /api/workspace 200 in 20ms
- GET /api/invoices/9 200 in 29ms
+ ✓ Compiled /dashboard in 1148ms (1025 modules)
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ GET /dashboard 500 in 1405ms
+ ✓ Compiled /favicon.ico in 140ms (684 modules)
+ GET /favicon.ico 200 in 224ms
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ ⨯ TypeError: fetch failed
+    at async DashboardPage (./app/dashboard/page.tsx:48:26)
+digest: "2081087209"
+Cause: AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1122:18)
+    at afterConnectMultiple (node:net:1689:7)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 1337
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:1337
+        at createConnectionError (node:net:1652:14)
+        at afterConnectMultiple (node:net:1682:16)
+        at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+      errno: -61,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 1337
+    }
+  ]
+}
+ GET /dashboard 500 in 167ms
+ GET /favicon.ico 200 in 29ms
