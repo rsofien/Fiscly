@@ -1,15 +1,14 @@
 import { NextAuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
 import { getServerSession } from "next-auth"
 
 interface User {
   id: string
   email: string
   name: string
-  workspaceId: string
-  workspaceName: string
 }
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -24,13 +23,13 @@ export const authConfig: NextAuthOptions = {
         }
 
         try {
-          const response = await fetch(`${process.env.STRAPI_URL}/api/auth/local`, {
+          const response = await fetch(`${API_URL}/api/auth/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              identifier: credentials.email,
+              email: credentials.email,
               password: credentials.password,
             }),
           })
@@ -42,12 +41,11 @@ export const authConfig: NextAuthOptions = {
           const data = await response.json()
 
           return {
-            id: data.user.id.toString(),
+            id: data.user.id,
             email: data.user.email,
-            name: data.user.username,
-            workspaceId: "",
-            workspaceName: "",
-          } as User
+            name: data.user.name,
+            token: data.token,
+          } as User & { token: string }
         } catch (error) {
           console.error("Auth error:", error)
           return null
@@ -66,8 +64,7 @@ export const authConfig: NextAuthOptions = {
     async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.id = user.id
-        token.workspaceId = (user as User).workspaceId
-        token.workspaceName = (user as User).workspaceName
+        token.token = user.token // Store backend JWT token in session
       }
       return token
     },
@@ -75,8 +72,7 @@ export const authConfig: NextAuthOptions = {
     async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
         session.user.id = token.id as string
-        session.user.workspaceId = token.workspaceId as string
-        session.user.workspaceName = token.workspaceName as string
+        session.user.token = token.token as string // Make backend token available
       }
       return session
     },

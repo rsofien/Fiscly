@@ -1,51 +1,38 @@
+npm warn Unknown user config "python". This will stop working in the next major version of npm.
 
-> invoice-backend@0.1.0 develop
-> strapi develop
+> fiscly-backend@1.0.0 dev
+> tsx watch src/index.ts
 
-- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (21ms)
-- Loading Strapi
-[2026-01-20 15:35:16.024] [33mwarn[39m: admin.auth.options.expiresIn is deprecated and will be removed in Strapi 6. Please configure admin.auth.sessions.maxRefreshTokenLifespan and admin.auth.sessions.maxSessionLifespan.
-🔧 Configuring API permissions...
-- Building build context
+[SERVER] Serving static files from: /Users/rhoumasofien/Local Sites/Fiscly/backend/public/uploads
+[SERVER] Calling startServer()
+[SERVER] Starting server...
+[SERVER] Connecting to database...
+(node:5034) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✓ MongoDB connected
+[SERVER] Seeding database...
+✓ Admin user already exists
+[SERVER] Calling app.listen...
+[SERVER] Listener registered
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
 
-[INFO] Including the following ENV variables as part of the JS bundle:
-    - ADMIN_PATH
-    - STRAPI_ADMIN_BACKEND_URL
-    - STRAPI_TELEMETRY_DISABLED
-    - STRAPI_AI_URL
-    - STRAPI_ANALYTICS_URL
-✔ Building build context (202ms)
-- Creating admin
-✔ Creating admin (781ms)
-✔ Loading Strapi (5342ms)
-- Generating types
-✔ Generating types (189ms)
-- Compiling TS
-- Cleaning dist dir /Users/rhoumasofien/Local Sites/Fiscly/invoice-backend/dist
-✔ Cleaning dist dir (15ms)
-✔ Compiling TS (2138ms)
+Error: listen EADDRINUSE: address already in use :::1337
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at app.listen (/Users/rhoumasofien/Local Sites/Fiscly/backend/node_modules/express/lib/application.js:635:24)
+    at startServer (/Users/rhoumasofien/Local Sites/Fiscly/backend/src/index.ts:116:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 1337
+}
 
- Project information
-
-[90m┌────────────────────[39m[90m┬──────────────────────────────────────────────────┐[39m
-[90m│[39m Time               [90m│[39m Tue Jan 20 2026 15:35:19 GMT+0100 (Central Euro… [90m│[39m
-[90m│[39m Launched in        [90m│[39m 7695 ms                                          [90m│[39m
-[90m│[39m Environment        [90m│[39m development                                      [90m│[39m
-[90m│[39m Process PID        [90m│[39m 25817                                            [90m│[39m
-[90m│[39m Version            [90m│[39m 5.33.2 (node v20.19.5)                           [90m│[39m
-[90m│[39m Edition            [90m│[39m Enterprise                                       [90m│[39m
-[90m│[39m Database           [90m│[39m postgres                                         [90m│[39m
-[90m│[39m Database name      [90m│[39m fiscly_invoices                                  [90m│[39m
-[90m│[39m Database schema    [90m│[39m public                                           [90m│[39m
-[90m└────────────────────[39m[90m┴──────────────────────────────────────────────────┘[39m
-
- Actions available
-
-Welcome back!
-To access the server ⚡️, go to:
-http://localhost:1337
-
-[2026-01-20 15:35:19.518] [32minfo[39m: Strapi started successfully
-✅ API permissions configured successfully
-   Enabled 5 actions for 4 APIs
+Node.js v25.4.0

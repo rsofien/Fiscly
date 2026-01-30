@@ -25,7 +25,7 @@ const translations = {
     totalAmount: "Total Amount",
     notes: "Notes",
     paymentMethod: "Payment Method",
-    matriculeFiscale: "Matricule Fiscale",
+    matriculeFiscale: "Tax ID",
     noCustomer: "No customer assigned",
     back: "Back",
     print: "Print",
@@ -177,10 +177,34 @@ export default function InvoicePreviewPage() {
 
   const lang = invoice.language || "en"
   const t = translations[lang]
-  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
+  
+  // Debug workspace logo
+  console.log('[PREVIEW] Workspace:', { 
+    hasWorkspace: !!workspace, 
+    hasLogo: !!workspace?.logo, 
+    logoUrl: workspace?.logo?.url,
+    logoId: workspace?.logo?.id,
+    logoName: workspace?.logo?.name,
+    signatureUrl: workspace?.signature?.url,
+    signatureId: workspace?.signature?.id,
+    fullWorkspace: workspace 
+  });
+  
+  // Try logo.id as fallback if url is empty
   const logoUrl = workspace?.logo?.url ? 
-    (workspace.logo.url.startsWith('http') ? workspace.logo.url : `${STRAPI_URL}${workspace.logo.url}`) 
+    (workspace.logo.url.startsWith('http') ? workspace.logo.url : `${API_URL}${workspace.logo.url}`) 
+    : workspace?.logo?.id ?
+    `${API_URL}/uploads/${workspace.logo.id}` 
     : null
+  
+  const signatureUrl = workspace?.signature?.url ? 
+    (workspace.signature.url.startsWith('http') ? workspace.signature.url : `${API_URL}${workspace.signature.url}`) 
+    : workspace?.signature?.id ?
+    `${API_URL}/uploads/${workspace.signature.id}` 
+    : null
+  
+  console.log('[PREVIEW] Computed URLs:', { logoUrl, signatureUrl, issuerType: invoice.issuerType });
 
   return (
     <div className="min-h-screen bg-background">
@@ -292,11 +316,11 @@ export default function InvoicePreviewPage() {
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div>
                 <div className="text-xs text-muted-foreground mb-0.5">{t.issueDate}</div>
-                <div className="font-medium">{invoice.issueDate}</div>
+                <div className="font-medium">{invoice.issueDate ? new Date(invoice.issueDate).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}</div>
               </div>
               <div>
                 <div className="text-xs text-muted-foreground mb-0.5">{t.dueDate}</div>
-                <div className="font-medium text-xs">{invoice.dueDate}</div>
+                <div className="font-medium text-xs">{invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}</div>
               </div>
               {invoice.description && (
                 <div>
@@ -363,11 +387,11 @@ export default function InvoicePreviewPage() {
             )}
 
             {/* Signature */}
-            {workspace?.signature?.url && invoice.issuerType !== "personal" && (
+            {signatureUrl && invoice.issuerType !== "personal" && (
               <div className="mt-4 mb-3">
                 <div className="flex flex-col items-end">
                   <img
-                    src={workspace.signature.url.startsWith('http') ? workspace.signature.url : `${STRAPI_URL}${workspace.signature.url}`}
+                    src={signatureUrl}
                     alt="Signature"
                     className="h-12 object-contain mb-1"
                   />

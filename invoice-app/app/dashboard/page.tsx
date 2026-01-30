@@ -22,21 +22,20 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-  const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
-  }
-  if (STRAPI_API_TOKEN) {
-    headers["Authorization"] = `Bearer ${STRAPI_API_TOKEN}`
+    Authorization: `Bearer ${userId}`,
   }
 
   // Get user's workspace
   const workspaceRes = await fetch(
-    `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
+    `${API_URL}/api/workspaces`,
     { headers, cache: "no-store" }
   )
+
+  console.log('[DASHBOARD] Workspace response:', workspaceRes.status)
 
   let invoices: any[] = []
   let customers: any[] = []
@@ -47,94 +46,77 @@ export default async function DashboardPage() {
   let dueInvoices = 0
   let overdueInvoices = 0
   let topCustomers: any[] = []
-  let reports = null
 
   if (workspaceRes.ok) {
-    const workspaceData = await workspaceRes.json()
-    const workspaces = workspaceData.data || []
+    // Fetch data from MongoDB backend
+    const [invoicesRes, customersRes] = await Promise.all([
+      fetch(`${API_URL}/api/invoices`, { 
+        headers, 
+        cache: "no-store" 
+      }),
+      fetch(`${API_URL}/api/customers`, { 
+        headers, 
+        cache: "no-store" 
+      }),
+    ])
+
+    console.log('[DASHBOARD] Invoices response:', invoicesRes.status)
+    console.log('[DASHBOARD] Customers response:', customersRes.status)
+
+    const invoicesData = invoicesRes.ok ? await invoicesRes.json() : []
+    const customersData = customersRes.ok ? await customersRes.json() : []
     
-    if (workspaces.length > 0) {
-      const workspaceId = workspaces[0].id
+    console.log('[DASHBOARD] Invoices data:', invoicesData)
+    console.log('[DASHBOARD] Customers data:', customersData)
+    
+    invoices = (Array.isArray(invoicesData) ? invoicesData : []).map((item: any) => ({
+      id: item._id?.toString() || item.id,
+      invoiceNumber: item.invoiceNumber,
+      customerName: item.customer_id?.name || '',
+      amount: item.amount,
+      status: item.status,
+      issueDate: item.issueDate,
+      dueDate: item.dueDate,
+    }))
+    
+    customers = Array.isArray(customersData) ? customersData : []
 
-      // Fetch data directly from Strapi
-      const [invoicesRes, customersRes] = await Promise.all([
-        fetch(`${STRAPI_URL}/api/invoices?filters[workspace][id][$eq]=${workspaceId}&populate=*`, { 
-          headers, 
-          cache: "no-store" 
-        }),
-        fetch(`${STRAPI_URL}/api/customers?filters[workspace][id][$eq]=${workspaceId}`, { 
-          headers, 
-          cache: "no-store" 
-        }),
-      ])
+    const now = new Date()
+    paidThisMonth = invoices
+      .filter((inv: any) => {
+        if (inv.status !== "paid" || !inv.issueDate) return false
+        const issued = new Date(inv.issueDate)
+        return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
+      })
+      .reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
 
-      const invoicesData = invoicesRes.ok ? await invoicesRes.json() : { data: [] }
-      const customersData = customersRes.ok ? await customersRes.json() : { data: [] }
-      
-      invoices = (invoicesData.data || []).map((item: any) => ({
-        id: item.id.toString(),
-        invoiceNumber: item.invoiceNumber,
-        customerName: item.customer?.name || '',
-        amount: item.amount,
-        currency: item.currency,
-        status: item.status,
-        issueDate: item.issueDate,
-        dueDate: item.dueDate,
-      }))
-      
-      customers = customersData.data || []
+    const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+    const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
+    const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+    outstandingAmount = totalRevenue - paidAmount
 
-      const now = new Date()
-      paidThisMonth = invoices
-        .filter((inv: any) => {
-          if (inv.status !== "paid" || !inv.issueDate) return false
-          const issued = new Date(inv.issueDate)
-          return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
-        })
-        .reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+    totalInvoices = invoices.length
+    totalCustomers = customers.length
+    dueInvoices = invoices.filter((inv: any) => inv.status === 'sent').length
+    overdueInvoices = invoices.filter((inv: any) => inv.status === 'overdue').length
 
-      const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
-      const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
-      const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
-      outstandingAmount = totalRevenue - paidAmount
-
-      totalInvoices = invoices.length
-      totalCustomers = customers.length
-      dueInvoices = invoices.filter((inv: any) => inv.status === 'sent').length
-      overdueInvoices = invoices.filter((inv: any) => inv.status === 'overdue').length
-
-      reports = {
-        totalRevenue,
-        paidAmount,
-        outstanding: outstandingAmount,
-        invoiceCount: totalInvoices,
-        byStatus: {
-          draft: invoices.filter((inv: any) => inv.status === 'draft').length,
-          sent: dueInvoices,
-          paid: paidInvoices.length,
-          overdue: overdueInvoices,
-          cancelled: invoices.filter((inv: any) => inv.status === 'cancelled').length,
-        }
-      }
-
-      topCustomers = Object.values(
-        invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
-          (acc: any, inv: any) => {
-            const name = inv.customerName || "Unknown"
-            const amount = Number(inv.amount) || 0
-            if (!acc[name]) {
-              acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
-            }
-            acc[name].totalSpent += amount
-            acc[name].invoiceCount += 1
-            return acc
-          },
-          {}
-        )
+    topCustomers = Object.values(
+      invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
+        (acc: any, inv: any) => {
+          const name = inv.customerName || "Unknown"
+          const amount = Number(inv.amount) || 0
+          if (!acc[name]) {
+            acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
+          }
+          acc[name].totalSpent += amount
+          acc[name].invoiceCount += 1
+          return acc
+        },
+        {}
       )
-        .sort((a: any, b: any) => b.totalSpent - a.totalSpent)
-        .slice(0, 5)
-    }
+    )
+      .sort((a: any, b: any) => b.totalSpent - a.totalSpent)
+      .slice(0, 5)
   }
 
   const user = {

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
+const API_TOKEN = process.env.API_TOKEN;
 
 const buildHeaders = (json = false): HeadersInit => {
   const headers: Record<string, string> = {};
   if (json) headers['Content-Type'] = 'application/json';
-  if (STRAPI_API_TOKEN) headers['Authorization'] = `Bearer ${STRAPI_API_TOKEN}`;
+  if (API_TOKEN) headers['Authorization'] = `Bearer ${API_TOKEN}`;
   return headers;
 }
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's workspace to verify the invoice belongs to them
-    const workspaceResponse = await fetch(`${STRAPI_URL}/api/workspaces`, {
+    const workspaceResponse = await fetch(`${API_URL}/api/workspaces`, {
       headers: buildHeaders(true),
     });
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     const workspaceId = workspaces[0].id;
 
     // Verify the invoice belongs to user's workspace
-    const invoiceResponse = await fetch(`${STRAPI_URL}/api/invoices?filters[id][$eq]=${body.invoice}&filters[workspace][id][$eq]=${workspaceId}`, {
+    const invoiceResponse = await fetch(`${API_URL}/api/invoices?filters[id][$eq]=${body.invoice}&filters[workspace][id][$eq]=${workspaceId}`, {
       headers: buildHeaders(),
     });
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create invoice item
-    const response = await fetch(`${STRAPI_URL}/api/invoice-items`, {
+    const response = await fetch(`${API_URL}/api/invoice-items`, {
       method: 'POST',
       headers: buildHeaders(true),
       body: JSON.stringify({

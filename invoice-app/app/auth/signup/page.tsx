@@ -39,11 +39,14 @@ export default function SignupPage() {
   })
 
   const onSubmit = async (data: SignupFormData) => {
+    console.log('[SIGNUP PAGE] Form submitted')
+    console.log('[SIGNUP PAGE] Data:', { email: data.email, name: data.name, companyName: data.companyName })
     setIsLoading(true)
     setError("")
 
     try {
       // Create user via our API route (which handles the Strapi registration)
+      console.log('[SIGNUP PAGE] Calling /api/auth/register...')
       const response = await fetch('/api/auth/register', {
         method: "POST",
         headers: {
@@ -57,12 +60,16 @@ export default function SignupPage() {
         }),
       })
 
+      console.log('[SIGNUP PAGE] Register response status:', response.status)
       const result = await response.json()
+      console.log('[SIGNUP PAGE] Register response:', result)
 
       if (!response.ok) {
+        console.log('[SIGNUP PAGE] ❌ Registration failed:', result.error?.message || result.error)
         throw new Error(result.error?.message || "Failed to create account")
       }
 
+      console.log('[SIGNUP PAGE] ✓ Registration successful, attempting auto-login...')
       // Auto-login after signup
       const signInResult = await signIn("credentials", {
         email: data.email,
@@ -70,13 +77,17 @@ export default function SignupPage() {
         redirect: false,
       })
 
+      console.log('[SIGNUP PAGE] SignIn result:', signInResult)
       if (signInResult?.error) {
+        console.log('[SIGNUP PAGE] ❌ Auto-login failed:', signInResult.error)
         setError("Account created but login failed. Please login manually.")
       } else if (signInResult?.ok) {
+        console.log('[SIGNUP PAGE] ✅ Auto-login successful, redirecting...')
         router.push("/dashboard")
         router.refresh()
       }
     } catch (err) {
+      console.error('[SIGNUP PAGE] ❌ ERROR:', err)
       if (err instanceof Error) {
         setError(err.message)
       } else {
@@ -84,6 +95,7 @@ export default function SignupPage() {
       }
     } finally {
       setIsLoading(false)
+      console.log('[SIGNUP PAGE] Form submission complete')
     }
   }
 

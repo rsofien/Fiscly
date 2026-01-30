@@ -56,19 +56,25 @@ export default function SettingsPage() {
 
   const fetchWorkspace = async () => {
     try {
+      console.log('[SETTINGS] Fetching workspace...')
       const response = await fetch("/api/workspace")
       if (response.ok) {
         const data = await response.json()
+        console.log('[SETTINGS] Workspace data:', data)
+        console.log('[SETTINGS] Logo:', data.logo)
+        console.log('[SETTINGS] Signature:', data.signature)
         setWorkspace(data)
         if (data.logo?.url) {
-          const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-          const fullUrl = data.logo.url.startsWith('http') ? data.logo.url : `${STRAPI_URL}${data.logo.url}`
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
+          const fullUrl = data.logo.url.startsWith('http') ? data.logo.url : `${API_URL}${data.logo.url}`
+          console.log('[SETTINGS] Setting logo preview:', fullUrl)
           setLogoPreview(fullUrl)
           setUploadedLogoId(data.logo.id)
         }
         if (data.signature?.url) {
-          const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-          const fullUrl = data.signature.url.startsWith('http') ? data.signature.url : `${STRAPI_URL}${data.signature.url}`
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
+          const fullUrl = data.signature.url.startsWith('http') ? data.signature.url : `${API_URL}${data.signature.url}`
+          console.log('[SETTINGS] Setting signature preview:', fullUrl)
           setSignaturePreview(fullUrl)
           setUploadedSignatureId(data.signature.id)
         }
@@ -104,7 +110,7 @@ export default function SettingsPage() {
     reader.readAsDataURL(file)
   }
 
-  const uploadLogo = async (): Promise<string | null> => {
+  const uploadLogo = async (): Promise<{id: string, url: string, name: string} | null> => {
     if (!selectedFile) return null
     console.log('========== CLIENT UPLOAD START ==========', {
       name: selectedFile.name,
@@ -134,7 +140,7 @@ export default function SettingsPage() {
         console.log('========== CLIENT UPLOAD SUCCESS ==========')
         setUploadedLogoId(uploaded.id)
         setSelectedFile(null)
-        return uploaded.id.toString()
+        return uploaded
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
         console.error('Upload failed:', {
@@ -154,7 +160,7 @@ export default function SettingsPage() {
     }
   }
 
-  const uploadSignature = async (): Promise<string | null> => {
+  const uploadSignature = async (): Promise<{id: string, url: string, name: string} | null> => {
     if (!selectedSignatureFile) return null
     console.log('========== SIGNATURE UPLOAD START ==========', {
       name: selectedSignatureFile.name,
@@ -177,7 +183,7 @@ export default function SettingsPage() {
         console.log('========== SIGNATURE UPLOAD SUCCESS ==========', uploaded)
         setUploadedSignatureId(uploaded.id)
         setSelectedSignatureFile(null)
-        return uploaded.id.toString()
+        return uploaded
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
         console.error('Signature upload failed:', errorData)
@@ -200,43 +206,50 @@ export default function SettingsPage() {
     }
     setSaving(true)
     try {
-      let logoIdToSave = uploadedLogoId
-      let signatureIdToSave = uploadedSignatureId
+      let logoToSave = workspace.logo
+      let signatureToSave = workspace.signature
 
       // Upload logo if a new file was selected
       if (selectedFile) {
-        const newLogoId = await uploadLogo()
-        if (newLogoId) {
-          logoIdToSave = newLogoId
+        const newLogo = await uploadLogo()
+        if (newLogo) {
+          logoToSave = newLogo
         }
       }
 
       // Upload signature if a new file was selected
       if (selectedSignatureFile) {
-        const newSignatureId = await uploadSignature()
-        if (newSignatureId) {
-          signatureIdToSave = newSignatureId
+        const newSignature = await uploadSignature()
+        if (newSignature) {
+          signatureToSave = newSignature
         }
       }
 
+      const bodyData = {
+        name: workspace.name,
+        email: workspace.email,
+        address: workspace.address,
+        phone: workspace.phone,
+        invoicePrefix: workspace.invoicePrefix,
+        defaultPaymentTerms: workspace.defaultPaymentTerms ?? 15,
+        defaultNotes: workspace.defaultNotes,
+        matriculeFiscale: workspace.matriculeFiscale,
+        personal_name: workspace.personal_name,
+        personal_email: workspace.personal_email,
+        personal_phone: workspace.personal_phone,
+        ...(logoToSave && { logo: logoToSave }),
+        ...(signatureToSave && { signature: signatureToSave }),
+      }
+      
+      console.log('========== SAVING WORKSPACE ==========')
+      console.log('Logo to save:', logoToSave)
+      console.log('Signature to save:', signatureToSave)
+      console.log('Body data:', bodyData)
+      
       const response = await fetch("/api/workspace", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: workspace.name,
-          email: workspace.email,
-          address: workspace.address,
-          phone: workspace.phone,
-          invoicePrefix: workspace.invoicePrefix,
-          defaultPaymentTerms: workspace.defaultPaymentTerms ?? 15,
-          defaultNotes: workspace.defaultNotes,
-          matriculeFiscale: workspace.matriculeFiscale,
-          personal_name: workspace.personal_name,
-          personal_email: workspace.personal_email,
-          personal_phone: workspace.personal_phone,
-          ...(logoIdToSave && { logoId: logoIdToSave }),
-          ...(signatureIdToSave && { signatureId: signatureIdToSave }),
-        }),
+        body: JSON.stringify(bodyData),
       })
 
       if (response.ok) {

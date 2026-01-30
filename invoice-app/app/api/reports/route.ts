@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
-
-const buildHeaders = (): HeadersInit => {
-  const headers: Record<string, string> = {};
-  if (STRAPI_API_TOKEN) headers['Authorization'] = `Bearer ${STRAPI_API_TOKEN}`;
-  return headers;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
 
 export async function GET() {
   try {
@@ -18,73 +11,48 @@ export async function GET() {
     }
 
     const userId = session.user.id;
-
     if (!userId) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    // Get user's workspace by user_id
-    const workspaceResponse = await fetch(
-      `${STRAPI_URL}/api/workspaces?filters[user_id][$eq]=${userId}`,
-      {
-        headers: buildHeaders(),
-      }
-    );
+    const headers = {
+      Authorization: `Bearer ${userId}`,
+    };
 
-    if (!workspaceResponse.ok) {
-      return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
-    }
-
-    const workspaceData = await workspaceResponse.json();
-    const workspaces = workspaceData.data || [];
-    
-    if (workspaces.length === 0) {
-      return NextResponse.json({
-        totalRevenue: 0,
-        paidAmount: 0,
-        outstanding: 0,
-        invoiceCount: 0,
-        byStatus: { draft: 0, sent: 0, paid: 0, overdue: 0, cancelled: 0 },
-        invoices: [],
-      });
-    }
-
-    const workspaceId = workspaces[0].id;
-
-    // Fetch only invoices for this workspace
-    const response = await fetch(`${STRAPI_URL}/api/invoices?filters[workspace][id][$eq]=${workspaceId}&populate=*`, {
-      headers: buildHeaders(),
+    // Fetch invoices from MongoDB backend
+    const response = await fetch(`${API_URL}/api/invoices`, {
+      headers,
     });
 
     if (!response.ok) {
       return NextResponse.json({ error: 'Failed to fetch data' }, { status: response.status });
     }
 
-    const data = await response.json();
-    const invoices = data.data || [];
+    const invoices = await response.json();
+    const invoiceArray = Array.isArray(invoices) ? invoices : [];
 
     // Calculate metrics
-    const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
-    const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid');
+    const totalRevenue = invoiceArray.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
+    const paidInvoices = invoiceArray.filter((inv: any) => inv.status === 'paid');
     const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (inv.amount || 0), 0);
 
     // Group by status
     const byStatus = {
-      draft: invoices.filter((inv: any) => inv.status === 'draft').length,
-      sent: invoices.filter((inv: any) => inv.status === 'sent').length,
+      draft: invoiceArray.filter((inv: any) => inv.status === 'draft').length,
+      sent: invoiceArray.filter((inv: any) => inv.status === 'sent').length,
       paid: paidInvoices.length,
-      overdue: invoices.filter((inv: any) => inv.status === 'overdue').length,
-      cancelled: invoices.filter((inv: any) => inv.status === 'cancelled').length,
+      overdue: invoiceArray.filter((inv: any) => inv.status === 'overdue').length,
+      cancelled: invoiceArray.filter((inv: any) => inv.status === 'cancelled').length,
     };
 
     return NextResponse.json({
       totalRevenue,
       paidAmount,
       outstanding: totalRevenue - paidAmount,
-      invoiceCount: invoices.length,
+      invoiceCount: invoiceArray.length,
       byStatus,
-      invoices: invoices.map((inv: any) => ({
-        id: inv.id,
+      invoices: invoiceArray.map((inv: any) => ({
+        id: inv._id,
         number: inv.invoiceNumber,
         amount: inv.amount,
         status: inv.status,
