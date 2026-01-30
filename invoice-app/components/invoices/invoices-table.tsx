@@ -259,27 +259,24 @@ export function InvoicesTable() {
     try {
       // Calculate total amount from line items
       const totalAmount = formData.items?.reduce((sum, item) => sum + item.total, 0) || 0
-      
-      // Keep customer as string ObjectId, don't convert to number
+
+      // Prepare invoice data, including items
       const invoiceData = {
         ...formData,
         customer: formData.customer, // Keep as MongoDB ObjectId string
         amount: totalAmount,
-        items: undefined, // Remove items from invoice data
+        items: formData.items, // Send items to backend for update
       }
-      
+
       console.log('[UPDATE INVOICE] Sending data:', invoiceData)
-      
+
       const response = await fetch(`/api/invoices/${editingInvoice.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(invoiceData),
       })
-      
+
       if (response.ok) {
-        // Note: Line items need separate management - skipping for now to avoid duplicates
-        // TODO: Implement proper item update/delete logic
-        
         setIsEditDialogOpen(false)
         setEditingInvoice(null)
         setFormData({ 

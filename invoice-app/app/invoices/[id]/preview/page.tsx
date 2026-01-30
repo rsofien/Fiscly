@@ -36,7 +36,7 @@ const translations = {
     statusPaid: "PAID",
     statusOverdue: "OVERDUE",
     statusCancelled: "CANCELLED",
-    taxClarification: "VAT not applicable – DevSync SUARL, fully exporting company.",
+    taxClarification: "VAT not applicable – DevSync SUARL, fully exporting company. Export of services – Article 262 CGI.",
     authorizedSignature: "Authorized Signature",
   },
   fr: {
@@ -66,7 +66,7 @@ const translations = {
     statusPaid: "PAYÉ",
     statusOverdue: "EN RETARD",
     statusCancelled: "ANNULÉ",
-    taxClarification: "TVA non applicable – DevSync SUARL, société totalement exportatrice.",
+    taxClarification: "TVA non applicable – DevSync SUARL, société totalement exportatrice. Export de services – article 262 CGI.",
     authorizedSignature: "Signature autorisée",
   },
 }
@@ -205,6 +205,9 @@ export default function InvoicePreviewPage() {
     : null
   
   console.log('[PREVIEW] Computed URLs:', { logoUrl, signatureUrl, issuerType: invoice.issuerType });
+
+  // Debug invoice items
+  console.log('[PREVIEW] Invoice items:', invoice.items);
 
   return (
     <div className="min-h-screen bg-background">

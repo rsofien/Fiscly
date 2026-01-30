@@ -83,6 +83,7 @@ router.put("/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
     const workspace = await Workspace.findOne({ user_id: userId })
     if (!workspace) return res.status(404).json({ error: "Workspace not found" })
 
+    // Update invoice document
     const invoice = await Invoice.findOneAndUpdate(
       { _id: req.params.id, workspace_id: workspace._id },
       req.body,
@@ -90,7 +91,24 @@ router.put("/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
     )
     if (!invoice) return res.status(404).json({ error: "Invoice not found" })
 
-    res.json(invoice)
+    // Handle invoice items
+    if (Array.isArray(req.body.items)) {
+      // Remove all old items for this invoice
+      await InvoiceItem.deleteMany({ invoice_id: invoice._id })
+      // Insert new items
+      const itemsToInsert = req.body.items.map(item => ({
+        invoice_id: invoice._id,
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        total: item.total,
+      }))
+      await InvoiceItem.insertMany(itemsToInsert)
+    }
+
+    // Return updated invoice with items
+    const items = await InvoiceItem.find({ invoice_id: invoice._id })
+    res.json({ ...invoice.toObject(), items })
   } catch (error) {
     console.error("[invoice PUT] error:", error)
     res.status(500).json({ error: "Failed to update invoice" })
