@@ -9,6 +9,8 @@ const customerSchema = new Schema(
     company: String,
     address: String,
     taxId: String,
+    vat: String,
+    siren: String,
     status: { type: String, enum: ["active", "inactive"], default: "active" },
     notes: String,
   },

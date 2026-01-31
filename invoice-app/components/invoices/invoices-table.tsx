@@ -255,7 +255,13 @@ export function InvoicesTable() {
 
   const handleUpdateInvoice = async () => {
     if (!editingInvoice) return
-    
+
+    // Validation: all items must have a non-empty description
+    if (formData.items && formData.items.some(item => !item.description || item.description.trim() === "")) {
+      alert("All invoice items must have a description.")
+      return
+    }
+
     try {
       // Calculate total amount from line items
       const totalAmount = formData.items?.reduce((sum, item) => sum + item.total, 0) || 0
@@ -263,7 +269,7 @@ export function InvoicesTable() {
       // Prepare invoice data, including items
       const invoiceData = {
         ...formData,
-        customer: formData.customer, // Keep as MongoDB ObjectId string
+        customer_id: formData.customer, // Send as customer_id for backend
         amount: totalAmount,
         items: formData.items, // Send items to backend for update
       }

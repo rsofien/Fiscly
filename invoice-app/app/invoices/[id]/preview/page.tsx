@@ -82,7 +82,7 @@ type LineItem = {
 type Invoice = {
   id: string
   invoiceNumber: string
-  customer?: { name: string; email: string; phone?: string; address?: string; company?: string }
+  customer?: { name: string; email: string; phone?: string; address?: string; company?: string; vat?: string; siren?: string }
   amount: number
   currency?: Currency
   language?: "en" | "fr"
@@ -306,6 +306,13 @@ export default function InvoicePreviewPage() {
                       )}
                       {invoice.customer.address && (
                         <p className="text-muted-foreground whitespace-pre-line">{invoice.customer.address}</p>
+                      )}
+                      {/* Show VAT and SIREN if present */}
+                      {invoice.customer.vat && (
+                        <p className="text-muted-foreground">VAT: {invoice.customer.vat}</p>
+                      )}
+                      {invoice.customer.siren && (
+                        <p className="text-muted-foreground">SIREN: {invoice.customer.siren}</p>
                       )}
                     </>
                   ) : (

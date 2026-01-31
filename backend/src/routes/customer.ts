@@ -39,6 +39,8 @@ router.post("/", authMiddleware, async (req: AuthRequest, res: Response) => {
       company: req.body.company,
       address: req.body.address,
       taxId: req.body.taxId,
+      vat: req.body.vat,
+      siren: req.body.siren,
       status: req.body.status || "active",
       notes: req.body.notes,
     })

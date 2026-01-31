@@ -25,6 +25,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         phone: data.customer_id.phone,
         address: data.customer_id.address,
         company: data.customer_id.company,
+        vat: data.customer_id.vat,
+        siren: data.customer_id.siren,
       } : null,
       items: data.items || [],
       issueDate: data.issueDate ? new Date(data.issueDate).toISOString().split('T')[0] : '',

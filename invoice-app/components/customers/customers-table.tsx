@@ -44,6 +44,8 @@ type Customer = {
   company?: string
   address?: string
   taxId?: string
+  vat?: string
+  siren?: string
   status: "active" | "inactive"
   notes?: string
 }
@@ -58,6 +60,8 @@ export function CustomersTable() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
   const [formData, setFormData] = useState<Partial<Customer>>({
     status: "active",
+    vat: "",
+    siren: "",
   })
 
   useEffect(() => {
@@ -200,6 +204,8 @@ export function CustomersTable() {
                   company: row.original.company,
                   address: row.original.address,
                   taxId: row.original.taxId,
+                  vat: row.original.vat,
+                  siren: row.original.siren,
                   status: row.original.status,
                   notes: row.original.notes,
                 })
@@ -392,6 +398,24 @@ export function CustomersTable() {
               />
             </div>
             <div>
+              <Label htmlFor="vat">VAT</Label>
+              <Input
+                id="vat"
+                value={formData.vat || ""}
+                onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
+                placeholder="VAT number"
+              />
+            </div>
+            <div>
+              <Label htmlFor="siren">SIREN</Label>
+              <Input
+                id="siren"
+                value={formData.siren || ""}
+                onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
+                placeholder="SIREN number"
+              />
+            </div>
+            <div>
               <Label htmlFor="status">Status</Label>
               <select
                 id="status"
@@ -466,6 +490,24 @@ export function CustomersTable() {
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                 placeholder="Street address, city, state, zip"
                 rows={3}
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-vat">VAT</Label>
+              <Input
+                id="edit-vat"
+                value={formData.vat || ""}
+                onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
+                placeholder="VAT number"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-siren">SIREN</Label>
+              <Input
+                id="edit-siren"
+                value={formData.siren || ""}
+                onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
+                placeholder="SIREN number"
               />
             </div>
             <div>
