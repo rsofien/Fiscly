@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Download, Trash2, Eye, Printer, Pencil } from "lucide-react"
+import { Plus, Download, Trash2, Eye, Printer, Pencil, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -72,11 +72,12 @@ export function InvoicesTable() {
     language: "en",
     issuerType: "company",
   })
+  const [year, setYear] = useState<string>("2026")
 
   useEffect(() => {
     fetchInvoices()
     fetchCustomers()
-  }, [])
+  }, [year])
 
   const fetchCustomers = async () => {
     try {
@@ -92,7 +93,9 @@ export function InvoicesTable() {
 
   const fetchInvoices = async () => {
     try {
-      const response = await fetch("/api/invoices")
+      setLoading(true)
+      const yearParam = year !== "2026" ? `?year=${year}` : ""
+      const response = await fetch(`/api/invoices${yearParam}`)
       if (response.ok) {
         const invoices = await response.json()
         setData(Array.isArray(invoices) ? invoices : invoices.data || [])
@@ -377,6 +380,23 @@ export function InvoicesTable() {
             <option value="overdue">Overdue</option>
             <option value="cancelled">Cancelled</option>
           </select>
+          <div className="flex items-center gap-2 ml-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">Year:</span>
+            <div className="flex gap-1">
+              {["2024", "2025", "2026", "all"].map((yearOption) => (
+                <Button
+                  key={yearOption}
+                  variant={year === yearOption ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setYear(yearOption)}
+                  className={year === yearOption ? "bg-primary" : ""}
+                >
+                  {yearOption === "all" ? "All" : yearOption}
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportToCSV} className="hidden sm:flex">

@@ -27,24 +27,28 @@ export function DashboardPageClient({ user }: { user: any }) {
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<DashboardData | null>(null)
-  
-  // Get year from URL or default to current year (2026)
-  const currentYear = 2026
-  const selectedYear = searchParams.get("year") || currentYear.toString()
+  const [year, setYear] = useState(searchParams.get("year") || "2026")
   
   // Generate year options (2024, 2025, 2026, All)
   const yearOptions = ["2024", "2025", "2026", "all"]
 
   useEffect(() => {
+    const urlYear = searchParams.get("year")
+    if (urlYear && urlYear !== year) {
+      setYear(urlYear)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
     fetchDashboardData()
-  }, [selectedYear])
+  }, [year])
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
       
       // Build URL with year filter
-      const yearParam = selectedYear !== currentYear.toString() ? `?year=${selectedYear}` : ""
+      const yearParam = year !== "2026" ? `?year=${year}` : ""
       
       const [invoicesRes, customersRes] = await Promise.all([
         fetch(`/api/invoices${yearParam}`),
@@ -146,12 +150,12 @@ export function DashboardPageClient({ user }: { user: any }) {
     }
   }
 
-  const handleYearChange = (year: string) => {
-    if (year === "2026") {
+  const handleYearChange = (newYear: string) => {
+    if (newYear === "2026") {
       // Default year - remove param from URL
       router.push("/dashboard")
     } else {
-      router.push(`/dashboard?year=${year}`)
+      router.push(`/dashboard?year=${newYear}`)
     }
   }
 
@@ -188,15 +192,15 @@ export function DashboardPageClient({ user }: { user: any }) {
             <Calendar className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Year:</span>
             <div className="flex gap-1">
-              {yearOptions.map((year) => (
+              {yearOptions.map((yearOption) => (
                 <Button
-                  key={year}
-                  variant={selectedYear === year ? "default" : "outline"}
+                  key={yearOption}
+                  variant={year === yearOption ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handleYearChange(year)}
-                  className={selectedYear === year ? "bg-primary" : ""}
+                  onClick={() => handleYearChange(yearOption)}
+                  className={year === yearOption ? "bg-primary" : ""}
                 >
-                  {year === "all" ? "All" : year}
+                  {yearOption === "all" ? "All" : yearOption}
                 </Button>
               ))}
             </div>
@@ -230,7 +234,7 @@ export function DashboardPageClient({ user }: { user: any }) {
             <CardContent>
               <div className="text-2xl font-semibold">{formatCurrency(data.totalRevenueUSD)}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {selectedYear === "all" ? "All years" : `Year ${selectedYear}`}
+                {year === "all" ? "All years" : `Year ${year}`}
               </p>
             </CardContent>
           </Card>
