@@ -198,59 +198,71 @@ export function InvoicesTable() {
   }
 
   const handleEditInvoice = async (invoice: Invoice) => {
-    console.log('Editing invoice:', invoice)
-    setEditingInvoice(invoice)
-    
-    // Pre-fill form with existing invoice data
-    const items = invoice.items && invoice.items.length > 0 
-      ? invoice.items.map(item => ({
-          description: item.description || '',
-          quantity: item.quantity || 1,
-          unitPrice: item.unitPrice || 0,
-          total: item.total || (item.quantity * item.unitPrice) || 0
-        }))
-      : [{ description: '', quantity: 1, unitPrice: invoice.amount || 0, total: invoice.amount || 0 }]
-    
-    console.log('Invoice items:', invoice.items)
-    console.log('Transformed items:', items)
-    
-    // Extract customer ID - handle both string and object formats
-    const customerId = typeof invoice.customer === 'string' 
-      ? invoice.customer 
-      : invoice.customer?.id || invoice.customer?._id || ''
-    
-    // Format dates for HTML date input (yyyy-MM-dd)
-    const formatDateForInput = (dateStr: string) => {
-      if (!dateStr) return '';
-      // Handle both ISO timestamp and yyyy-MM-dd formats
-      const date = new Date(dateStr);
-      return date.toISOString().split('T')[0];
-    };
-    
-    setFormData({
-      invoiceNumber: invoice.invoiceNumber || '',
-      customer: customerId,
-      issueDate: formatDateForInput(invoice.issueDate),
-      dueDate: formatDateForInput(invoice.dueDate),
-      amount: invoice.amount || 0,
-      currency: invoice.currency || 'USD',
-      language: invoice.language || 'en',
-      issuerType: invoice.issuerType || 'company',
-      status: invoice.status || 'draft',
-      description: invoice.description || '',
-      notes: invoice.notes || '',
-      paymentMethod: invoice.paymentMethod || 'bank_transfer',
-      items: items
-    })
-    
-    console.log('Form data set:', {
-      customer: customerId,
-      paymentMethod: invoice.paymentMethod,
-      notes: invoice.notes,
-      items: items
-    })
-    
-    setIsEditDialogOpen(true)
+    try {
+      // Fetch full invoice details with items from the API
+      const response = await fetch(`/api/invoices/${invoice.id}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch invoice details')
+      }
+      const fullInvoice = await response.json()
+      
+      console.log('Editing invoice:', fullInvoice)
+      setEditingInvoice(fullInvoice)
+      
+      // Pre-fill form with existing invoice data
+      const items = fullInvoice.items && fullInvoice.items.length > 0 
+        ? fullInvoice.items.map(item => ({
+            description: item.description || '',
+            quantity: item.quantity || 1,
+            unitPrice: item.unitPrice || 0,
+            total: item.total || (item.quantity * item.unitPrice) || 0
+          }))
+        : [{ description: '', quantity: 1, unitPrice: fullInvoice.amount || 0, total: fullInvoice.amount || 0 }]
+      
+      console.log('Invoice items:', fullInvoice.items)
+      console.log('Transformed items:', items)
+      
+      // Extract customer ID - handle both string and object formats
+      const customerId = typeof fullInvoice.customer === 'string' 
+        ? fullInvoice.customer 
+        : fullInvoice.customer?.id || fullInvoice.customer?._id || ''
+      
+      // Format dates for HTML date input (yyyy-MM-dd)
+      const formatDateForInput = (dateStr: string) => {
+        if (!dateStr) return '';
+        // Handle both ISO timestamp and yyyy-MM-dd formats
+        const date = new Date(dateStr);
+        return date.toISOString().split('T')[0];
+      };
+      
+      setFormData({
+        invoiceNumber: fullInvoice.invoiceNumber || '',
+        customer: customerId,
+        issueDate: formatDateForInput(fullInvoice.issueDate),
+        dueDate: formatDateForInput(fullInvoice.dueDate),
+        amount: fullInvoice.amount || 0,
+        currency: fullInvoice.currency || 'USD',
+        language: fullInvoice.language || 'en',
+        issuerType: fullInvoice.issuerType || 'company',
+        status: fullInvoice.status || 'draft',
+        description: fullInvoice.description || '',
+        notes: fullInvoice.notes || '',
+        paymentMethod: fullInvoice.paymentMethod || 'bank_transfer',
+        items: items
+      })
+      
+      console.log('Form data set:', {
+        customer: customerId,
+        paymentMethod: fullInvoice.paymentMethod,
+        notes: fullInvoice.notes,
+        items: items
+      })
+      
+      setIsEditDialogOpen(true)
+    } catch (error) {
+      console.error('Failed to fetch invoice details:', error)
+      alert('Failed to load invoice details. Please try again.')
+    }
   }
 
   const handleUpdateInvoice = async () => {
