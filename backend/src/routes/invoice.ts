@@ -15,17 +15,28 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response) => {
     const workspace = await Workspace.findOne({ user_id: userId })
     if (!workspace) return res.status(404).json({ error: "Workspace not found" })
 
-    // DEBUG: Log all query parameters
-    console.log("[invoice GET] FULL URL:", req.originalUrl)
-    console.log("[invoice GET] QUERY PARAMS:", req.query)
-    console.log("[invoice GET] YEAR PARAM:", req.query.year)
-    console.log("[invoice GET] YEAR TYPE:", typeof req.query.year)
+    // EMERGENCY DEBUG - Log everything
+    console.log("=== INVOICE GET DEBUG ===")
+    console.log("URL:", req.originalUrl)
+    console.log("Query string:", req.url)
+    console.log("Query object:", JSON.stringify(req.query, null, 2))
+    console.log("Year value:", req.query.year)
+    console.log("Year type:", typeof req.query.year)
+    console.log("Has year?", 'year' in req.query)
 
     // Build query with optional year filter
     let query: any = { workspace_id: workspace._id }
     
-    // Check for year filter
-    const year = req.query.year as string
+    // FORCE YEAR FILTER - Check all possible ways year could come in
+    let year: string | undefined
+    
+    if (req.query.year && typeof req.query.year === 'string') {
+      year = req.query.year
+    } else if (req.query.year && Array.isArray(req.query.year)) {
+      year = req.query.year[0] as string
+    }
+    
+    console.log("Extracted year:", year)
     if (year && year !== "all") {
       const yearNum = parseInt(year)
       if (!isNaN(yearNum)) {
@@ -46,6 +57,7 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response) => {
     }
 
     console.log(`[invoice GET] Final query:`, JSON.stringify(query))
+    console.log(`[invoice GET] Has issueDate filter?`, 'issueDate' in query)
     
     // First, let's see ALL invoices without filter to understand the data
     const allInvoices = await Invoice.find({ workspace_id: workspace._id }).populate("customer_id")
