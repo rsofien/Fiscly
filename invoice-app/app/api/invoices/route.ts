@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
 
     const token = session.user.token;
 
-    const response = await fetch(`${API_URL}/api/invoices`, {
+    const { searchParams } = new URL(request.url);
+    const backendUrl = `${API_URL}/api/invoices?${searchParams.toString()}`;
+
+    const response = await fetch(backendUrl, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });

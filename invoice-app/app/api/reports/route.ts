@@ -15,19 +15,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    // Get year from query params
     const { searchParams } = new URL(request.url);
-    const year = searchParams.get('year') || '2026'; // Default to current year
+    const year = searchParams.get('year') || '2026';
+    const backendUrl = `${API_URL}/api/invoices?${searchParams.toString()}`;
 
     const headers = {
       Authorization: `Bearer ${token}`,
     };
 
-    // Build URL with year filter
-    const yearParam = year !== '2026' ? `?year=${year}` : '';
-    
-    // Fetch invoices from MongoDB backend with year filter
-    const response = await fetch(`${API_URL}/api/invoices${yearParam}`, {
+    const response = await fetch(backendUrl, {
       headers,
     });
 
