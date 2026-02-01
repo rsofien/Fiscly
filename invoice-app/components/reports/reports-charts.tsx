@@ -109,16 +109,16 @@ export function ReportsCharts() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Key Metrics</h2>
-        <Button variant="outline" onClick={exportToCSV} disabled={!data.invoices.length}>
+        <Button variant="outline" onClick={exportToCSV} disabled={!data.invoices.length} size="sm" className="w-full sm:w-auto">
           <Download className="mr-2 h-4 w-4" />
           Export CSV
         </Button>
       </div>
 
       {/* Main Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue (USD)</CardTitle>
@@ -164,7 +164,7 @@ export function ReportsCharts() {
           <CardDescription>Invoice counts by status</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-success/10 border border-success/20">
               <CheckCircle className="h-5 w-5 text-success" />
               <div>
@@ -212,39 +212,41 @@ export function ReportsCharts() {
             <CardDescription>Totals by original invoice currency</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Currency</TableHead>
-                  <TableHead>Invoices</TableHead>
-                  <TableHead>Original Total</TableHead>
-                  <TableHead>USD Equivalent</TableHead>
-                  <TableHead className="text-right">% of Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Object.entries(data.currencyBreakdown).map(([currency, breakdown]) => (
-                  <TableRow key={currency}>
-                    <TableCell className="font-medium">{currency}</TableCell>
-                    <TableCell>{breakdown.count}</TableCell>
-                    <TableCell>{formatCurrency(breakdown.originalTotal, currency as any)}</TableCell>
-                    <TableCell>{formatCurrency(breakdown.usdTotal)}</TableCell>
-                    <TableCell className="text-right">
-                      {data.totalRevenue > 0 
-                        ? `${((breakdown.usdTotal / data.totalRevenue) * 100).toFixed(1)}%` 
-                        : '0%'}
-                    </TableCell>
+            <div className="overflow-x-auto -mx-4 px-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Currency</TableHead>
+                    <TableHead>Invoices</TableHead>
+                    <TableHead>Original Total</TableHead>
+                    <TableHead>USD Equivalent</TableHead>
+                    <TableHead className="text-right">% of Total</TableHead>
                   </TableRow>
-                ))}
-                <TableRow className="border-t-2 font-semibold">
-                  <TableCell>Total</TableCell>
-                  <TableCell>{data.invoiceCount}</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>{formatCurrency(data.totalRevenue)}</TableCell>
-                  <TableCell className="text-right">100%</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {Object.entries(data.currencyBreakdown).map(([currency, breakdown]) => (
+                    <TableRow key={currency}>
+                      <TableCell className="font-medium">{currency}</TableCell>
+                      <TableCell>{breakdown.count}</TableCell>
+                      <TableCell>{formatCurrency(breakdown.originalTotal, currency as any)}</TableCell>
+                      <TableCell>{formatCurrency(breakdown.usdTotal)}</TableCell>
+                      <TableCell className="text-right">
+                        {data.totalRevenue > 0 
+                          ? `${((breakdown.usdTotal / data.totalRevenue) * 100).toFixed(1)}%` 
+                          : '0%'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="border-t-2 font-semibold">
+                    <TableCell>Total</TableCell>
+                    <TableCell>{data.invoiceCount}</TableCell>
+                    <TableCell>-</TableCell>
+                    <TableCell>{formatCurrency(data.totalRevenue)}</TableCell>
+                    <TableCell className="text-right">100%</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       )}
@@ -257,34 +259,36 @@ export function ReportsCharts() {
         </CardHeader>
         <CardContent>
           {data.invoices.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Invoice #</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Original Amount</TableHead>
-                  <TableHead>USD Amount</TableHead>
-                  <TableHead>Issue Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.invoices.map((inv) => (
-                  <TableRow key={inv.id}>
-                    <TableCell className="font-medium">{inv.number}</TableCell>
-                    <TableCell>{getStatusBadge(inv.status)}</TableCell>
-                    <TableCell>
-                      {formatCurrency(inv.amount, (inv.currency || 'USD') as any)}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(inv.usdAmount || inv.amount)}
-                    </TableCell>
-                    <TableCell>
-                      {inv.issueDate ? new Date(inv.issueDate).toLocaleDateString() : '-'}
-                    </TableCell>
+            <div className="overflow-x-auto -mx-4 px-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Invoice #</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Original Amount</TableHead>
+                    <TableHead>USD Amount</TableHead>
+                    <TableHead>Issue Date</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {data.invoices.map((inv) => (
+                    <TableRow key={inv.id}>
+                      <TableCell className="font-medium">{inv.number}</TableCell>
+                      <TableCell>{getStatusBadge(inv.status)}</TableCell>
+                      <TableCell>
+                        {formatCurrency(inv.amount, (inv.currency || 'USD') as any)}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {formatCurrency(inv.usdAmount || inv.amount)}
+                      </TableCell>
+                      <TableCell>
+                        {inv.issueDate ? new Date(inv.issueDate).toLocaleDateString() : '-'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-8">
               No invoices found. Create your first invoice to see data here.

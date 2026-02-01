@@ -36,6 +36,12 @@ const translations = {
     statusCancelled: "CANCELLED",
     taxClarification: "VAT not applicable – Export of services – Article 262 CGI.",
     authorizedSignature: "Authorized Signature",
+    paymentMethods: {
+      bank_transfer: "Bank Transfer",
+      card: "Card",
+      crypto: "Crypto",
+      cash: "Cash"
+    }
   },
   fr: {
     invoice: "FACTURE",
@@ -66,6 +72,12 @@ const translations = {
     statusCancelled: "ANNULÉ",
     taxClarification: "TVA non applicable – Export de services – article 262 CGI.",
     authorizedSignature: "Signature autorisée",
+    paymentMethods: {
+      bank_transfer: "Virement bancaire",
+      card: "Carte",
+      crypto: "Crypto",
+      cash: "Espèces"
+    }
   },
 }
 
@@ -286,31 +298,35 @@ export default function InvoicePreviewPage() {
             </div>
 
             {/* Items */}
-            {invoice.items && invoice.items.length > 0 && (
-              <div className="mb-4">
-                <h3 className="text-xs font-semibold mb-2 text-black">{t.items}</h3>
-                <table className="w-full text-xs">
-                  <thead className="border-b border-gray-300">
-                    <tr>
-                      <th className="text-left py-1 font-semibold text-black">{t.itemDescription}</th>
-                      <th className="text-right py-1 font-semibold text-black">{t.quantity}</th>
-                      <th className="text-right py-1 font-semibold text-black">{t.unitPrice}</th>
-                      <th className="text-right py-1 font-semibold text-black">{t.total}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoice.items.map((item: any, index: number) => (
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold mb-2 text-black">{t.items}</h3>
+              <table className="w-full text-xs">
+                <thead className="border-b border-gray-300">
+                  <tr>
+                    <th className="text-left py-1 font-semibold text-black">{t.itemDescription}</th>
+                    <th className="text-right py-1 font-semibold text-black">{t.quantity}</th>
+                    <th className="text-right py-1 font-semibold text-black">{t.unitPrice}</th>
+                    <th className="text-right py-1 font-semibold text-black">{t.total}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoice.items && invoice.items.length > 0 ? (
+                    invoice.items.map((item: any, index: number) => (
                       <tr key={index} className="border-b border-gray-200">
                         <td className="py-1 text-black">{item.description}</td>
                         <td className="text-right py-1 text-black">{item.quantity}</td>
                         <td className="text-right py-1 text-black">{formatCurrency(item.unitPrice, invoice.currency || 'USD')}</td>
                         <td className="text-right py-1 font-medium text-black">{formatCurrency(item.total, invoice.currency || 'USD')}</td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} className="py-4 text-center text-gray-500 italic">No items</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
             {/* Total */}
             <div className="border-t border-b border-gray-300 py-2 mb-4">
@@ -320,8 +336,13 @@ export default function InvoicePreviewPage() {
               </div>
               <div className="flex justify-between items-center mt-1">
                 <span className="text-xs text-gray-500">{t.paymentMethod}</span>
-                <span className="text-xs capitalize text-black">{invoice.paymentMethod || 'bank_transfer'}</span>
+                <span className="text-xs text-black">{t.paymentMethods[invoice.paymentMethod as keyof typeof t.paymentMethods] || t.paymentMethods.bank_transfer}</span>
               </div>
+            </div>
+
+            {/* TVA Exemption Notice */}
+            <div className="mb-3 text-xs text-gray-600 italic border-l-2 border-gray-300 pl-2">
+              {t.taxClarification}
             </div>
 
             {/* Notes */}

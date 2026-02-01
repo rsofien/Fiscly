@@ -357,8 +357,8 @@ export function InvoicesTable() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row gap-2">
           <Input
             placeholder="Search invoices..."
             value={searchQuery}
@@ -379,96 +379,104 @@ export function InvoicesTable() {
           </select>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={exportToCSV}>
+          <Button variant="outline" size="sm" onClick={exportToCSV} className="hidden sm:flex">
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Button size="sm" onClick={() => setIsAddDialogOpen(true)}>
+          <Button variant="outline" size="icon" onClick={exportToCSV} className="sm:hidden">
+            <Download className="h-4 w-4" />
+          </Button>
+          <Button size="sm" onClick={() => setIsAddDialogOpen(true)} className="hidden sm:flex">
             <Plus className="mr-2 h-4 w-4" />
             New Invoice
+          </Button>
+          <Button size="icon" onClick={() => setIsAddDialogOpen(true)} className="sm:hidden">
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       <Card>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Invoice Number</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Issue Date</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-8">
-                  Loading...
-                </TableCell>
+                <TableHead>Invoice Number</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Issue Date</TableHead>
+                <TableHead>Due Date</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ) : filteredInvoices.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-8">
-                  No invoices found
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredInvoices.map((invoice) => (
-                <TableRow key={invoice.id}>
-                  <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
-                  <TableCell>{invoice.customerName || "-"}</TableCell>
-                  <TableCell>{formatCurrency(invoice.amount, invoice.currency || 'USD')}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusColors[invoice.status] as any}>
-                      {invoice.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{invoice.issueDate}</TableCell>
-                  <TableCell>{invoice.dueDate}</TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleEditInvoice(invoice)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/invoices/${invoice.id}/preview`} className="flex items-center">
-                            <Printer className="mr-2 h-4 w-4" />
-                            View/Print
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDeleteInvoice(invoice.id)} className="text-red-600">
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8">
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : filteredInvoices.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8">
+                    No invoices found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredInvoices.map((invoice) => (
+                  <TableRow key={invoice.id}>
+                    <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
+                    <TableCell>{invoice.customerName || "-"}</TableCell>
+                    <TableCell>{formatCurrency(invoice.amount, invoice.currency || 'USD')}</TableCell>
+                    <TableCell>
+                      <Badge variant={statusColors[invoice.status] as any}>
+                        {invoice.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{invoice.issueDate}</TableCell>
+                    <TableCell>{invoice.dueDate}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem onClick={() => handleEditInvoice(invoice)}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href={`/invoices/${invoice.id}/preview`} className="flex items-center">
+                              <Printer className="mr-2 h-4 w-4" />
+                              View/Print
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDeleteInvoice(invoice.id)} className="text-red-600">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </Card>
 
       {/* Add Invoice Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-4xl p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Create Invoice</DialogTitle>
             <DialogDescription>Add a new invoice</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto p-1">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="number">Invoice Number *</Label>
@@ -529,8 +537,8 @@ export function InvoicesTable() {
               
               <div className="space-y-3">
                 {formData.items?.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-dark-800">
-                    <div className="col-span-4">
+                  <div key={index} className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:items-start p-3 border rounded-md bg-dark-800">
+                    <div className="sm:col-span-4">
                       <Label htmlFor={`item-desc-${index}`} className="text-xs">Description *</Label>
                       <Input
                         id={`item-desc-${index}`}
@@ -540,7 +548,7 @@ export function InvoicesTable() {
                         className="text-sm"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <Label htmlFor={`item-qty-${index}`} className="text-xs">Quantity *</Label>
                       <Input
                         id={`item-qty-${index}`}
@@ -552,7 +560,7 @@ export function InvoicesTable() {
                         className="text-sm"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <Label htmlFor={`item-price-${index}`} className="text-xs">Unit Price *</Label>
                       <Input
                         id={`item-price-${index}`}
@@ -564,7 +572,7 @@ export function InvoicesTable() {
                         className="text-sm"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <Label className="text-xs">Total</Label>
                       <Input
                         value={item.total.toFixed(2)}
@@ -572,7 +580,7 @@ export function InvoicesTable() {
                         className="text-sm bg-dark-700"
                       />
                     </div>
-                    <div className="col-span-2 flex items-end">
+                    <div className="sm:col-span-2 flex sm:items-end">
                       <Button
                         type="button"
                         variant="ghost"
@@ -599,7 +607,7 @@ export function InvoicesTable() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="currency">Currency</Label>
                 <select
@@ -699,26 +707,26 @@ export function InvoicesTable() {
 
       {/* Edit Invoice Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Edit Invoice</DialogTitle>
             <DialogDescription>Update invoice details</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto p-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="edit-number">Invoice Number *</Label>
+                <Label htmlFor="number">Invoice Number *</Label>
                 <Input
-                  id="edit-number"
+                  id="number"
                   value={formData.invoiceNumber || ""}
                   onChange={(e) => setFormData({ ...formData, invoiceNumber: e.target.value })}
                   placeholder="INV-2026-001"
                 />
               </div>
               <div>
-                <Label htmlFor="edit-customer">Customer *</Label>
+                <Label htmlFor="customer">Customer *</Label>
                 <select
-                  id="edit-customer"
+                  id="customer"
                   value={formData.customer || ""}
                   onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
                   className="w-full px-3 py-2 border rounded-md"
@@ -732,7 +740,7 @@ export function InvoicesTable() {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="edit-issue-date">Issue Date *</Label>
                 <Input
@@ -765,8 +773,8 @@ export function InvoicesTable() {
               
               <div className="space-y-3">
                 {formData.items?.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-dark-800">
-                    <div className="col-span-4">
+                  <div key={index} className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:items-start p-3 border rounded-md bg-dark-800">
+                    <div className="sm:col-span-4">
                       <Label htmlFor={`edit-item-desc-${index}`} className="text-xs">Description *</Label>
                       <Input
                         id={`edit-item-desc-${index}`}
@@ -776,7 +784,7 @@ export function InvoicesTable() {
                         className="text-sm"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <Label htmlFor={`edit-item-qty-${index}`} className="text-xs">Quantity *</Label>
                       <Input
                         id={`edit-item-qty-${index}`}
@@ -788,7 +796,7 @@ export function InvoicesTable() {
                         className="text-sm"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <Label htmlFor={`edit-item-price-${index}`} className="text-xs">Unit Price *</Label>
                       <Input
                         id={`edit-item-price-${index}`}
@@ -800,7 +808,7 @@ export function InvoicesTable() {
                         className="text-sm"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <Label className="text-xs">Total</Label>
                       <Input
                         value={item.total.toFixed(2)}
@@ -808,7 +816,7 @@ export function InvoicesTable() {
                         className="text-sm bg-dark-700"
                       />
                     </div>
-                    <div className="col-span-2 flex items-end">
+                    <div className="sm:col-span-2 flex sm:items-end">
                       <Button
                         type="button"
                         variant="ghost"
@@ -835,7 +843,7 @@ export function InvoicesTable() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="currency">Currency</Label>
                 <select

@@ -246,7 +246,7 @@ export function CustomersTable() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-2">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -256,24 +256,31 @@ export function CustomersTable() {
               onChange={(event) =>
                 table.getColumn("name")?.setFilterValue(event.target.value)
               }
-              className="pl-9 w-[300px]"
+              className="pl-9 w-full sm:w-[300px]"
             />
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={exportToCSV}>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={exportToCSV} className="hidden sm:flex">
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
+          <Button variant="outline" size="icon" onClick={exportToCSV} className="sm:hidden">
+            <Download className="h-4 w-4" />
+          </Button>
+          <Button size="sm" onClick={() => setIsAddDialogOpen(true)} className="hidden sm:flex">
             <Plus className="mr-2 h-4 w-4" />
             Add Customer
+          </Button>
+          <Button size="icon" onClick={() => setIsAddDialogOpen(true)} className="sm:hidden">
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       <Card>
-        <Table>
+        <div className="overflow-x-auto">
+          <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -316,6 +323,7 @@ export function CustomersTable() {
             )}
           </TableBody>
         </Table>
+        </div>
       </Card>
 
       <div className="flex items-center justify-between">
@@ -344,48 +352,52 @@ export function CustomersTable() {
 
       {/* Add Customer Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent>
+        <DialogContent className="p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Add Customer</DialogTitle>
             <DialogDescription>Create a new customer</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Name *</Label>
-              <Input
-                id="name"
-                value={formData.name || ""}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Customer name"
-              />
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto p-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name">Name *</Label>
+                <Input
+                  id="name"
+                  value={formData.name || ""}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Customer name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email || ""}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="customer@example.com"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="email">Email *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email || ""}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="customer@example.com"
-              />
-            </div>
-            <div>
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                value={formData.phone || ""}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+1 (555) 000-0000"
-              />
-            </div>
-            <div>
-              <Label htmlFor="company">Company</Label>
-              <Input
-                id="company"
-                value={formData.company || ""}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                placeholder="Company name"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="phone">Phone</Label>
+                <Input
+                  id="phone"
+                  value={formData.phone || ""}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+1 (555) 000-0000"
+                />
+              </div>
+              <div>
+                <Label htmlFor="company">Company</Label>
+                <Input
+                  id="company"
+                  value={formData.company || ""}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  placeholder="Company name"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="address">Address</Label>
@@ -397,23 +409,25 @@ export function CustomersTable() {
                 rows={3}
               />
             </div>
-            <div>
-              <Label htmlFor="vat">VAT</Label>
-              <Input
-                id="vat"
-                value={formData.vat || ""}
-                onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
-                placeholder="VAT number"
-              />
-            </div>
-            <div>
-              <Label htmlFor="siren">SIREN</Label>
-              <Input
-                id="siren"
-                value={formData.siren || ""}
-                onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
-                placeholder="SIREN number"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="vat">VAT</Label>
+                <Input
+                  id="vat"
+                  value={formData.vat || ""}
+                  onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
+                  placeholder="VAT number"
+                />
+              </div>
+              <div>
+                <Label htmlFor="siren">SIREN</Label>
+                <Input
+                  id="siren"
+                  value={formData.siren || ""}
+                  onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
+                  placeholder="SIREN number"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="status">Status</Label>
@@ -439,48 +453,52 @@ export function CustomersTable() {
 
       {/* Edit Customer Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Edit Customer</DialogTitle>
             <DialogDescription>Update customer information</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="edit-name">Name *</Label>
-              <Input
-                id="edit-name"
-                value={formData.name || ""}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Customer name"
-              />
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto p-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-name">Name *</Label>
+                <Input
+                  id="edit-name"
+                  value={formData.name || ""}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Customer name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-email">Email *</Label>
+                <Input
+                  id="edit-email"
+                  type="email"
+                  value={formData.email || ""}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="customer@example.com"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="edit-email">Email *</Label>
-              <Input
-                id="edit-email"
-                type="email"
-                value={formData.email || ""}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="customer@example.com"
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-phone">Phone</Label>
-              <Input
-                id="edit-phone"
-                value={formData.phone || ""}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+1 (555) 000-0000"
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-company">Company</Label>
-              <Input
-                id="edit-company"
-                value={formData.company || ""}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                placeholder="Company name"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-phone">Phone</Label>
+                <Input
+                  id="edit-phone"
+                  value={formData.phone || ""}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+1 (555) 000-0000"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-company">Company</Label>
+                <Input
+                  id="edit-company"
+                  value={formData.company || ""}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  placeholder="Company name"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="edit-address">Address</Label>
@@ -492,23 +510,25 @@ export function CustomersTable() {
                 rows={3}
               />
             </div>
-            <div>
-              <Label htmlFor="edit-vat">VAT</Label>
-              <Input
-                id="edit-vat"
-                value={formData.vat || ""}
-                onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
-                placeholder="VAT number"
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-siren">SIREN</Label>
-              <Input
-                id="edit-siren"
-                value={formData.siren || ""}
-                onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
-                placeholder="SIREN number"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-vat">VAT</Label>
+                <Input
+                  id="edit-vat"
+                  value={formData.vat || ""}
+                  onChange={(e) => setFormData({ ...formData, vat: e.target.value })}
+                  placeholder="VAT number"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-siren">SIREN</Label>
+                <Input
+                  id="edit-siren"
+                  value={formData.siren || ""}
+                  onChange={(e) => setFormData({ ...formData, siren: e.target.value })}
+                  placeholder="SIREN number"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="edit-status">Status</Label>

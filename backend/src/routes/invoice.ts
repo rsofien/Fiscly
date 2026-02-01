@@ -50,10 +50,12 @@ router.post("/", authMiddleware, async (req: AuthRequest, res: Response) => {
       dueDate: req.body.dueDate,
       amount: req.body.amount,
       currency: req.body.currency || "USD",
+      language: req.body.language || "en",
       status: req.body.status || "draft",
       description: req.body.description,
       notes: req.body.notes,
       paymentMethod: req.body.paymentMethod || "bank_transfer",
+      issuerType: req.body.issuerType || "company",
       paidDate: req.body.paidDate,
     })
 

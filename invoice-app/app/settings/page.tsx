@@ -36,8 +36,17 @@ type Workspace = {
   }
 }
 
+const TABS = [
+  { id: "workspace", label: "Workspace" },
+  { id: "personal", label: "Personal" },
+  { id: "logo", label: "Logo" },
+  { id: "signature", label: "Signature" },
+  { id: "invoices", label: "Invoices" },
+]
+
 export default function SettingsPage() {
   const router = useRouter()
+  const [activeTab, setActiveTab] = useState("workspace")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [logoUploading, setLogoUploading] = useState(false)
@@ -270,7 +279,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <AppLayout user={{ email: "user@example.com", name: "User" }}>
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       </AppLayout>
@@ -279,271 +288,340 @@ export default function SettingsPage() {
 
   return (
     <AppLayout user={{ email: "user@example.com", name: "User" }}>
-      <div className="space-y-6">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Settings</h1>
-          <p className="text-muted-foreground mt-1">Manage your workspace and preferences</p>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Settings</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Manage your workspace and preferences</p>
         </div>
 
-        <div className="grid gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Workspace Information</CardTitle>
-              <CardDescription>Update your workspace details</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="workspace-name">Workspace Name *</Label>
-                <Input
-                  id="workspace-name"
-                  value={workspace.name || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, name: e.target.value })}
-                  placeholder="My Company"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="workspace-email">Workspace Email</Label>
-                <Input
-                  id="workspace-email"
-                  type="email"
-                  value={workspace.email || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, email: e.target.value })}
-                  placeholder="billing@company.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="workspace-address">Address</Label>
-                <Textarea
-                  id="workspace-address"
-                  value={workspace.address || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, address: e.target.value })}
-                  placeholder="123 Business St, Suite 100&#10;San Francisco, CA 94105"
-                  rows={3}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="workspace-phone">Phone</Label>
-                <Input
-                  id="workspace-phone"
-                  value={workspace.phone || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, phone: e.target.value })}
-                  placeholder="+1 (555) 000-0000"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="matricule-fiscale">Matricule Fiscale</Label>
-                <Input
-                  id="matricule-fiscale"
-                  value={workspace.matriculeFiscale || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, matriculeFiscale: e.target.value })}
-                  placeholder="Your tax registration number"
-                />
-              </div>
-              <Button onClick={handleSaveWorkspace} disabled={saving}>
-                {saving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
-              <CardDescription>Your personal details for invoices (optional)</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="personal-name">Your Name</Label>
-                <Input
-                  id="personal-name"
-                  value={workspace.personal_name || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, personal_name: e.target.value })}
-                  placeholder="John Doe"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="personal-email">Your Email</Label>
-                <Input
-                  id="personal-email"
-                  type="email"
-                  value={workspace.personal_email || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, personal_email: e.target.value })}
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="personal-phone">Your Phone</Label>
-                <Input
-                  id="personal-phone"
-                  value={workspace.personal_phone || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, personal_phone: e.target.value })}
-                  placeholder="+1 (555) 000-0000"
-                />
-              </div>
-              <Button onClick={handleSaveWorkspace} disabled={saving}>
-                {saving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save Personal Info"
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Company Logo</CardTitle>
-              <CardDescription>Upload your company logo for invoices</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {logoPreview && (
-                <div className="flex justify-center p-4 border rounded-lg bg-dark-800">
-                  <img
-                    src={logoPreview}
-                    alt="Logo preview"
-                    className="h-32 object-contain"
-                  />
-                </div>
-              )}
-              <div className="space-y-2">
-                <Label htmlFor="logo">Select Logo</Label>
-                <Input
-                  id="logo"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoChange}
-                />
-                <p className="text-sm text-muted-foreground">
-                  Supported formats: JPG, PNG, GIF, SVG (Max 5MB)
-                </p>
-              </div>
-              {selectedFile && (
-                <Button 
-                  onClick={handleSaveWorkspace} 
-                  disabled={saving || logoUploading}
-                >
-                  {logoUploading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Uploading Logo...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="mr-2 h-4 w-4" />
-                      Upload & Save Logo
-                    </>
-                  )}
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Agency Signature</CardTitle>
-              <CardDescription>Upload your signature for invoices (PNG recommended)</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {signaturePreview && (
-                <div className="flex justify-center p-4 border rounded-lg bg-dark-800">
-                  <img
-                    src={signaturePreview}
-                    alt="Signature preview"
-                    className="h-24 object-contain"
-                  />
-                </div>
-              )}
-              <div className="space-y-2">
-                <Label htmlFor="signature">Select Signature</Label>
-                <Input
-                  id="signature"
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg"
-                  onChange={handleSignatureChange}
-                />
-                <p className="text-sm text-muted-foreground">
-                  Supported formats: PNG, JPG (Max 5MB). PNG with transparent background recommended.
-                </p>
-              </div>
-              {selectedSignatureFile && (
-                <Button 
-                  onClick={handleSaveWorkspace} 
-                  disabled={saving || signatureUploading}
-                >
-                  {signatureUploading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Uploading Signature...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="mr-2 h-4 w-4" />
-                      Upload & Save Signature
-                    </>
-                  )}
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Invoice Settings</CardTitle>
-              <CardDescription>Configure invoice defaults</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="invoice-prefix">Invoice Number Prefix</Label>
-                <Input
-                  id="invoice-prefix"
-                  value={workspace.invoicePrefix || "INV"}
-                  onChange={(e) => setWorkspace({ ...workspace, invoicePrefix: e.target.value })}
-                  placeholder="INV"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payment-terms">Default Payment Terms (days)</Label>
-                <Input
-                  id="payment-terms"
-                  type="number"
-                  value={workspace.defaultPaymentTerms || 15}
-                  onChange={(e) =>
-                    setWorkspace({ ...workspace, defaultPaymentTerms: parseInt(e.target.value) })
+        {/* Mobile-friendly tabs */}
+        <div className="border-b overflow-x-auto scrollbar-hide">
+          <nav className="flex space-x-2 sm:space-x-4 min-w-max" aria-label="Tabs">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  whitespace-nowrap py-2 px-3 sm:px-4 border-b-2 font-medium text-xs sm:text-sm
+                  min-h-[44px] min-w-[80px]
+                  ${
+                    activeTab === tab.id
+                      ? "border-primary text-primary"
+                      : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground"
                   }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="invoice-notes">Default Invoice Notes</Label>
-                <Textarea
-                  id="invoice-notes"
-                  value={workspace.defaultNotes || ""}
-                  onChange={(e) => setWorkspace({ ...workspace, defaultNotes: e.target.value })}
-                  placeholder="Thank you for your business!"
-                  rows={3}
-                />
-              </div>
-              <Button onClick={handleSaveWorkspace} disabled={saving}>
-                {saving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save Settings"
+                `}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Tab content */}
+        <div className="space-y-4 sm:space-y-6">
+          {activeTab === "workspace" && (
+            <Card className="overflow-hidden">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-lg sm:text-xl">Workspace Information</CardTitle>
+                <CardDescription className="text-sm">Update your workspace details</CardDescription>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="workspace-name" className="text-sm sm:text-base">Workspace Name *</Label>
+                    <Input
+                      id="workspace-name"
+                      value={workspace.name || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, name: e.target.value })}
+                      placeholder="My Company"
+                      required
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="workspace-email" className="text-sm sm:text-base">Workspace Email</Label>
+                    <Input
+                      id="workspace-email"
+                      type="email"
+                      value={workspace.email || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, email: e.target.value })}
+                      placeholder="billing@company.com"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="workspace-phone" className="text-sm sm:text-base">Phone</Label>
+                    <Input
+                      id="workspace-phone"
+                      value={workspace.phone || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, phone: e.target.value })}
+                      placeholder="+1 (555) 000-0000"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="matricule-fiscale" className="text-sm sm:text-base">Matricule Fiscale</Label>
+                    <Input
+                      id="matricule-fiscale"
+                      value={workspace.matriculeFiscale || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, matriculeFiscale: e.target.value })}
+                      placeholder="Your tax registration number"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="workspace-address" className="text-sm sm:text-base">Address</Label>
+                  <Textarea
+                    id="workspace-address"
+                    value={workspace.address || ""}
+                    onChange={(e) => setWorkspace({ ...workspace, address: e.target.value })}
+                    placeholder="123 Business St, Suite 100\nSan Francisco, CA 94105"
+                    rows={3}
+                    className="min-h-[80px]"
+                  />
+                </div>
+                <Button 
+                  onClick={handleSaveWorkspace} 
+                  disabled={saving}
+                  className="w-full sm:w-auto min-h-[44px]"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === "personal" && (
+            <Card className="overflow-hidden">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-lg sm:text-xl">Personal Information</CardTitle>
+                <CardDescription className="text-sm">Your personal details for invoices (optional)</CardDescription>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="personal-name" className="text-sm sm:text-base">Your Name</Label>
+                    <Input
+                      id="personal-name"
+                      value={workspace.personal_name || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, personal_name: e.target.value })}
+                      placeholder="John Doe"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="personal-email" className="text-sm sm:text-base">Your Email</Label>
+                    <Input
+                      id="personal-email"
+                      type="email"
+                      value={workspace.personal_email || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, personal_email: e.target.value })}
+                      placeholder="john@example.com"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="personal-phone" className="text-sm sm:text-base">Your Phone</Label>
+                    <Input
+                      id="personal-phone"
+                      value={workspace.personal_phone || ""}
+                      onChange={(e) => setWorkspace({ ...workspace, personal_phone: e.target.value })}
+                      placeholder="+1 (555) 000-0000"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                </div>
+                <Button 
+                  onClick={handleSaveWorkspace} 
+                  disabled={saving}
+                  className="w-full sm:w-auto min-h-[44px]"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Personal Info"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === "logo" && (
+            <Card className="overflow-hidden">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-lg sm:text-xl">Company Logo</CardTitle>
+                <CardDescription className="text-sm">Upload your company logo for invoices</CardDescription>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 space-y-4">
+                {logoPreview && (
+                  <div className="flex justify-center p-3 sm:p-4 border rounded-lg bg-dark-800">
+                    <img
+                      src={logoPreview}
+                      alt="Logo preview"
+                      className="h-24 sm:h-32 max-w-full object-contain"
+                    />
+                  </div>
                 )}
-              </Button>
-            </CardContent>
-          </Card>
+                <div className="space-y-2">
+                  <Label htmlFor="logo" className="text-sm sm:text-base">Select Logo</Label>
+                  <Input
+                    id="logo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                    className="h-11 min-h-[44px] file:min-h-[36px]"
+                  />
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Supported formats: JPG, PNG, GIF, SVG (Max 5MB)
+                  </p>
+                </div>
+                {selectedFile && (
+                  <Button 
+                    onClick={handleSaveWorkspace} 
+                    disabled={saving || logoUploading}
+                    className="w-full sm:w-auto min-h-[44px]"
+                  >
+                    {logoUploading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Uploading Logo...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Upload & Save Logo
+                      </>
+                    )}
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === "signature" && (
+            <Card className="overflow-hidden">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-lg sm:text-xl">Agency Signature</CardTitle>
+                <CardDescription className="text-sm">Upload your signature for invoices (PNG recommended)</CardDescription>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 space-y-4">
+                {signaturePreview && (
+                  <div className="flex justify-center p-3 sm:p-4 border rounded-lg bg-dark-800">
+                    <img
+                      src={signaturePreview}
+                      alt="Signature preview"
+                      className="h-16 sm:h-24 max-w-full object-contain"
+                    />
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <Label htmlFor="signature" className="text-sm sm:text-base">Select Signature</Label>
+                  <Input
+                    id="signature"
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg"
+                    onChange={handleSignatureChange}
+                    className="h-11 min-h-[44px] file:min-h-[36px]"
+                  />
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Supported formats: PNG, JPG (Max 5MB). PNG with transparent background recommended.
+                  </p>
+                </div>
+                {selectedSignatureFile && (
+                  <Button 
+                    onClick={handleSaveWorkspace} 
+                    disabled={saving || signatureUploading}
+                    className="w-full sm:w-auto min-h-[44px]"
+                  >
+                    {signatureUploading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Uploading Signature...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Upload & Save Signature
+                      </>
+                    )}
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === "invoices" && (
+            <Card className="overflow-hidden">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-lg sm:text-xl">Invoice Settings</CardTitle>
+                <CardDescription className="text-sm">Configure invoice defaults</CardDescription>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="invoice-prefix" className="text-sm sm:text-base">Invoice Number Prefix</Label>
+                    <Input
+                      id="invoice-prefix"
+                      value={workspace.invoicePrefix || "INV"}
+                      onChange={(e) => setWorkspace({ ...workspace, invoicePrefix: e.target.value })}
+                      placeholder="INV"
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="payment-terms" className="text-sm sm:text-base">Default Payment Terms (days)</Label>
+                    <Input
+                      id="payment-terms"
+                      type="number"
+                      value={workspace.defaultPaymentTerms || 15}
+                      onChange={(e) =>
+                        setWorkspace({ ...workspace, defaultPaymentTerms: parseInt(e.target.value) })
+                      }
+                      className="h-11 min-h-[44px]"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="invoice-notes" className="text-sm sm:text-base">Default Invoice Notes</Label>
+                  <Textarea
+                    id="invoice-notes"
+                    value={workspace.defaultNotes || ""}
+                    onChange={(e) => setWorkspace({ ...workspace, defaultNotes: e.target.value })}
+                    placeholder="Thank you for your business!"
+                    rows={3}
+                    className="min-h-[80px]"
+                  />
+                </div>
+                <Button 
+                  onClick={handleSaveWorkspace} 
+                  disabled={saving}
+                  className="w-full sm:w-auto min-h-[44px]"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Settings"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </AppLayout>

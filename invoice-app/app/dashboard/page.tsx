@@ -152,14 +152,14 @@ export default async function DashboardPage() {
 
   return (
     <AppLayout user={user}>
-      <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-1">Welcome back, {session.user.name || session.user.email}</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -221,7 +221,7 @@ export default async function DashboardPage() {
           </Card>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
           {/* Top Customers */}
           <Card>
             <CardHeader>

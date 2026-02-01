@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Users, FileText, BarChart3, Menu, Bell, HelpCircle, LogOut, Settings } from "lucide-react"
+import { Home, Users, FileText, BarChart3, Menu, LogOut, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -82,15 +82,6 @@ export function AppLayout({ children, user }: AppLayoutProps) {
           </nav>
 
           <div className="flex items-center space-x-2 ml-auto">
-            <Button variant="ghost" size="icon" className="relative" onClick={() => alert('Notifications feature coming soon!')}>
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2 right-2 h-2 w-2 bg-destructive rounded-full" />
-            </Button>
-
-            <Button variant="ghost" size="icon" onClick={() => window.open('https://docs.fiscly.com', '_blank')}>
-              <HelpCircle className="h-5 w-5" />
-            </Button>
-
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center space-x-2">
@@ -168,7 +159,7 @@ export function AppLayout({ children, user }: AppLayoutProps) {
         </div>
       )}
 
-      <main className="container py-8">{children}</main>
+      <main className="container px-4 sm:px-6 lg:px-8 py-6 sm:py-8">{children}</main>
     </div>
   )
 }

@@ -14,6 +14,7 @@ const invoiceSchema = new Schema(
     notes: String,
     paymentMethod: { type: String, enum: ["bank_transfer", "card", "crypto", "cash"], default: "bank_transfer" },
     language: { type: String, enum: ["en", "fr"], default: "en" },
+    issuerType: { type: String, enum: ["company", "personal"], default: "company" },
     paidDate: Date,
     // FX conversion fields
     usdAmount: { type: Number },
