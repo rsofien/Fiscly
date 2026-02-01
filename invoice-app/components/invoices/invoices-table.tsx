@@ -80,7 +80,7 @@ export function InvoicesTable() {
   useEffect(() => {
     fetchInvoices()
     fetchCustomers()
-  }, [])
+  }, [year])
 
   const fetchCustomers = async () => {
     try {
