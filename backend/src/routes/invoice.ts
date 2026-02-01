@@ -15,6 +15,12 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response) => {
     const workspace = await Workspace.findOne({ user_id: userId })
     if (!workspace) return res.status(404).json({ error: "Workspace not found" })
 
+    // DEBUG: Log all query parameters
+    console.log("[invoice GET] FULL URL:", req.originalUrl)
+    console.log("[invoice GET] QUERY PARAMS:", req.query)
+    console.log("[invoice GET] YEAR PARAM:", req.query.year)
+    console.log("[invoice GET] YEAR TYPE:", typeof req.query.year)
+
     // Build query with optional year filter
     let query: any = { workspace_id: workspace._id }
     
