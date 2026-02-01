@@ -70,10 +70,23 @@ export async function getFXRate(
       }
     }
     
-    // Final fallback: use current rate
-    console.log(`[FX] WARNING: No historical rate found, fetching current rate...`)
+    // Final fallback: try alternative API for current rate
+    console.log(`[FX] WARNING: No historical rate found from Frankfurter, trying alternative API...`)
+    const altRate = await fetchCurrentRateAlternative(fromCurrency, toCurrency)
+    
+    if (altRate && altRate > 0 && altRate !== 1) {
+      console.log(`[FX] Got rate from alternative API: ${altRate}`)
+      return { 
+        rate: altRate, 
+        actualDate: new Date().toISOString().split('T')[0],
+        source: 'alt-api-fallback'
+      }
+    }
+    
+    // Very last resort: use current rate (which may be 1)
+    console.log(`[FX] CRITICAL: Using current rate as last resort...`)
     const currentRate = await fetchCurrentRate(fromCurrency, toCurrency)
-    console.log(`[FX] Current rate: ${currentRate}`)
+    console.log(`[FX] Final rate: ${currentRate} (source: current-fallback)`)
     return { 
       rate: currentRate, 
       actualDate: new Date().toISOString().split('T')[0],
@@ -95,6 +108,8 @@ export async function getFXRate(
 /**
  * Fetch historical rate for a specific date using Frankfurter API
  * Example: https://api.frankfurter.app/2026-01-01?from=CAD&to=USD
+ * Note: Frankfurter doesn't support all currencies (e.g., TND). 
+ * For unsupported currencies, we return null and let the caller handle fallback.
  */
 async function fetchHistoricalRate(
   fromCurrency: string,
@@ -109,7 +124,8 @@ async function fetchHistoricalRate(
     const response = await fetch(url)
     
     if (!response.ok) {
-      console.log(`[FX] API error: ${response.status} ${response.statusText}`)
+      console.log(`[FX] API error: ${response.status} ${response.statusText} for ${fromCurrency} -> ${toCurrency}`)
+      // Don't return 1 here - return null so caller knows API failed
       return null
     }
     
@@ -117,14 +133,20 @@ async function fetchHistoricalRate(
     console.log(`[FX] API response:`, JSON.stringify(data))
     
     // Frankfurter returns: { "rates": { "USD": 0.735 }, "base": "CAD", "date": "2026-01-01" }
+    // OR for unsupported currencies: { "rates": {}, "base": "TND", "date": "2026-01-01" }
     const rate = data.rates?.[toCurrency]
     
-    if (rate && typeof rate === 'number') {
+    if (rate && typeof rate === 'number' && rate > 0) {
       console.log(`[FX] Got rate ${rate} for ${fromCurrency} -> ${toCurrency}`)
       return rate
     }
     
-    console.log(`[FX] No rate found in response for ${toCurrency}`)
+    // Check if rates object is empty (unsupported currency)
+    if (data.rates && Object.keys(data.rates).length === 0) {
+      console.log(`[FX] Currency ${fromCurrency} not supported by Frankfurter API`)
+    } else {
+      console.log(`[FX] No rate found in response for ${toCurrency}`)
+    }
     return null
   } catch (error) {
     console.error(`[FX] Error fetching historical rate:`, error)
@@ -133,33 +155,74 @@ async function fetchHistoricalRate(
 }
 
 /**
+ * Fetch current FX rate from alternative API (for currencies not supported by Frankfurter)
+ * Uses exchangerate-api.com as fallback
+ */
+async function fetchCurrentRateAlternative(fromCurrency: string, toCurrency: string): Promise<number | null> {
+  try {
+    // exchangerate-api.com free tier - supports more currencies including TND
+    const url = `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`
+    console.log(`[FX] Alternative API call: ${url}`)
+    
+    const response = await fetch(url)
+    
+    if (!response.ok) {
+      console.log(`[FX] Alternative API error: ${response.status}`)
+      return null
+    }
+    
+    const data: any = await response.json()
+    const rate = data.rates?.[toCurrency]
+    
+    if (rate && typeof rate === 'number' && rate > 0) {
+      console.log(`[FX] Alternative API got rate: ${rate} for ${fromCurrency} -> ${toCurrency}`)
+      return rate
+    }
+    
+    console.log(`[FX] Alternative API: No rate found for ${toCurrency}`)
+    return null
+  } catch (error) {
+    console.error(`[FX] Error fetching from alternative API:`, error)
+    return null
+  }
+}
+
+/**
  * Fetch current FX rate
+ * Tries Frankfurter first, falls back to alternative API
  */
 async function fetchCurrentRate(fromCurrency: string, toCurrency: string): Promise<number> {
+  // Try Frankfurter first
   try {
     const url = `${FX_API_BASE}/latest?from=${fromCurrency}&to=${toCurrency}`
     console.log(`[FX] Current rate API: ${url}`)
     
     const response = await fetch(url)
     
-    if (!response.ok) {
-      console.log(`[FX] Current rate API error: ${response.status}`)
-      return 1
+    if (response.ok) {
+      const data: any = await response.json()
+      const rate = data.rates?.[toCurrency]
+      
+      if (rate && typeof rate === 'number' && rate > 0) {
+        console.log(`[FX] Current rate from Frankfurter: ${rate}`)
+        return rate
+      }
     }
     
-    const data: any = await response.json()
-    const rate = data.rates?.[toCurrency]
-    
-    if (rate && typeof rate === 'number') {
-      console.log(`[FX] Current rate: ${rate}`)
-      return rate
-    }
-    
-    return 1
+    console.log(`[FX] Frankfurter failed or unsupported currency, trying alternative API...`)
   } catch (error) {
-    console.error(`[FX] Error fetching current rate:`, error)
-    return 1 // Return 1:1 rate as last resort
+    console.error(`[FX] Frankfurter error:`, error)
   }
+  
+  // Try alternative API
+  const altRate = await fetchCurrentRateAlternative(fromCurrency, toCurrency)
+  if (altRate && altRate > 0) {
+    return altRate
+  }
+  
+  // Last resort: return 1 with a warning
+  console.error(`[FX] CRITICAL: No rate found for ${fromCurrency} -> ${toCurrency}. Using 1:1 rate.`)
+  return 1
 }
 
 /**
