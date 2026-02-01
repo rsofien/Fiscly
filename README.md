@@ -1,6 +1,6 @@
 # Fiscly - Complete Invoice Management System
 
-A production-ready, full-stack invoice management application with an ultra clean, elegant dashboard UI. Built with Next.js 14, Strapi 4, PostgreSQL, and modern web technologies.
+A production-ready, full-stack invoice management application with an ultra clean, elegant dashboard UI. Built with Next.js 14, Express.js, MongoDB, and modern web technologies.
 
 ## 📋 Table of Contents
 
@@ -47,14 +47,14 @@ start.bat
 
 This will automatically:
 1. Install dependencies (if needed)
-2. Start PostgreSQL with Docker Compose
+2. Connect to MongoDB database
 3. Seed the database with sample data
-4. Start the Strapi backend (port 1337)
+4. Start the Express.js backend (port 1337)
 5. Start the Next.js frontend (port 3000)
 
 Then visit:
 - **Frontend**: http://localhost:3000
-- **Backend Admin**: http://localhost:1337/admin
+- **Backend API**: http://localhost:1337
 
 **Login with:**
 - Email: `admin@acme.com`
@@ -89,18 +89,17 @@ Fiscly/
 │   ├── public/              # Static assets
 │   └── package.json
 │
-├── invoice-backend/         # Strapi Backend
+├── backend/                 # Express.js Backend
 │   ├── src/
-│   │   ├── api/
-│   │   │   ├── workspace/   # Workspace API
-│   │   │   ├── customer/    # Customer API
-│   │   │   ├── invoice/     # Invoice API
-│   │   │   └── invoice-item/# Line items API
-│   │   ├── extensions/
-│   │   │   └── users-permissions/ # Extended User model
-│   │   ├── seeders/         # Database seeding
-│   │   └── config/          # Configuration
-│   ├── docker-compose.yml   # PostgreSQL + Strapi setup
+│   │   ├── routes/          # API Routes
+│   │   │   ├── workspace.ts # Workspace API
+│   │   │   ├── customer.ts  # Customer API
+│   │   │   ├── invoice.ts   # Invoice API
+│   │   │   └── auth.ts      # Authentication API
+│   │   ├── models/          # MongoDB Models
+│   │   ├── middleware/      # Auth middleware
+│   │   ├── db.ts            # Database connection
+│   │   └── seed.ts          # Database seeding
 │   ├── package.json
 │   └── README.md
 │
@@ -123,13 +122,14 @@ Fiscly/
 - **Lucide React** - Icons
 
 ### Backend
-- **Strapi 4** - Headless CMS & API
-- **PostgreSQL 16** - Database
+- **Express.js 4** - Web framework
+- **MongoDB** - NoSQL Database
+- **Mongoose 7** - MongoDB ODM
+- **JWT** - Authentication tokens
 - **Node.js 18+** - Runtime
 - **TypeScript** - Type safety
 
 ### DevOps
-- **Docker & Docker Compose** - Containerization
 - **Node.js** - Runtime environment
 
 ## ✨ Features
@@ -180,7 +180,7 @@ Fiscly/
 ### Prerequisites
 
 - **Node.js 18+** - Download from https://nodejs.org/
-- **PostgreSQL 13+** (or Docker Desktop for Docker Compose)
+- **MongoDB** - Local instance or MongoDB Atlas
 - **Git** - For version control
 - **npm or yarn** - Package managers
 
@@ -202,45 +202,38 @@ cd ..
 ### Step 3: Install Backend Dependencies
 
 ```bash
-cd invoice-backend
-npm install pg  # PostgreSQL driver
+cd backend
+npm install
 cd ..
 ```
 
 ### Step 4: Set Up Database
 
-#### Option A: Using Docker (Recommended)
+#### Option A: MongoDB Atlas (Recommended for Production)
 
-```bash
-cd invoice-backend
-docker-compose up -d
-cd ..
-```
+1. Create a free account at https://www.mongodb.com/atlas
+2. Create a new cluster and get your connection string
+3. Add the connection string to your backend `.env` file
 
-This starts PostgreSQL automatically.
-
-#### Option B: Manual PostgreSQL Setup
+#### Option B: Local MongoDB
 
 **macOS:**
 ```bash
-brew install postgresql@16
-brew services start postgresql@16
-createdb fiscly_invoices
+brew tap mongodb/brew
+brew install mongodb-community
+brew services start mongodb-community
 ```
 
 **Ubuntu/Debian:**
 ```bash
-sudo apt-get install postgresql postgresql-contrib
-sudo -u postgres createdb fiscly_invoices
+sudo apt-get install mongodb
+sudo service mongodb start
 ```
 
 **Windows:**
-1. Download PostgreSQL installer from https://www.postgresql.org/
-2. Run the installer and remember the password
-3. Create database: Open pgAdmin or use Command Prompt:
-   ```cmd
-   psql -U postgres -c "CREATE DATABASE fiscly_invoices;"
-   ```
+1. Download MongoDB Community Server from https://www.mongodb.com/
+2. Run the installer
+3. Start MongoDB service
 
 ## ⚙️ Configuration
 
@@ -251,25 +244,18 @@ Update [invoice-app/.env.local](invoice-app/.env.local):
 ```env
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key-here
-NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
-STRAPI_URL=http://localhost:1337
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/fiscly_invoices
+NEXT_PUBLIC_API_URL=http://localhost:1337
+API_URL=http://localhost:1337
 ```
 
 ### Backend Configuration
 
-The backend is pre-configured. Update [invoice-backend/.env](invoice-backend/.env) if needed:
+Update [backend/.env](backend/.env):
 
 ```env
-HOST=0.0.0.0
 PORT=1337
-DATABASE_CLIENT=postgres
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_NAME=fiscly_invoices
-DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=postgres
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/fiscly_invoices
+DATABASE_URL=mongodb://localhost:27017/fiscly
+JWT_SECRET=your-jwt-secret-key-here
 ```
 
 ## 🎮 Running the Application
@@ -290,8 +276,8 @@ start.bat
 
 **Terminal 1 - Start Backend:**
 ```bash
-cd invoice-backend
-npm run develop
+cd backend
+npm run dev
 ```
 
 Backend will be available at http://localhost:1337
@@ -303,9 +289,6 @@ npm run dev
 ```
 
 Frontend will be available at http://localhost:3000
-
-**Terminal 3 (Optional) - Strapi Admin:**
-Visit http://localhost:1337/admin to manage content types and permissions.
 
 ### Initial Login
 
@@ -320,7 +303,6 @@ This user has access to the "Acme Corporation" workspace with 3 sample customers
 ### Base URLs
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:1337/api
-- Backend Admin: http://localhost:1337/admin
 
 ### Key Endpoints
 
@@ -406,17 +388,16 @@ git push -u origin main
 **Using Railway:**
 1. Sign up at https://railway.app
 2. Connect your GitHub repository
-3. Add PostgreSQL plugin
+3. Add MongoDB plugin (or use MongoDB Atlas)
 4. Set environment variables
 5. Deploy!
 
 **Using Heroku:**
 ```bash
-cd invoice-backend
+cd backend
 heroku login
 heroku create fiscly-backend
-heroku addons:create heroku-postgresql:standard-0
-heroku config:set DATABASE_URL=postgresql://...
+heroku config:set DATABASE_URL=mongodb+srv://...
 git push heroku main
 ```
 
@@ -425,18 +406,16 @@ git push heroku main
 Update backend `.env`:
 ```env
 NODE_ENV=production
-DATABASE_URL=postgresql://user:password@host:5432/fiscly_invoices
-ADMIN_JWT_SECRET=generate-secure-random-string
-API_TOKEN_SALT=generate-secure-random-string
-APP_KEYS=key1,key2,key3,key4
+DATABASE_URL=mongodb+srv://user:password@cluster.mongodb.net/fiscly
+JWT_SECRET=generate-secure-random-string
 ```
 
 Update frontend `.env.production`:
 ```env
 NEXTAUTH_URL=https://yourdomain.com
 NEXTAUTH_SECRET=generate-secure-random-string
-NEXT_PUBLIC_STRAPI_URL=https://api.yourdomain.com
-STRAPI_URL=https://api.yourdomain.com
+NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+API_URL=https://api.yourdomain.com
 ```
 
 ## 🐛 Troubleshooting
@@ -457,33 +436,24 @@ taskkill /PID <PID> /F
 
 ### Database Connection Error
 
-**Error**: `Error: connect ECONNREFUSED 127.0.0.1:5432`
+**Error**: `Error: connect ECONNREFUSED 127.0.0.1:27017`
 
 **Solution**: 
-1. Ensure PostgreSQL is running
+1. Ensure MongoDB is running
 2. Check `.env` database configuration
-3. Verify database exists: `psql -l`
+3. Verify connection: `mongosh --eval "db.adminCommand('ping')"`
 
-### Strapi Admin Panel Not Loading
+### Cannot connect to Backend from Next.js
 
-**Solution**:
-```bash
-cd invoice-backend
-npm run build
-npm run develop
-```
-
-### Cannot connect to Strapi from Next.js
-
-**Solution**: Check CORS settings in `invoice-backend/src/config/api.ts`
+**Solution**: Check CORS settings in `backend/src/index.ts` - the backend allows all origins by default with `app.use(cors())`
 
 ## 📚 Learning Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [Strapi Documentation](https://docs.strapi.io)
+- [Express.js Documentation](https://expressjs.com)
+- [MongoDB Documentation](https://docs.mongodb.com)
 - [TailwindCSS Guide](https://tailwindcss.com/docs)
 - [shadcn/ui Components](https://ui.shadcn.com/)
-- [PostgreSQL Manual](https://www.postgresql.org/docs/)
 - [Docker Documentation](https://docs.docker.com)
 
 ## 📝 License
@@ -494,7 +464,7 @@ MIT License - Free to use for personal or commercial projects.
 
 For issues or questions:
 1. Check the troubleshooting section
-2. Review the individual README files in `invoice-app/` and `invoice-backend/`
+2. Review the individual README files in `invoice-app/` and `backend/`
 3. Check console logs for error messages
 
 ## 📊 Database Schema Diagram
