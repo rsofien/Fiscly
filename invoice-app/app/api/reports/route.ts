@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await auth();
     if (!session?.user) {
@@ -15,12 +15,19 @@ export async function GET() {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
+    // Get year from query params
+    const { searchParams } = new URL(request.url);
+    const year = searchParams.get('year') || '2026'; // Default to current year
+
     const headers = {
       Authorization: `Bearer ${token}`,
     };
 
-    // Fetch invoices from MongoDB backend
-    const response = await fetch(`${API_URL}/api/invoices`, {
+    // Build URL with year filter
+    const yearParam = year !== '2026' ? `?year=${year}` : '';
+    
+    // Fetch invoices from MongoDB backend with year filter
+    const response = await fetch(`${API_URL}/api/invoices${yearParam}`, {
       headers,
     });
 
@@ -72,6 +79,7 @@ export async function GET() {
       invoiceCount: invoiceArray.length,
       byStatus,
       currencyBreakdown,
+      year,
       invoices: invoiceArray.map((inv: any) => ({
         id: inv._id,
         number: inv.invoiceNumber,

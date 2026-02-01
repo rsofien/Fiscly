@@ -15,7 +15,22 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response) => {
     const workspace = await Workspace.findOne({ user_id: userId })
     if (!workspace) return res.status(404).json({ error: "Workspace not found" })
 
-    const invoices = await Invoice.find({ workspace_id: workspace._id }).populate("customer_id")
+    // Build query with optional year filter
+    let query: any = { workspace_id: workspace._id }
+    
+    // Check for year filter
+    const year = req.query.year as string
+    if (year && year !== "all") {
+      const yearNum = parseInt(year)
+      if (!isNaN(yearNum)) {
+        const startDate = new Date(`${yearNum}-01-01T00:00:00.000Z`)
+        const endDate = new Date(`${yearNum + 1}-01-01T00:00:00.000Z`)
+        query.issueDate = { $gte: startDate, $lt: endDate }
+        console.log(`[invoice GET] Filtering by year ${yearNum}:`, startDate, "to", endDate)
+      }
+    }
+
+    const invoices = await Invoice.find(query).populate("customer_id")
     const invoicesWithConversion = await Promise.all(
       invoices.map(async (invoice) => {
         try {

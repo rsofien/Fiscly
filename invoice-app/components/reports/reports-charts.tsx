@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Download, FileText, DollarSign, Clock, CheckCircle, AlertCircle, XCircle } from "lucide-react"
+import { Download, FileText, DollarSign, Clock, CheckCircle, AlertCircle, XCircle, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatCurrency } from "@/lib/currency"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -35,14 +35,15 @@ interface ReportData {
 export function ReportsCharts() {
   const [data, setData] = useState<ReportData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [year, setYear] = useState<string>("2026")
 
   useEffect(() => {
-    fetchReportsData()
-  }, [])
+    fetchReportsData(year)
+  }, [year])
 
-  const fetchReportsData = async () => {
+  const fetchReportsData = async (selectedYear: string) => {
     try {
-      const response = await fetch("/api/reports")
+      const response = await fetch(`/api/reports?year=${selectedYear}`)
       if (response.ok) {
         const result = await response.json()
         setData(result)
@@ -110,12 +111,29 @@ export function ReportsCharts() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">Key Metrics</h2>
+        <div className="flex items-center gap-2">
+          <Calendar className="h-5 w-5 text-muted-foreground" />
+          <div className="flex gap-1">
+            {["2024", "2025", "2026", "All"].map((y) => (
+              <Button
+                key={y}
+                variant={year === y ? "default" : "outline"}
+                size="sm"
+                onClick={() => setYear(y)}
+                className={year === y ? "bg-primary text-primary-foreground" : ""}
+              >
+                {y}
+              </Button>
+            ))}
+          </div>
+        </div>
         <Button variant="outline" onClick={exportToCSV} disabled={!data.invoices.length} size="sm" className="w-full sm:w-auto">
           <Download className="mr-2 h-4 w-4" />
           Export CSV
         </Button>
       </div>
+
+      <h2 className="text-lg font-semibold">Key Metrics {year !== "All" && `(${year})`}</h2>
 
       {/* Main Summary Cards */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
@@ -125,7 +143,7 @@ export function ReportsCharts() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground mt-1">{data.invoiceCount} invoices total</p>
+            <p className="text-xs text-muted-foreground mt-1">{data.invoiceCount} invoices {year !== "All" && `in ${year}`}</p>
           </CardContent>
         </Card>
         <Card>
@@ -134,7 +152,7 @@ export function ReportsCharts() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">{formatCurrency(data.paidAmount)}</div>
-            <p className="text-xs text-muted-foreground mt-1">{data.byStatus.paid} paid invoices</p>
+            <p className="text-xs text-muted-foreground mt-1">{data.byStatus.paid} paid invoices {year !== "All" && `in ${year}`}</p>
           </CardContent>
         </Card>
         <Card>
@@ -143,7 +161,7 @@ export function ReportsCharts() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-600">{formatCurrency(data.outstanding)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Unpaid balance</p>
+            <p className="text-xs text-muted-foreground mt-1">Unpaid balance {year !== "All" && `in ${year}`}</p>
           </CardContent>
         </Card>
         <Card>
@@ -152,7 +170,7 @@ export function ReportsCharts() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{data.invoiceCount}</div>
-            <p className="text-xs text-muted-foreground mt-1">All time</p>
+            <p className="text-xs text-muted-foreground mt-1">{year !== "All" ? year : "All time"}</p>
           </CardContent>
         </Card>
       </div>
