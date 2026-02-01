@@ -40,12 +40,22 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response) => {
     }
 
     console.log(`[invoice GET] Final query:`, JSON.stringify(query))
+    
+    // First, let's see ALL invoices without filter to understand the data
+    const allInvoices = await Invoice.find({ workspace_id: workspace._id }).populate("customer_id")
+    console.log(`[invoice GET] Total invoices in workspace: ${allInvoices.length}`)
+    allInvoices.forEach(inv => {
+      const issueDateType = inv.issueDate instanceof Date ? "Date" : typeof inv.issueDate
+      console.log(`[invoice GET] ALL: ${inv.invoiceNumber} | issueDate=${inv.issueDate} | type=${issueDateType}`)
+    })
+    
+    // Now apply the filter
     const invoices = await Invoice.find(query).populate("customer_id")
     
-    // Debug: log what we got
-    console.log(`[invoice GET] Found ${invoices.length} invoices`)
+    // Debug: log what we got after filtering
+    console.log(`[invoice GET] FILTERED: Found ${invoices.length} invoices`)
     invoices.forEach(inv => {
-      console.log(`[invoice GET] Invoice ${inv.invoiceNumber}: issueDate=${inv.issueDate}`)
+      console.log(`[invoice GET] FILTERED: ${inv.invoiceNumber}: issueDate=${inv.issueDate}`)
     })
     const invoicesWithConversion = await Promise.all(
       invoices.map(async (invoice) => {
