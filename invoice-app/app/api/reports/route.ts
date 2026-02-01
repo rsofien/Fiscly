@@ -10,13 +10,13 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = session.user.id;
-    if (!userId) {
+    const token = (session.user as any).token;
+    if (!token) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
     const headers = {
-      Authorization: `Bearer ${userId}`,
+      Authorization: `Bearer ${token}`,
     };
 
     // Fetch invoices from MongoDB backend

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
 
     const response = await fetch(`${API_URL}/api/invoices`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
     const body = await request.json();
 
     // Transform customer to customer_id for MongoDB backend

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
     console.log('[WORKSPACE GET] ✓ Session valid for:', session.user.email)
 
-    const token = (session.user as any).token || session.user.id
+    const token = session.user.token
     console.log('[WORKSPACE GET] Using token:', token ? 'present' : 'missing')
     
     console.log('[WORKSPACE GET] Calling backend:', `${API_URL}/api/workspaces`)
@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest) {
     }
     console.log('[WORKSPACE PUT] ✓ Session valid for:', session.user.email)
 
-    const token = (session.user as any).token || session.user.id
+    const token = session.user.token
     const body = await request.json()
     console.log('[WORKSPACE PUT] Update data:', JSON.stringify(body, null, 2))
 

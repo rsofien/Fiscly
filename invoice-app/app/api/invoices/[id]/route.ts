@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
     const response = await fetch(`${API_URL}/api/invoices/${params.id}`, { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
     if (!response.ok) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     const data = await response.json();
@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
     const body = await request.json();
     
     // Transform customer to customer_id for MongoDB backend
@@ -67,7 +67,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
     const response = await fetch(`${API_URL}/api/invoices/${params.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
     if (!response.ok) return NextResponse.json({ error: 'Failed to delete invoice' }, { status: response.status });
     return NextResponse.json({ success: true });

@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const backendFormData = new FormData()
     backendFormData.append("file", file)
 
-    const token = (session.user as any).token || session.user.id
+    const token = session.user.token
 
     const response = await fetch(`${API_URL}/api/upload`, {
       method: "POST",

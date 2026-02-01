@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
-const API_TOKEN = process.env.API_TOKEN;
 
-const buildHeaders = (json = false): HeadersInit => {
-  const headers: Record<string, string> = {};
+const buildHeaders = (token: string, json = false): HeadersInit => {
+  const headers: Record<string, string> = {
+    'Authorization': `Bearer ${token}`,
+  };
   if (json) headers['Content-Type'] = 'application/json';
-  if (API_TOKEN) headers['Authorization'] = `Bearer ${API_TOKEN}`;
   return headers;
 }
 
@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const token = session.user.token;
     const body = await request.json();
 
     // Validate required fields
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // Get user's workspace to verify the invoice belongs to them
     const workspaceResponse = await fetch(`${API_URL}/api/workspaces`, {
-      headers: buildHeaders(true),
+      headers: buildHeaders(token, true),
     });
 
     if (!workspaceResponse.ok) {
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     // Verify the invoice belongs to user's workspace
     const invoiceResponse = await fetch(`${API_URL}/api/invoices?filters[id][$eq]=${body.invoice}&filters[workspace][id][$eq]=${workspaceId}`, {
-      headers: buildHeaders(),
+      headers: buildHeaders(token),
     });
 
     if (!invoiceResponse.ok) {
@@ -73,7 +74,7 @@ export async function POST(request: NextRequest) {
     // Create invoice item
     const response = await fetch(`${API_URL}/api/invoice-items`, {
       method: 'POST',
-      headers: buildHeaders(true),
+      headers: buildHeaders(token, true),
       body: JSON.stringify({
         data: body,
       }),

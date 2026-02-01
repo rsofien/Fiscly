@@ -14,7 +14,7 @@ export async function GET() {
     }
     console.log('[CUSTOMERS GET] ✓ Session valid for:', session.user.email)
 
-    const token = (session.user as any).token || session.user.id
+    const token = session.user.token
 
     console.log('[CUSTOMERS GET] Calling backend:', `${API_URL}/api/customers`)
     const response = await fetch(`${API_URL}/api/customers`, {
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
     console.log('[CUSTOMERS POST] ✓ Session valid for:', session.user.email)
 
-    const token = (session.user as any).token || session.user.id
+    const token = session.user.token
     const body = await request.json()
     console.log('[CUSTOMERS POST] Customer data:', JSON.stringify(body, null, 2))
 

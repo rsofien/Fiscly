@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
 
     const response = await fetch(`${API_URL}/api/customers/${params.id}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -42,7 +42,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
     const body = await request.json();
 
     const response = await fetch(`${API_URL}/api/customers/${params.id}`, {
@@ -76,7 +76,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = (session.user as any).token || session.user.id;
+    const token = session.user.token;
 
     const response = await fetch(`${API_URL}/api/customers/${params.id}`, {
       method: 'DELETE',
