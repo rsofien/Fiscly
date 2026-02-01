@@ -8,13 +8,18 @@ const invoiceSchema = new Schema(
     issueDate: { type: Date, required: true },
     dueDate: { type: Date, required: true },
     amount: { type: Number, required: true },
+    currency: { type: String, default: "USD" },
     status: { type: String, enum: ["draft", "sent", "paid", "overdue", "cancelled"], default: "draft" },
     description: String,
     notes: String,
     paymentMethod: { type: String, enum: ["bank_transfer", "card", "crypto", "cash"], default: "bank_transfer" },
-    currency: { type: String, default: "USD" },
     language: { type: String, enum: ["en", "fr"], default: "en" },
     paidDate: Date,
+    // FX conversion fields
+    usdAmount: { type: Number },
+    fxRate: { type: Number },
+    fxDate: { type: String },
+    fxSource: { type: String },
   },
   { timestamps: true }
 )

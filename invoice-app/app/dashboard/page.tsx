@@ -16,9 +16,9 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const userId = session.user.id
+  const token = session.user.token
 
-  if (!userId) {
+  if (!token) {
     redirect("/auth/login")
   }
 
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${userId}`,
+    Authorization: `Bearer ${token}`,
   }
 
   // Get user's workspace
@@ -46,6 +46,8 @@ export default async function DashboardPage() {
   let dueInvoices = 0
   let overdueInvoices = 0
   let topCustomers: any[] = []
+  let currencyBreakdown: Record<string, { count: number; originalTotal: number; usdTotal: number }> = {}
+  let totalRevenueUSD = 0
 
   if (workspaceRes.ok) {
     // Fetch data from MongoDB backend
@@ -74,37 +76,62 @@ export default async function DashboardPage() {
       invoiceNumber: item.invoiceNumber,
       customerName: item.customer_id?.name || '',
       amount: item.amount,
+      usdAmount: item.usdAmount || item.amount,
+      currency: item.currency || 'USD',
       status: item.status,
       issueDate: item.issueDate,
       dueDate: item.dueDate,
+      fxRate: item.fxRate,
+      fxSource: item.fxSource,
     }))
     
     customers = Array.isArray(customersData) ? customersData : []
 
     const now = new Date()
+    
+    // Use usdAmount for all calculations to ensure consistency
     paidThisMonth = invoices
       .filter((inv: any) => {
         if (inv.status !== "paid" || !inv.issueDate) return false
         const issued = new Date(inv.issueDate)
         return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
       })
-      .reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+      .reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
 
-    const totalRevenue = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
+    totalRevenueUSD = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
     const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
-    const paidAmount = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.amount) || 0), 0)
-    outstandingAmount = totalRevenue - paidAmount
+    const paidAmountUSD = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
+    outstandingAmount = totalRevenueUSD - paidAmountUSD
 
     totalInvoices = invoices.length
     totalCustomers = customers.length
     dueInvoices = invoices.filter((inv: any) => inv.status === 'sent').length
     overdueInvoices = invoices.filter((inv: any) => inv.status === 'overdue').length
+    
+    // Calculate currency breakdown (original currencies)
+    currencyBreakdown = invoices.reduce<Record<string, { count: number; originalTotal: number; usdTotal: number }>>(
+      (acc: any, inv: any) => {
+        const currency = inv.currency || 'USD'
+        const originalAmount = Number(inv.amount) || 0
+        const usdAmount = Number(inv.usdAmount) || Number(inv.amount) || 0
+        
+        if (!acc[currency]) {
+          acc[currency] = { count: 0, originalTotal: 0, usdTotal: 0 }
+        }
+        acc[currency].count += 1
+        acc[currency].originalTotal += originalAmount
+        acc[currency].usdTotal += usdAmount
+        return acc
+      },
+      {}
+    )
 
+    // Calculate top customers using USD amounts
     topCustomers = Object.values(
       invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
         (acc: any, inv: any) => {
           const name = inv.customerName || "Unknown"
-          const amount = Number(inv.amount) || 0
+          const amount = Number(inv.usdAmount) || Number(inv.amount) || 0
           if (!acc[name]) {
             acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
           }
@@ -170,7 +197,7 @@ export default async function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Outstanding
+                Outstanding (USD)
               </CardTitle>
               <DollarSign className="h-4 w-4 text-warning" />
             </CardHeader>
@@ -185,7 +212,7 @@ export default async function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Paid This Month
+                Paid This Month (USD)
               </CardTitle>
               <CheckCircle2 className="h-4 w-4 text-success" />
             </CardHeader>
@@ -248,42 +275,44 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Payment Support */}
+          {/* Currency Breakdown */}
           <Card>
             <CardHeader>
-              <CardTitle>Payment Gateways</CardTitle>
-              <CardDescription>Connect your payment processors</CardDescription>
+              <CardTitle>Currency Breakdown</CardTitle>
+              <CardDescription>Invoice totals by original currency</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg border bg-card">
-                <div>
-                  <p className="font-medium">Redotpay</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Accept crypto payments
-                  </p>
+            <CardContent>
+              {Object.keys(currencyBreakdown).length > 0 ? (
+                <div className="space-y-3">
+                  {Object.entries(currencyBreakdown).map(([currency, data]) => (
+                    <div key={currency} className="flex items-center justify-between p-3 rounded-lg border bg-card">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
+                          {currency}
+                        </div>
+                        <div>
+                          <p className="font-medium">{data.count} invoices</p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatCurrency(data.originalTotal, currency)} original
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold">{formatCurrency(data.usdTotal)}</p>
+                        <p className="text-xs text-muted-foreground">in USD</p>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="pt-2 border-t">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Total USD Equivalent</span>
+                      <span className="font-bold">{formatCurrency(totalRevenueUSD)}</span>
+                    </div>
+                  </div>
                 </div>
-                <Button size="sm" variant="outline">
-                  Connect
-                </Button>
-              </div>
-
-              <div className="flex items-center justify-between p-4 rounded-lg border bg-card">
-                <div>
-                  <p className="font-medium">Stripe</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Accept card payments
-                  </p>
-                </div>
-                <Button size="sm" variant="outline">
-                  Connect
-                </Button>
-              </div>
-
-              <div className="p-4 rounded-lg bg-muted text-center">
-                <p className="text-sm text-muted-foreground">
-                  More payment options coming soon
-                </p>
-              </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No invoices yet.</p>
+              )}
             </CardContent>
           </Card>
         </div>
