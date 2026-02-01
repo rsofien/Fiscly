@@ -113,7 +113,7 @@ async function fetchHistoricalRate(
       return null
     }
     
-    const data = await response.json()
+    const data: any = await response.json()
     console.log(`[FX] API response:`, JSON.stringify(data))
     
     // Frankfurter returns: { "rates": { "USD": 0.735 }, "base": "CAD", "date": "2026-01-01" }
@@ -147,7 +147,7 @@ async function fetchCurrentRate(fromCurrency: string, toCurrency: string): Promi
       return 1
     }
     
-    const data = await response.json()
+    const data: any = await response.json()
     const rate = data.rates?.[toCurrency]
     
     if (rate && typeof rate === 'number') {
