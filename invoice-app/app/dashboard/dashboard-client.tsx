@@ -115,7 +115,7 @@ export function DashboardPageClient({ user }: { user: any }) {
       setLoading(true)
       
       // Build URL with year filter - always include year param for consistency
-      const yearParam = year !== CURRENT_YEAR ? `?year=${year}` : "?year=2026"
+      const yearParam = `?year=${year}`
       
       console.log(`[DASHBOARD] Fetching data for year: ${year}`)
       

@@ -105,7 +105,7 @@ export function InvoicesTable() {
   const fetchInvoices = async () => {
     try {
       setLoading(true)
-      const yearParam = year !== "2026" ? `?year=${year}` : "?year=2026"
+      const yearParam = `?year=${year}`
       const response = await fetch(`/api/invoices${yearParam}`)
       if (response.ok) {
         const invoices = await response.json()

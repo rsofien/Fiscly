@@ -50,7 +50,7 @@ export function ReportsCharts() {
       setLoading(true)
       
       // Always include year param for consistency
-      const yearParam = year !== CURRENT_YEAR ? `?year=${year}` : "?year=2026"
+      const yearParam = `?year=${year}`
       
       console.log(`[REPORTS] Fetching data for year: ${year}`)
       
