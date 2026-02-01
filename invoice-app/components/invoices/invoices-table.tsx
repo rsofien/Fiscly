@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Plus, Download, Trash2, Eye, Printer, Pencil, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -58,6 +59,8 @@ type Customer = {
 }
 
 export function InvoicesTable() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [data, setData] = useState<Invoice[]>([])
   const [customers, setCustomers] = useState<Customer[]>([])
   const [loading, setLoading] = useState(true)
@@ -72,12 +75,12 @@ export function InvoicesTable() {
     language: "en",
     issuerType: "company",
   })
-  const [year, setYear] = useState<string>("2026")
+  const year = searchParams.get("year") || "2026"
 
   useEffect(() => {
     fetchInvoices()
     fetchCustomers()
-  }, [year])
+  }, [])
 
   const fetchCustomers = async () => {
     try {
@@ -91,10 +94,18 @@ export function InvoicesTable() {
     }
   }
 
+  const handleYearChange = (newYear: string) => {
+    if (newYear === "2026") {
+      router.push("/invoices")
+    } else {
+      router.push(`/invoices?year=${newYear}`)
+    }
+  }
+
   const fetchInvoices = async () => {
     try {
       setLoading(true)
-      const yearParam = year !== "2026" ? `?year=${year}` : ""
+      const yearParam = year !== "2026" ? `?year=${year}` : "?year=2026"
       const response = await fetch(`/api/invoices${yearParam}`)
       if (response.ok) {
         const invoices = await response.json()
@@ -384,12 +395,12 @@ export function InvoicesTable() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Year:</span>
             <div className="flex gap-1">
-              {["2024", "2025", "2026", "all"].map((yearOption) => (
+                {["2024", "2025", "2026", "all"].map((yearOption) => (
                 <Button
                   key={yearOption}
                   variant={year === yearOption ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setYear(yearOption)}
+                  onClick={() => handleYearChange(yearOption)}
                   className={year === yearOption ? "bg-primary" : ""}
                 >
                   {yearOption === "all" ? "All" : yearOption}

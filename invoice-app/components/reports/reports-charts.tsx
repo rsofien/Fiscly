@@ -1,12 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Download, FileText, DollarSign, Clock, CheckCircle, AlertCircle, XCircle, Calendar } from "lucide-react"
+import { Download, FileText, Clock, CheckCircle, AlertCircle, XCircle, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatCurrency } from "@/lib/currency"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+
+const CURRENT_YEAR = "2026"
+const YEAR_OPTIONS = ["2024", "2025", "2026", "all"]
 
 interface ReportData {
   totalRevenue: number
@@ -33,38 +37,63 @@ interface ReportData {
 }
 
 export function ReportsCharts() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [data, setData] = useState<ReportData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [year, setYear] = useState<string>("2026")
+  
+  // Get year from URL - default to CURRENT_YEAR
+  const year = searchParams.get("year") || CURRENT_YEAR
 
-  useEffect(() => {
-    fetchReportsData(year)
-  }, [year])
-
-  const fetchReportsData = async (selectedYear: string) => {
+  const fetchReportsData = useCallback(async () => {
     try {
-      const response = await fetch(`/api/reports?year=${selectedYear}`)
-      if (response.ok) {
-        const result = await response.json()
-        setData(result)
+      setLoading(true)
+      
+      // Always include year param for consistency
+      const yearParam = year !== CURRENT_YEAR ? `?year=${year}` : "?year=2026"
+      
+      console.log(`[REPORTS] Fetching data for year: ${year}`)
+      
+      const response = await fetch(`/api/reports${yearParam}`)
+      
+      if (!response.ok) {
+        console.error("[REPORTS] Fetch failed:", response.status)
+        setData(null)
+        return
       }
+      
+      const result = await response.json()
+      
+      console.log(`[REPORTS] Received data for year ${year}:`, {
+        invoiceCount: result.invoiceCount,
+        totalRevenue: result.totalRevenue,
+        paidAmount: result.paidAmount,
+        outstanding: result.outstanding
+      })
+      
+      setData(result)
     } catch (error) {
-      console.error("Failed to fetch reports:", error)
+      console.error("[REPORTS] Failed to fetch reports:", error)
+      setData(null)
     } finally {
       setLoading(false)
     }
-  }
+  }, [year])
 
-  if (loading) {
-    return <div className="text-center py-8">Loading reports...</div>
-  }
+  useEffect(() => {
+    fetchReportsData()
+  }, [fetchReportsData])
 
-  if (!data) {
-    return <div className="text-center py-8">Failed to load reports data</div>
+  const handleYearChange = (newYear: string) => {
+    if (newYear === CURRENT_YEAR) {
+      router.push("/reports")
+    } else {
+      router.push(`/reports?year=${newYear}`)
+    }
   }
 
   const exportToCSV = () => {
-    if (!data.invoices.length) return
+    if (!data?.invoices.length) return
 
     const headers = ['Invoice #', 'Amount', 'Currency', 'USD Amount', 'Status', 'Issue Date']
     const rows = data.invoices.map(inv => [
@@ -85,92 +114,115 @@ export function ReportsCharts() {
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `invoices_report_${new Date().toISOString().split('T')[0]}.csv`
+    a.download = `invoices_report_${year}_${new Date().toISOString().split('T')[0]}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
   }
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: string; icon: any }> = {
-      paid: { variant: 'success', icon: CheckCircle },
-      sent: { variant: 'default', icon: Clock },
-      draft: { variant: 'secondary', icon: FileText },
-      overdue: { variant: 'destructive', icon: AlertCircle },
-      cancelled: { variant: 'outline', icon: XCircle },
+    const variants: Record<string, { variant: string; icon: any; label: string }> = {
+      paid: { variant: 'success', icon: CheckCircle, label: 'Paid' },
+      sent: { variant: 'default', icon: Clock, label: 'Sent' },
+      draft: { variant: 'secondary', icon: FileText, label: 'Draft' },
+      overdue: { variant: 'destructive', icon: AlertCircle, label: 'Overdue' },
+      cancelled: { variant: 'outline', icon: XCircle, label: 'Cancelled' },
     }
     const config = variants[status] || variants.draft
     const Icon = config.icon
     return (
       <Badge variant={config.variant as any} className="flex items-center gap-1 w-fit">
         <Icon className="h-3 w-3" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {config.label}
       </Badge>
     )
   }
 
+  if (loading) {
+    return <div className="text-center py-8">Loading reports for {year}...</div>
+  }
+
+  if (!data) {
+    return <div className="text-center py-8">Failed to load reports data</div>
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* Header with Year Selector */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-lg font-semibold">Key Metrics ({year === "all" ? "All Years" : year})</h2>
+        
         <div className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-muted-foreground" />
-          <div className="flex gap-1">
-            {["2024", "2025", "2026", "All"].map((y) => (
-              <Button
-                key={y}
-                variant={year === y ? "default" : "outline"}
-                size="sm"
-                onClick={() => setYear(y)}
-                className={year === y ? "bg-primary text-primary-foreground" : ""}
-              >
-                {y}
-              </Button>
-            ))}
+          <div className="flex items-center gap-2 bg-card p-2 rounded-lg border">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium">Year:</span>
+            <div className="flex gap-1">
+              {YEAR_OPTIONS.map((y) => (
+                <Button
+                  key={y}
+                  variant={year === y ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleYearChange(y)}
+                  className={year === y ? "bg-primary" : ""}
+                >
+                  {y === "all" ? "All" : y}
+                </Button>
+              ))}
+            </div>
           </div>
+          
+          <Button variant="outline" onClick={exportToCSV} disabled={!data.invoices.length} size="sm">
+            <Download className="mr-2 h-4 w-4" />
+            Export
+          </Button>
         </div>
-        <Button variant="outline" onClick={exportToCSV} disabled={!data.invoices.length} size="sm" className="w-full sm:w-auto">
-          <Download className="mr-2 h-4 w-4" />
-          Export CSV
-        </Button>
       </div>
 
-      <h2 className="text-lg font-semibold">Key Metrics {year !== "All" && `(${year})`}</h2>
-
       {/* Main Summary Cards */}
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue (USD)</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Revenue ({year === "all" ? "All" : year})
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground mt-1">{data.invoiceCount} invoices {year !== "All" && `in ${year}`}</p>
+            <p className="text-xs text-muted-foreground mt-1">{data.invoiceCount} invoices</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Paid Amount (USD)</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Paid Amount ({year === "all" ? "All" : year})
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(data.paidAmount)}</div>
-            <p className="text-xs text-muted-foreground mt-1">{data.byStatus.paid} paid invoices {year !== "All" && `in ${year}`}</p>
+            <div className="text-2xl font-bold text-success">{formatCurrency(data.paidAmount)}</div>
+            <p className="text-xs text-muted-foreground mt-1">{data.byStatus.paid} paid invoices</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Outstanding (USD)</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Outstanding ({year === "all" ? "All" : year})
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{formatCurrency(data.outstanding)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Unpaid balance {year !== "All" && `in ${year}`}</p>
+            <div className="text-2xl font-bold text-warning">{formatCurrency(data.outstanding)}</div>
+            <p className="text-xs text-muted-foreground mt-1">Unpaid balance</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Invoices</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Invoices ({year === "all" ? "All" : year})
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{data.invoiceCount}</div>
-            <p className="text-xs text-muted-foreground mt-1">{year !== "All" ? year : "All time"}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {data.byStatus.paid} paid, {data.byStatus.sent} sent
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -178,44 +230,44 @@ export function ReportsCharts() {
       {/* Status Breakdown */}
       <Card>
         <CardHeader>
-          <CardTitle>Status Breakdown</CardTitle>
+          <CardTitle>Status Breakdown ({year === "all" ? "All Years" : year})</CardTitle>
           <CardDescription>Invoice counts by status</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-success/10 border border-success/20">
               <CheckCircle className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold text-success">{data.byStatus.paid}</p>
-                <p className="text-xs text-dark-400">Paid</p>
+                <p className="text-xs text-muted-foreground">Paid</p>
               </div>
             </div>
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-info/10 border border-info/20">
               <Clock className="h-5 w-5 text-info" />
               <div>
                 <p className="text-2xl font-bold text-info">{data.byStatus.sent}</p>
-                <p className="text-xs text-dark-400">Sent</p>
+                <p className="text-xs text-muted-foreground">Sent</p>
               </div>
             </div>
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-dark-800 border border-dark-700">
               <FileText className="h-5 w-5 text-dark-300" />
               <div>
                 <p className="text-2xl font-bold text-dark-100">{data.byStatus.draft}</p>
-                <p className="text-xs text-dark-400">Draft</p>
+                <p className="text-xs text-muted-foreground">Draft</p>
               </div>
             </div>
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-danger/10 border border-danger/20">
               <AlertCircle className="h-5 w-5 text-danger" />
               <div>
                 <p className="text-2xl font-bold text-danger">{data.byStatus.overdue}</p>
-                <p className="text-xs text-dark-400">Overdue</p>
+                <p className="text-xs text-muted-foreground">Overdue</p>
               </div>
             </div>
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-dark-800 border border-dark-700">
               <XCircle className="h-5 w-5 text-dark-400" />
               <div>
                 <p className="text-2xl font-bold text-dark-300">{data.byStatus.cancelled}</p>
-                <p className="text-xs text-dark-400">Cancelled</p>
+                <p className="text-xs text-muted-foreground">Cancelled</p>
               </div>
             </div>
           </div>
@@ -226,11 +278,11 @@ export function ReportsCharts() {
       {data.currencyBreakdown && Object.keys(data.currencyBreakdown).length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Currency Breakdown</CardTitle>
+            <CardTitle>Currency Breakdown ({year === "all" ? "All Years" : year})</CardTitle>
             <CardDescription>Totals by original invoice currency</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto -mx-4 px-4">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -272,12 +324,12 @@ export function ReportsCharts() {
       {/* Invoice List */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Invoices</CardTitle>
+          <CardTitle>Recent Invoices ({year === "all" ? "All Years" : year})</CardTitle>
           <CardDescription>All invoices with USD conversion</CardDescription>
         </CardHeader>
         <CardContent>
           {data.invoices.length > 0 ? (
-            <div className="overflow-x-auto -mx-4 px-4">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -309,7 +361,7 @@ export function ReportsCharts() {
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-8">
-              No invoices found. Create your first invoice to see data here.
+              No invoices found for {year === "all" ? "any year" : year}. Create your first invoice to see data here.
             </p>
           )}
         </CardContent>

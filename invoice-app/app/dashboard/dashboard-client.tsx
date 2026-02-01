@@ -1,12 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileText, DollarSign, Users, CheckCircle2, Calendar } from "lucide-react"
 import { formatCurrency } from "@/lib/currency"
 import { Button } from "@/components/ui/button"
+
+const CURRENT_YEAR = "2026"
+const YEAR_OPTIONS = ["2024", "2025", "2026", "all"]
 
 interface DashboardData {
   invoices: any[]
@@ -22,41 +25,123 @@ interface DashboardData {
   topCustomers: any[]
 }
 
+function calculateDashboardMetrics(invoices: any[], customers: any[]) {
+  const now = new Date()
+  const currentMonth = now.getMonth()
+  const currentYear = now.getFullYear()
+  
+  // Calculate metrics
+  const paidThisMonth = invoices
+    .filter((inv: any) => {
+      if (inv.status !== "paid" || !inv.issueDate) return false
+      const issued = new Date(inv.issueDate)
+      return issued.getMonth() === currentMonth && issued.getFullYear() === currentYear
+    })
+    .reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
+
+  const totalRevenueUSD = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
+  const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
+  const paidAmountUSD = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
+  const outstandingAmount = totalRevenueUSD - paidAmountUSD
+
+  const totalInvoices = invoices.length
+  const totalCustomers = customers.length
+  const dueInvoices = invoices.filter((inv: any) => inv.status === 'sent').length
+  const overdueInvoices = invoices.filter((inv: any) => inv.status === 'overdue').length
+  
+  // Calculate currency breakdown
+  const currencyBreakdown = invoices.reduce<Record<string, { count: number; originalTotal: number; usdTotal: number }>>(
+    (acc: any, inv: any) => {
+      const currency = inv.currency || 'USD'
+      const originalAmount = Number(inv.amount) || 0
+      const usdAmount = Number(inv.usdAmount) || Number(inv.amount) || 0
+      
+      if (!acc[currency]) {
+        acc[currency] = { count: 0, originalTotal: 0, usdTotal: 0 }
+      }
+      acc[currency].count += 1
+      acc[currency].originalTotal += originalAmount
+      acc[currency].usdTotal += usdAmount
+      return acc
+    },
+    {}
+  )
+
+  // Calculate top customers
+  const topCustomers = Object.values(
+    invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
+      (acc: any, inv: any) => {
+        const name = inv.customerName || "Unknown"
+        const amount = Number(inv.usdAmount) || Number(inv.amount) || 0
+        if (!acc[name]) {
+          acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
+        }
+        acc[name].totalSpent += amount
+        acc[name].invoiceCount += 1
+        return acc
+      },
+      {}
+    )
+  )
+    .sort((a: any, b: any) => b.totalSpent - a.totalSpent)
+    .slice(0, 5)
+
+  return {
+    invoices,
+    customers,
+    totalInvoices,
+    totalCustomers,
+    dueInvoices,
+    overdueInvoices,
+    paidThisMonth,
+    outstandingAmount,
+    totalRevenueUSD,
+    currencyBreakdown,
+    topCustomers,
+  }
+}
+
 export function DashboardPageClient({ user }: { user: any }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<DashboardData | null>(null)
-  const [year, setYear] = useState(searchParams.get("year") || "2026")
   
-  // Generate year options (2024, 2025, 2026, All)
-  const yearOptions = ["2024", "2025", "2026", "all"]
+  // Get year from URL - default to CURRENT_YEAR
+  const year = searchParams.get("year") || CURRENT_YEAR
 
-  useEffect(() => {
-    const urlYear = searchParams.get("year")
-    if (urlYear && urlYear !== year) {
-      setYear(urlYear)
-    }
-  }, [searchParams])
-
-  useEffect(() => {
-    fetchDashboardData()
-  }, [year])
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true)
       
-      // Build URL with year filter
-      const yearParam = year !== "2026" ? `?year=${year}` : ""
+      // Build URL with year filter - always include year param for consistency
+      const yearParam = year !== CURRENT_YEAR ? `?year=${year}` : "?year=2026"
+      
+      console.log(`[DASHBOARD] Fetching data for year: ${year}`)
       
       const [invoicesRes, customersRes] = await Promise.all([
         fetch(`/api/invoices${yearParam}`),
         fetch(`/api/customers`),
       ])
 
-      const invoicesData = invoicesRes.ok ? await invoicesRes.json() : []
+      if (!invoicesRes.ok) {
+        console.error("[DASHBOARD] Invoices fetch failed:", invoicesRes.status)
+        setData(null)
+        return
+      }
+
+      const invoicesData = await invoicesRes.json()
       const customersData = customersRes.ok ? await customersRes.json() : []
+      
+      console.log(`[DASHBOARD] Received ${invoicesData.length} invoices for year ${year}`)
+      
+      // Log invoice dates for verification
+      invoicesData.forEach((inv: any) => {
+        if (inv.issueDate) {
+          const date = new Date(inv.issueDate)
+          console.log(`[DASHBOARD] Invoice ${inv.invoiceNumber}: ${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`)
+        }
+      })
       
       const invoices = (Array.isArray(invoicesData) ? invoicesData : []).map((item: any) => ({
         id: item._id?.toString() || item.id,
@@ -72,87 +157,25 @@ export function DashboardPageClient({ user }: { user: any }) {
       
       const customers = Array.isArray(customersData) ? customersData : []
 
-      const now = new Date()
+      const metrics = calculateDashboardMetrics(invoices, customers)
+      setData(metrics)
       
-      // Calculate metrics
-      const paidThisMonth = invoices
-        .filter((inv: any) => {
-          if (inv.status !== "paid" || !inv.issueDate) return false
-          const issued = new Date(inv.issueDate)
-          return issued.getMonth() === now.getMonth() && issued.getFullYear() === now.getFullYear()
-        })
-        .reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
-
-      const totalRevenueUSD = invoices.reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
-      const paidInvoices = invoices.filter((inv: any) => inv.status === 'paid')
-      const paidAmountUSD = paidInvoices.reduce((sum: number, inv: any) => sum + (Number(inv.usdAmount) || Number(inv.amount) || 0), 0)
-      const outstandingAmount = totalRevenueUSD - paidAmountUSD
-
-      const totalInvoices = invoices.length
-      const totalCustomers = customers.length
-      const dueInvoices = invoices.filter((inv: any) => inv.status === 'sent').length
-      const overdueInvoices = invoices.filter((inv: any) => inv.status === 'overdue').length
-      
-      // Calculate currency breakdown
-      const currencyBreakdown = invoices.reduce<Record<string, { count: number; originalTotal: number; usdTotal: number }>>(
-        (acc: any, inv: any) => {
-          const currency = inv.currency || 'USD'
-          const originalAmount = Number(inv.amount) || 0
-          const usdAmount = Number(inv.usdAmount) || Number(inv.amount) || 0
-          
-          if (!acc[currency]) {
-            acc[currency] = { count: 0, originalTotal: 0, usdTotal: 0 }
-          }
-          acc[currency].count += 1
-          acc[currency].originalTotal += originalAmount
-          acc[currency].usdTotal += usdAmount
-          return acc
-        },
-        {}
-      )
-
-      // Calculate top customers
-      const topCustomers = Object.values(
-        invoices.reduce<Record<string, { name: string; totalSpent: number; invoiceCount: number }>>(
-          (acc: any, inv: any) => {
-            const name = inv.customerName || "Unknown"
-            const amount = Number(inv.usdAmount) || Number(inv.amount) || 0
-            if (!acc[name]) {
-              acc[name] = { name, totalSpent: 0, invoiceCount: 0 }
-            }
-            acc[name].totalSpent += amount
-            acc[name].invoiceCount += 1
-            return acc
-          },
-          {}
-        )
-      )
-        .sort((a: any, b: any) => b.totalSpent - a.totalSpent)
-        .slice(0, 5)
-
-      setData({
-        invoices,
-        customers,
-        totalInvoices,
-        totalCustomers,
-        dueInvoices,
-        overdueInvoices,
-        paidThisMonth,
-        outstandingAmount,
-        totalRevenueUSD,
-        currencyBreakdown,
-        topCustomers,
-      })
+      console.log(`[DASHBOARD] Calculated total revenue: ${metrics.totalRevenueUSD} USD for year ${year}`)
     } catch (error) {
-      console.error("Failed to fetch dashboard data:", error)
+      console.error("[DASHBOARD] Failed to fetch data:", error)
+      setData(null)
     } finally {
       setLoading(false)
     }
-  }
+  }, [year])
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [fetchDashboardData])
 
   const handleYearChange = (newYear: string) => {
-    if (newYear === "2026") {
-      // Default year - remove param from URL
+    if (newYear === CURRENT_YEAR) {
+      // Default year - go to base URL
       router.push("/dashboard")
     } else {
       router.push(`/dashboard?year=${newYear}`)
@@ -163,7 +186,7 @@ export function DashboardPageClient({ user }: { user: any }) {
     return (
       <AppLayout user={user}>
         <div className="flex items-center justify-center h-64">
-          <div className="text-muted-foreground">Loading...</div>
+          <div className="text-muted-foreground">Loading dashboard...</div>
         </div>
       </AppLayout>
     )
@@ -172,7 +195,7 @@ export function DashboardPageClient({ user }: { user: any }) {
   if (!data) {
     return (
       <AppLayout user={user}>
-        <div className="text-red-500">Failed to load dashboard data</div>
+        <div className="text-red-500 p-4">Failed to load dashboard data. Please try again.</div>
       </AppLayout>
     )
   }
@@ -188,19 +211,19 @@ export function DashboardPageClient({ user }: { user: any }) {
           </div>
           
           {/* Year Selector */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-card p-2 rounded-lg border">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Year:</span>
+            <span className="text-sm font-medium">Year:</span>
             <div className="flex gap-1">
-              {yearOptions.map((yearOption) => (
+              {YEAR_OPTIONS.map((y) => (
                 <Button
-                  key={yearOption}
-                  variant={year === yearOption ? "default" : "outline"}
+                  key={y}
+                  variant={year === y ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handleYearChange(yearOption)}
-                  className={year === yearOption ? "bg-primary" : ""}
+                  onClick={() => handleYearChange(y)}
+                  className={year === y ? "bg-primary" : ""}
                 >
-                  {yearOption === "all" ? "All" : yearOption}
+                  {y === "all" ? "All" : y}
                 </Button>
               ))}
             </div>
@@ -212,7 +235,7 @@ export function DashboardPageClient({ user }: { user: any }) {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Invoices
+                Total Invoices ({year === "all" ? "All" : year})
               </CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -227,30 +250,26 @@ export function DashboardPageClient({ user }: { user: any }) {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Revenue (USD)
+                Total Revenue ({year === "all" ? "All" : year})
               </CardTitle>
               <DollarSign className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">{formatCurrency(data.totalRevenueUSD)}</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {year === "all" ? "All years" : `Year ${year}`}
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">USD</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Outstanding (USD)
+                Outstanding ({year === "all" ? "All" : year})
               </CardTitle>
               <DollarSign className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">{formatCurrency(data.outstandingAmount)}</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Pending payment
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">USD pending</p>
             </CardContent>
           </Card>
 
@@ -264,7 +283,7 @@ export function DashboardPageClient({ user }: { user: any }) {
             <CardContent>
               <div className="text-2xl font-semibold">{formatCurrency(data.paidThisMonth)}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                Current month
+                {new Date().toLocaleString('default', { month: 'long' })} 2026
               </p>
             </CardContent>
           </Card>
@@ -275,7 +294,7 @@ export function DashboardPageClient({ user }: { user: any }) {
           {/* Top Customers */}
           <Card>
             <CardHeader>
-              <CardTitle>Top Customers</CardTitle>
+              <CardTitle>Top Customers ({year === "all" ? "All" : year})</CardTitle>
               <CardDescription>By total revenue (USD)</CardDescription>
             </CardHeader>
             <CardContent>
@@ -299,7 +318,7 @@ export function DashboardPageClient({ user }: { user: any }) {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No customer data available.</p>
+                <p className="text-sm text-muted-foreground">No customer data for selected period.</p>
               )}
             </CardContent>
           </Card>
@@ -307,8 +326,8 @@ export function DashboardPageClient({ user }: { user: any }) {
           {/* Currency Breakdown */}
           <Card>
             <CardHeader>
-              <CardTitle>Currency Breakdown</CardTitle>
-              <CardDescription>Invoice totals by original currency</CardDescription>
+              <CardTitle>Currency Breakdown ({year === "all" ? "All" : year})</CardTitle>
+              <CardDescription>By original currency</CardDescription>
             </CardHeader>
             <CardContent>
               {Object.keys(data.currencyBreakdown).length > 0 ? (
@@ -328,13 +347,13 @@ export function DashboardPageClient({ user }: { user: any }) {
                       </div>
                       <div className="text-right">
                         <p className="font-semibold">{formatCurrency(breakdown.usdTotal)}</p>
-                        <p className="text-xs text-muted-foreground">in USD</p>
+                        <p className="text-xs text-muted-foreground">USD</p>
                       </div>
                     </div>
                   ))}
                   <div className="pt-2 border-t">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Total USD Equivalent</span>
+                      <span className="text-muted-foreground">Total USD</span>
                       <span className="font-bold">{formatCurrency(data.totalRevenueUSD)}</span>
                     </div>
                   </div>
