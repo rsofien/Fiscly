@@ -6,7 +6,6 @@ import path from "path"
 import { fileURLToPath } from "url"
 import fs from "fs"
 import { connectDB } from "./db.js"
-import { seedDatabase } from "./seed.js"
 import workspaceRouter from "./routes/workspace.js"
 import customerRouter from "./routes/customer.js"
 import invoiceRouter from "./routes/invoice.js"
@@ -109,8 +108,7 @@ const startServer = async () => {
     console.log('[SERVER] Starting server...')
     console.log('[SERVER] Connecting to database...')
     await connectDB()
-    console.log('[SERVER] Seeding database...')
-    await seedDatabase()
+    console.log('[SERVER] Database connected successfully')
     
     console.log('[SERVER] Calling app.listen...')
     const server = app.listen(PORT, () => {

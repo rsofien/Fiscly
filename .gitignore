@@ -34,3 +34,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# logs
+/logs/
+*.log
+npm-debug.log*
+
+# admin creation scripts (security)
+create-admin.js
+create-user.js
+backend/create-workspace-for-user.js
+backend/src/seed.ts
+backend/.local-admin-creds.txt
+
+# credentials and secrets
+*.key
+*.pem
+*credentials*
+*secret*
