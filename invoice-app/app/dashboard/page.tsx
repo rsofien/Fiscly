@@ -2,9 +2,7 @@ import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { FileText, DollarSign, Users, AlertCircle, CheckCircle2 } from "lucide-react"
-import { GetStartedButton } from "@/components/dashboard/get-started-button"
+import { FileText, DollarSign, Users, CheckCircle2 } from "lucide-react"
 import { formatCurrency } from "@/lib/currency"
 
 export const dynamic = "force-dynamic"
@@ -159,23 +157,6 @@ export default async function DashboardPage() {
           <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-1">Welcome back, {session.user.name || session.user.email}</p>
         </div>
-
-        {/* Announcement Card */}
-        <Card className="border-primary/20 bg-primary/5">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <AlertCircle className="h-5 w-5 text-primary" />
-              <span>Important Announcement</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Welcome to Fiscly! Start by adding your first customer and creating your first invoice. 
-              Need help getting started? Check out our documentation or contact support.
-            </p>
-            <GetStartedButton />
-          </CardContent>
-        </Card>
 
         {/* Stats Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

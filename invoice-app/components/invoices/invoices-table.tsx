@@ -529,7 +529,7 @@ export function InvoicesTable() {
               
               <div className="space-y-3">
                 {formData.items?.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-gray-50">
+                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-dark-800">
                     <div className="col-span-4">
                       <Label htmlFor={`item-desc-${index}`} className="text-xs">Description *</Label>
                       <Input
@@ -569,7 +569,7 @@ export function InvoicesTable() {
                       <Input
                         value={item.total.toFixed(2)}
                         readOnly
-                        className="text-sm bg-gray-100"
+                        className="text-sm bg-dark-700"
                       />
                     </div>
                     <div className="col-span-2 flex items-end">
@@ -589,10 +589,10 @@ export function InvoicesTable() {
               </div>
               
               {/* Total Amount Display */}
-              <div className="flex justify-end mt-4 p-3 bg-blue-50 rounded-md">
+              <div className="flex justify-end mt-4 p-3 bg-primary/10 border border-primary/20 rounded-md">
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">Total Amount</div>
-                  <div className="text-2xl font-bold">
+                  <div className="text-sm text-dark-400">Total Amount</div>
+                  <div className="text-2xl font-bold text-primary">
                     {formatCurrency(formData.items?.reduce((sum, item) => sum + item.total, 0) || 0, formData.currency || 'USD')}
                   </div>
                 </div>
@@ -765,7 +765,7 @@ export function InvoicesTable() {
               
               <div className="space-y-3">
                 {formData.items?.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-gray-50">
+                  <div key={index} className="grid grid-cols-12 gap-2 items-start p-3 border rounded-md bg-dark-800">
                     <div className="col-span-4">
                       <Label htmlFor={`edit-item-desc-${index}`} className="text-xs">Description *</Label>
                       <Input
@@ -805,7 +805,7 @@ export function InvoicesTable() {
                       <Input
                         value={item.total.toFixed(2)}
                         readOnly
-                        className="text-sm bg-gray-100"
+                        className="text-sm bg-dark-700"
                       />
                     </div>
                     <div className="col-span-2 flex items-end">
@@ -825,10 +825,10 @@ export function InvoicesTable() {
               </div>
               
               {/* Total Amount Display */}
-              <div className="flex justify-end mt-4 p-3 bg-blue-50 rounded-md">
+              <div className="flex justify-end mt-4 p-3 bg-primary/10 border border-primary/20 rounded-md">
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">Total Amount</div>
-                  <div className="text-2xl font-bold">
+                  <div className="text-sm text-dark-400">Total Amount</div>
+                  <div className="text-2xl font-bold text-primary">
                     {formatCurrency(formData.items?.reduce((sum, item) => sum + item.total, 0) || 0, formData.currency || 'USD')}
                   </div>
                 </div>

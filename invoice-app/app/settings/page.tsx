@@ -407,7 +407,7 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {logoPreview && (
-                <div className="flex justify-center p-4 border rounded-lg bg-gray-50">
+                <div className="flex justify-center p-4 border rounded-lg bg-dark-800">
                   <img
                     src={logoPreview}
                     alt="Logo preview"
@@ -455,7 +455,7 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {signaturePreview && (
-                <div className="flex justify-center p-4 border rounded-lg bg-gray-50">
+                <div className="flex justify-center p-4 border rounded-lg bg-dark-800">
                   <img
                     src={signaturePreview}
                     alt="Signature preview"

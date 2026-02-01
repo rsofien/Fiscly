@@ -165,39 +165,39 @@ export function ReportsCharts() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-green-50">
-              <CheckCircle className="h-5 w-5 text-green-600" />
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-success/10 border border-success/20">
+              <CheckCircle className="h-5 w-5 text-success" />
               <div>
-                <p className="text-2xl font-bold">{data.byStatus.paid}</p>
-                <p className="text-xs text-muted-foreground">Paid</p>
+                <p className="text-2xl font-bold text-success">{data.byStatus.paid}</p>
+                <p className="text-xs text-dark-400">Paid</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-blue-50">
-              <Clock className="h-5 w-5 text-blue-600" />
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-info/10 border border-info/20">
+              <Clock className="h-5 w-5 text-info" />
               <div>
-                <p className="text-2xl font-bold">{data.byStatus.sent}</p>
-                <p className="text-xs text-muted-foreground">Sent</p>
+                <p className="text-2xl font-bold text-info">{data.byStatus.sent}</p>
+                <p className="text-xs text-dark-400">Sent</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
-              <FileText className="h-5 w-5 text-gray-600" />
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-dark-800 border border-dark-700">
+              <FileText className="h-5 w-5 text-dark-300" />
               <div>
-                <p className="text-2xl font-bold">{data.byStatus.draft}</p>
-                <p className="text-xs text-muted-foreground">Draft</p>
+                <p className="text-2xl font-bold text-dark-100">{data.byStatus.draft}</p>
+                <p className="text-xs text-dark-400">Draft</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-red-50">
-              <AlertCircle className="h-5 w-5 text-red-600" />
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-danger/10 border border-danger/20">
+              <AlertCircle className="h-5 w-5 text-danger" />
               <div>
-                <p className="text-2xl font-bold">{data.byStatus.overdue}</p>
-                <p className="text-xs text-muted-foreground">Overdue</p>
+                <p className="text-2xl font-bold text-danger">{data.byStatus.overdue}</p>
+                <p className="text-xs text-dark-400">Overdue</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
-              <XCircle className="h-5 w-5 text-gray-500" />
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-dark-800 border border-dark-700">
+              <XCircle className="h-5 w-5 text-dark-400" />
               <div>
-                <p className="text-2xl font-bold">{data.byStatus.cancelled}</p>
-                <p className="text-xs text-muted-foreground">Cancelled</p>
+                <p className="text-2xl font-bold text-dark-300">{data.byStatus.cancelled}</p>
+                <p className="text-xs text-dark-400">Cancelled</p>
               </div>
             </div>
           </div>

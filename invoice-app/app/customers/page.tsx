@@ -13,7 +13,11 @@ export default async function CustomersPage() {
   }
 
   return (
-    <AppLayout user={session.user}>
+    <AppLayout user={{
+      name: session.user.name,
+      email: session.user.email || "",
+      workspaceName: (session.user as any).workspaceName ?? null,
+    }}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Customers</h1>
