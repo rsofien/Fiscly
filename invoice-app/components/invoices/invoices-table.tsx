@@ -650,6 +650,7 @@ export function InvoicesTable() {
                   <option value="USD">USD - US Dollar</option>
                   <option value="CAD">CAD - Canadian Dollar</option>
                   <option value="EUR">EUR - Euro</option>
+                  <option value="TND">TND - Tunisian Dinar</option>
                   <option value="USDT">USDT - Tether</option>
                 </select>
               </div>
@@ -886,6 +887,7 @@ export function InvoicesTable() {
                   <option value="USD">USD - US Dollar</option>
                   <option value="CAD">CAD - Canadian Dollar</option>
                   <option value="EUR">EUR - Euro</option>
+                  <option value="TND">TND - Tunisian Dinar</option>
                   <option value="USDT">USDT - Tether</option>
                 </select>
               </div>

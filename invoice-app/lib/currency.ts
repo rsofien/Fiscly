@@ -1,10 +1,11 @@
-export type Currency = 'USD' | 'CAD' | 'EUR' | 'USDT'
+export type Currency = 'USD' | 'CAD' | 'EUR' | 'USDT' | 'TND'
 
 export const CURRENCY_SYMBOLS: Record<Currency, string> = {
   USD: '$',
   CAD: 'C$',
   EUR: '€',
   USDT: 'USDT',
+  TND: 'DT',
 }
 
 export const CURRENCY_LOCALES: Record<Currency, string> = {
@@ -12,6 +13,7 @@ export const CURRENCY_LOCALES: Record<Currency, string> = {
   CAD: 'en-CA',
   EUR: 'de-DE',
   USDT: 'en-US',
+  TND: 'ar-TN',
 }
 
 export function formatCurrency(value: number, currency: Currency = 'USD'): string {
@@ -37,6 +39,7 @@ export function getCurrencyLabel(currency: Currency): string {
     CAD: 'Canadian Dollar',
     EUR: 'Euro',
     USDT: 'Tether (USDT)',
+    TND: 'Tunisian Dinar',
   }
   return labels[currency]
 }
