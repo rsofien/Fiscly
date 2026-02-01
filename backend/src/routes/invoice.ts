@@ -23,14 +23,30 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response) => {
     if (year && year !== "all") {
       const yearNum = parseInt(year)
       if (!isNaN(yearNum)) {
-        const startDate = new Date(`${yearNum}-01-01T00:00:00.000Z`)
-        const endDate = new Date(`${yearNum + 1}-01-01T00:00:00.000Z`)
-        query.issueDate = { $gte: startDate, $lt: endDate }
-        console.log(`[invoice GET] Filtering by year ${yearNum}:`, startDate, "to", endDate)
+        // Use start and end of year in ISO format for MongoDB
+        const startOfYear = new Date(Date.UTC(yearNum, 0, 1, 0, 0, 0, 0)) // Jan 1, 00:00:00
+        const endOfYear = new Date(Date.UTC(yearNum + 1, 0, 1, 0, 0, 0, 0)) // Jan 1 of next year, 00:00:00
+        
+        query.issueDate = { 
+          $gte: startOfYear, 
+          $lt: endOfYear 
+        }
+        
+        console.log(`[invoice GET] Year filter: ${yearNum}`)
+        console.log(`[invoice GET] Start: ${startOfYear.toISOString()}`)
+        console.log(`[invoice GET] End: ${endOfYear.toISOString()}`)
+        console.log(`[invoice GET] Query:`, JSON.stringify(query))
       }
     }
 
+    console.log(`[invoice GET] Final query:`, JSON.stringify(query))
     const invoices = await Invoice.find(query).populate("customer_id")
+    
+    // Debug: log what we got
+    console.log(`[invoice GET] Found ${invoices.length} invoices`)
+    invoices.forEach(inv => {
+      console.log(`[invoice GET] Invoice ${inv.invoiceNumber}: issueDate=${inv.issueDate}`)
+    })
     const invoicesWithConversion = await Promise.all(
       invoices.map(async (invoice) => {
         try {
